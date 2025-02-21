@@ -19,10 +19,7 @@ public class User {
     @Id
     private Long id;
 
-    @Column(nullable = false)
-    private String email;
-
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String nickname;
 
     @Column(nullable = false, name = "repository_url")
