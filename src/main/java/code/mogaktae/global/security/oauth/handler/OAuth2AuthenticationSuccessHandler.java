@@ -33,13 +33,19 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException{
 
+        log.info("[OAuth2AuthenticationSuccessHandler - onAuthenticationSuccess()] - In");
+
         String targetUrl = setTargetUrl(request, response, authentication);
 
         clearAuthenticationAttributes(request, response);
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
+
+        log.info("[OAuth2AuthenticationSuccessHandler - onAuthenticationSuccess()] - Out");
     }
 
     protected String setTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException{
+
+        log.info("[OAuth2AuthenticationSuccessHandler - setTargetUrl()] - In");
 
         Optional<String> redirectUrl = CookieUtils.getCookie(request, HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM)
                 .map(Cookie::getValue);
@@ -52,6 +58,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         OAuth2UserDetailsImpl userDetails = getOAuth2UserDetails(authentication);
 
+        log.info("[OAuth2AuthenticationSuccessHandler - setTargetUrl()] - Succeed to authenticate User({})", userDetails.getName());
+
         if (userDetails == null)
             return UriComponentsBuilder.fromUriString(targetUrl)
                     .queryParam("error", "Login Failed with Authentication Error")
@@ -60,6 +68,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         if ("login".equalsIgnoreCase(mode)){
             if (!oAuth2UserService.checkUserPresent(userDetails.getUsername())){
+                log.info("[OAuth2AuthenticationSuccessHandler - setTargetUrl()] - Not a member of the service ({}). Redirecting to the sign-up page", userDetails.getName());
                 return UriComponentsBuilder.fromUriString(targetUrl)
                         .path("/signup")
                         .queryParam("provider", userDetails.getUserInfo().getProvider())
@@ -67,6 +76,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                         .toUriString();
             }else{
                 TokenResponseDto tokenResponseDto = customOAuth2UserService.oAuth2Login(authentication);
+                log.info("[OAuth2AuthenticationSuccessHandler - setTargetUrl()] - Authenticate Succeed ({}). Redirecting to the main page with token", userDetails.getName());
                 return UriComponentsBuilder.fromUriString(targetUrl)
                         .path("/main")
                         .queryParam("accessToken", tokenResponseDto.getAccessToken())
