@@ -50,7 +50,7 @@ public class JwtTokenProvider {
         Date now = new Date();
 
         String accessToken = Jwts.builder()
-                .setSubject(authentication.getName()) // email
+                .setSubject(authentication.getName())
                 .claim("auth", authorities)
                 .setIssuedAt(now)
                 .setExpiration(new Date((now.getTime() + accessTokenExpiredTime)))

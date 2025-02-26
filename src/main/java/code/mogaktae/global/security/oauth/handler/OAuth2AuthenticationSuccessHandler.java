@@ -5,7 +5,6 @@ import code.mogaktae.global.security.oauth.domain.common.OAuth2UserDetailsImpl;
 import code.mogaktae.global.security.oauth.util.CookieUtils;
 import code.mogaktae.global.security.oauth.util.CustomOAuth2UserService;
 import code.mogaktae.global.security.oauth.util.HttpCookieOAuth2AuthorizationRequestRepository;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,11 +26,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final CustomOAuth2UserService oAuth2UserService;
 
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
-    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                        Authentication authentication) throws IOException, ServletException{
+                                        Authentication authentication) throws IOException {
 
         log.info("[OAuth2AuthenticationSuccessHandler - onAuthenticationSuccess()] - In");
 
@@ -43,7 +41,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         log.info("[OAuth2AuthenticationSuccessHandler - onAuthenticationSuccess()] - Out");
     }
 
-    protected String setTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException{
+    protected String setTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
 
         log.info("[OAuth2AuthenticationSuccessHandler - setTargetUrl()] - In");
 
@@ -58,25 +56,25 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         OAuth2UserDetailsImpl userDetails = getOAuth2UserDetails(authentication);
 
-        log.info("[OAuth2AuthenticationSuccessHandler - setTargetUrl()] - Succeed to authenticate User({})", userDetails.getName());
-
         if (userDetails == null)
             return UriComponentsBuilder.fromUriString(targetUrl)
-                    .queryParam("error", "Login Failed with Authentication Error")
+                    .queryParam("error", "AUTHENTICATION_LOGIN_ERROR")
                     .build()
                     .toUriString();
 
+        log.info("[OAuth2AuthenticationSuccessHandler - setTargetUrl()] - Succeed to authenticate User({})", userDetails.getName());
+
         if ("login".equalsIgnoreCase(mode)){
             if (!oAuth2UserService.checkUserPresent(userDetails.getUsername())){
-                log.info("[OAuth2AuthenticationSuccessHandler - setTargetUrl()] - Not a member of the service ({}). Redirecting to the sign-up page", userDetails.getName());
+                log.info("[OAuth2AuthenticationSuccessHandler - setTargetUrl()] - Not a member of the service ({}). Redirecting to the signUp", userDetails.getName());
                 return UriComponentsBuilder.fromUriString(targetUrl)
                         .path("/signup")
-                        .queryParam("provider", userDetails.getUserInfo().getProvider())
+                        .queryParam("nickname", userDetails.getName())
                         .build()
                         .toUriString();
             }else{
-                TokenResponseDto tokenResponseDto = customOAuth2UserService.oAuth2Login(authentication);
-                log.info("[OAuth2AuthenticationSuccessHandler - setTargetUrl()] - Authenticate Succeed ({}). Redirecting to the main page with token", userDetails.getName());
+                TokenResponseDto tokenResponseDto = oAuth2UserService.oAuth2Login(authentication);
+                log.info("[OAuth2AuthenticationSuccessHandler - setTargetUrl()] - Authenticate Succeed ({}). Redirecting to the main with token", userDetails.getName());
                 return UriComponentsBuilder.fromUriString(targetUrl)
                         .path("/main")
                         .queryParam("accessToken", tokenResponseDto.getAccessToken())
@@ -87,7 +85,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
 
         return UriComponentsBuilder.fromUriString(targetUrl)
-                .queryParam("error", "Login Failed with unexpected Error")
+                .queryParam("error", "UNEXPECTED_LOGIN_ERROR")
                 .build()
                 .toUriString();
     }
