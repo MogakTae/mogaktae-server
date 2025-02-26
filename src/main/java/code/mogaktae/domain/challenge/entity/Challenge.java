@@ -1,6 +1,6 @@
 package code.mogaktae.domain.challenge.entity;
 
-import code.mogaktae.domain.user.entity.User;
+import code.mogaktae.domain.userChallenge.entity.UserChallenge;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -20,6 +20,7 @@ import java.util.List;
 public class Challenge {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -41,8 +42,6 @@ public class Challenge {
     @Column(nullable = false)
     private Long penalty;
 
-    @OneToMany
-    @JoinColumn(name = "user_id")
-    private List<User> users = new ArrayList<>();
-
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserChallenge> userChallenges = new ArrayList<>();
 }

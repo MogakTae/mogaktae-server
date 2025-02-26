@@ -1,5 +1,6 @@
 package code.mogaktae.domain.user.entity;
 
+import code.mogaktae.domain.userChallenge.entity.UserChallenge;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -17,6 +20,7 @@ import java.time.LocalDateTime;
 @Table(name = "users")
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -39,7 +43,7 @@ public class User {
     private Long penaltySum = 0L;
 
     @CreatedDate
-    @Column(nullable = false, name = "created_at")
+    @Column(nullable = false, name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
@@ -48,4 +52,7 @@ public class User {
 
     @Column(nullable = false)
     private String role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserChallenge> userChallenges = new ArrayList<>();
 }
