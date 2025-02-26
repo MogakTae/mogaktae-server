@@ -70,6 +70,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 return UriComponentsBuilder.fromUriString(targetUrl)
                         .path("/signup")
                         .queryParam("nickname", userDetails.getName())
+                        .queryParam("profileImageUrl", userDetails.getUserInfo().getProfileImageUrl())
                         .build()
                         .toUriString();
             }else{
