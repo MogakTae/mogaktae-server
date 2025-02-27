@@ -1,13 +1,12 @@
 package code.mogaktae.domain.user.entity;
 
+import code.mogaktae.domain.user.dto.req.SignUpRequestDto;
 import code.mogaktae.domain.userChallenge.entity.UserChallenge;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,6 +15,7 @@ import java.util.List;
 @Entity
 @Getter
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "users")
 public class User {
@@ -34,10 +34,10 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = true)
-    private Tier tier;
+    private Tier tier = Tier.SEED;
 
     @Column(nullable = true, name = "daily_problem_solved")
-    private Boolean dailyProblemSolved;
+    private Boolean dailyProblemSolved = false;
 
     @Column(nullable = true, name = "penalty_sum")
     private Long penaltySum = 0L;
@@ -51,10 +51,18 @@ public class User {
     private LocalDateTime updatedAt;
 
     @Column(nullable = false)
-    private String role;
+    private String role = "ROLE_USER";
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserChallenge> userChallenges = new ArrayList<>();
+
+
+    @Builder
+    private User(SignUpRequestDto request){
+        this.nickname = request.getNickname();
+        this.repositoryUrl = request.getRepositoryUrl();
+        this.profileImageUrl = request.getProfileImageUrl();
+    }
 
     public String updateRepositoryUrl(String repositoryUrl){
         this.repositoryUrl = repositoryUrl;

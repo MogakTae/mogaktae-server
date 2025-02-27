@@ -75,9 +75,7 @@ public class UserService {
 
             log.info("updateRepositoryUrl() - 사용자 레포지토리 Url 업데이트 성공");
 
-            user.updateRepositoryUrl(request.getRepositoryUrl());
-
-            return request.getRepositoryUrl();
+            return user.updateRepositoryUrl(request.getRepositoryUrl());
         }else{
             throw new RestApiException(CustomErrorCode.REPOSITORY_URL_NOT_FOUND);
         }
