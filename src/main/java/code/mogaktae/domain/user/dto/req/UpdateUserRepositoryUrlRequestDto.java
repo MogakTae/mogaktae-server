@@ -7,7 +7,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Schema(example = "유저 레포지토리 Url 업데이트 Request")
+@Schema(example = "유저 레포지토리 URL 업데이트 Request")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UpdateUserRepositoryUrlRequestDto {
@@ -16,10 +16,10 @@ public class UpdateUserRepositoryUrlRequestDto {
             description = "변경하고 싶은 레포지토리 Url",
             example = "https://github.com/xunxxoie/BOJ"
     )
-    @NotBlank(message = "레포지토리 Url이 비어있습니다")
+    @NotBlank(message = "레포지토리 URL이 비어있습니다")
     @Pattern(
             regexp = "^https://github\\.com/.*$",
-            message = "레포지토리 Url은 'https://github.com/'로 시작해야 합니다."
+            message = "레포지토리 URL은 'https://github.com/'로 시작해야 합니다."
     )
     private String repositoryUrl;
 }

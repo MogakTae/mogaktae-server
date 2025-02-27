@@ -31,7 +31,7 @@ public class UserInfoResponseDto {
 
     @Schema(
             description = "티어",
-            example = "❗미정❗"
+            example = "SEED"
     )
     private final String tier;
 
