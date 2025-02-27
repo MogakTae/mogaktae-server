@@ -21,6 +21,9 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RestApiException.class)
     public ResponseEntity<ErrorResponse<String>> handleRestApiException(RestApiException e){
+
+        log.error("Error occur with {}", e.getMessage());
+
         ErrorCode errorCode = e.getErrorCode();
         return handleExceptionInternal(errorCode);
     }

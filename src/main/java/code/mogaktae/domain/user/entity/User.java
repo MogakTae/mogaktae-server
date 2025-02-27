@@ -55,4 +55,9 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserChallenge> userChallenges = new ArrayList<>();
+
+    public String updateRepositoryUrl(String repositoryUrl){
+        this.repositoryUrl = repositoryUrl;
+        return this.repositoryUrl;
+    }
 }

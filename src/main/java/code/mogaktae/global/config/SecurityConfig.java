@@ -1,4 +1,4 @@
-package code.mogaktae.global.security.config;
+package code.mogaktae.global.config;
 
 import code.mogaktae.global.exception.handler.CustomAccessDeniedHandler;
 import code.mogaktae.global.exception.handler.CustomAuthenticationEntryPoint;
@@ -45,7 +45,8 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/api/v1/auth/**",
-                                "/login"
+                                "/login",
+                                "/api/v1/user/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
