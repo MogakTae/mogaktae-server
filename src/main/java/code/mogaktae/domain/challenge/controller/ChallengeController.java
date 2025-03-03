@@ -24,4 +24,12 @@ public class ChallengeController {
     public ResponseEntity<ResponseDto<ChallengeResponseDto>> getChallenges(@Valid @RequestBody ChallengeRequestDto request){
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(challengeService.getChallenges(request.getSize(), request.getLastCursorId()), "챌린지 조회 성공"));
     }
+
+//    @PostMapping
+//    public ResponseEntity<ResponseDto<Boolean>> createChallenges(@AuthenticationPrincipal User user,
+//                                                                 @Valid @RequestBody ChallengeCreateRequestDto request){
+//        return ResponseEntity.status(HttpStatus.CREATED).body(ResponseDto.of(challengeService.createChallenge()));
+//    }
+
+//    @GetMapping("/suggest")
 }

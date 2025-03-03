@@ -4,6 +4,8 @@ import code.mogaktae.domain.challenge.dto.res.ChallengeSummaryResponseDto;
 import code.mogaktae.domain.challenge.service.ChallengeService;
 import code.mogaktae.domain.user.dto.res.UserInfoResponseDto;
 import code.mogaktae.domain.user.entity.User;
+import code.mogaktae.domain.user.entity.UserDocument;
+import code.mogaktae.domain.user.repository.UserDocumentRepository;
 import code.mogaktae.domain.user.repository.UserRepository;
 import code.mogaktae.global.exception.entity.RestApiException;
 import code.mogaktae.global.exception.error.CustomErrorCode;
@@ -21,6 +23,7 @@ public class UserService {
 
     private final ChallengeService challengeService;
     private final UserRepository userRepository;
+    private final UserDocumentRepository userDocumentRepository;
 
     @Transactional(readOnly = true)
     public UserInfoResponseDto getMyPageInfo(User authUser){
@@ -40,5 +43,9 @@ public class UserService {
                 .inProgressChallenges(inProgressChallenges)
                 .completedChallenges(completedChallenges)
                 .build();
+    }
+
+    public List<UserDocument> searchUsers(String nickname){
+        return userDocumentRepository.findByNickname(nickname);
     }
 }
