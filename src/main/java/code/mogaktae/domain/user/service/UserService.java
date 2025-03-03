@@ -1,6 +1,6 @@
 package code.mogaktae.domain.user.service;
 
-import code.mogaktae.domain.challenge.dto.ChallengeSummaryResponseDto;
+import code.mogaktae.domain.challenge.dto.res.ChallengeSummaryResponseDto;
 import code.mogaktae.domain.challenge.service.ChallengeService;
 import code.mogaktae.domain.user.dto.res.UserInfoResponseDto;
 import code.mogaktae.domain.user.entity.User;
@@ -27,8 +27,8 @@ public class UserService {
         User user = userRepository.findById(authUser.getId())
                 .orElseThrow(() -> new RestApiException(CustomErrorCode.USER_NOT_FOUND));
 
-        List<ChallengeSummaryResponseDto> completedChallenges = challengeService.getCompletedChallenges(user);
-        ChallengeSummaryResponseDto inProgressChallenges = challengeService.getInProgressChallenges(user);
+        List<ChallengeSummaryResponseDto> completedChallenges = challengeService.getMyCompletedChallenges(user);
+        ChallengeSummaryResponseDto inProgressChallenges = challengeService.getMyInProgressChallenges(user);
 
         log.info("getMyPageInfo() - 사용자 정보 조회 완료({})", user.getNickname());
 

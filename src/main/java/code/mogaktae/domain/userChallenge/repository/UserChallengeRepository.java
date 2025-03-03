@@ -1,6 +1,6 @@
 package code.mogaktae.domain.userChallenge.repository;
 
-import code.mogaktae.domain.challenge.dto.ChallengeSummaryResponseDto;
+import code.mogaktae.domain.challenge.dto.res.ChallengeSummaryResponseDto;
 import code.mogaktae.domain.user.entity.User;
 import code.mogaktae.domain.userChallenge.entity.UserChallenge;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,7 +12,9 @@ import java.util.Optional;
 
 public interface UserChallengeRepository extends JpaRepository<UserChallenge, Long> {
     @Query("""
-        SELECT new code.mogaktae.domain.challenge.dto.ChallengeSummaryResponseDto(
+        SELECT new code.mogaktae.domain.challenge.dto.res.ChallengeSummaryResponseDto(
+            uc.challenge.id,
+            uc.challenge.challengeImageUrl,
             uc.challenge.name,
             uc.challenge.dailyProblem,
             uc.challenge.startDate,
@@ -25,7 +27,9 @@ public interface UserChallengeRepository extends JpaRepository<UserChallenge, Lo
     List<ChallengeSummaryResponseDto> findCompletedChallengesByUser(@Param("user") User user);
 
     @Query("""
-        SELECT new code.mogaktae.domain.challenge.dto.ChallengeSummaryResponseDto(
+        SELECT new code.mogaktae.domain.challenge.dto.res.ChallengeSummaryResponseDto(
+            uc.challenge.id,
+            uc.challenge.challengeImageUrl,
             uc.challenge.name,
             uc.challenge.dailyProblem,
             uc.challenge.startDate,

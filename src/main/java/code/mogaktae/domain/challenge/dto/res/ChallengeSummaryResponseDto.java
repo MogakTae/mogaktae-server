@@ -1,4 +1,4 @@
-package code.mogaktae.domain.challenge.dto;
+package code.mogaktae.domain.challenge.dto.res;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -9,6 +9,18 @@ import java.time.LocalDate;
 @Getter
 @Schema(description = "챌린지 요약 정보 Response")
 public class ChallengeSummaryResponseDto {
+
+    @Schema(
+            description = "챌린지 id",
+            example = "10"
+    )
+    private final Long id;
+
+    @Schema(
+            description = "챌린지 이미지 URL",
+            example = "https://example.com/image6.jpg"
+    )
+    private final String challengeImageUrl;
 
     @Schema(
             description = "챌린지 이름",
@@ -35,7 +47,9 @@ public class ChallengeSummaryResponseDto {
     private final LocalDate endDate;
 
     @Builder
-    private ChallengeSummaryResponseDto(String name, Long dailyProblem, LocalDate startDate, LocalDate endDate) {
+    private ChallengeSummaryResponseDto(Long id, String challengeImageUrl, String name, Long dailyProblem, LocalDate startDate, LocalDate endDate) {
+        this.id = id;
+        this.challengeImageUrl = challengeImageUrl;
         this.name = name;
         this.dailyProblem = dailyProblem;
         this.startDate = startDate;
