@@ -25,14 +25,5 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(ResponseDto.of(authService.signUp(request), "회원가입 성공"));
     }
 
-    @PostMapping("/repository-url/confirm")
-    public ResponseEntity<ResponseDto<Boolean>> checkRepositoryUrlAvailable(@Valid @RequestBody CheckRepositoryUrlRequestDto request){
-        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(authService.checkRepositoryUrlAvailable(request.getNickname(), request.getRepositoryUrl()), "레포지토리 URL 검사 완료"));
-    }
 
-    @PutMapping("/repository-url")
-    public ResponseEntity<ResponseDto<String>> updateRepositoryUrl(@AuthenticationPrincipal User user,
-                                                                   @Valid @RequestBody UpdateUserRepositoryUrlRequestDto request){
-        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(authService.updateRepositoryUrl(user, request), "레포지토리 URL 변경 완료"));
-    }
 }
