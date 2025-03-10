@@ -2,7 +2,6 @@ package code.mogaktae.domain.user.service;
 
 import code.mogaktae.domain.common.util.GitHubApiResponseHandler;
 import code.mogaktae.domain.user.dto.req.SignUpRequestDto;
-import code.mogaktae.domain.user.dto.req.UpdateUserRepositoryUrlRequestDto;
 import code.mogaktae.domain.user.entity.User;
 import code.mogaktae.domain.user.repository.UserRepository;
 import code.mogaktae.global.exception.entity.RestApiException;
@@ -10,7 +9,6 @@ import code.mogaktae.global.exception.error.CustomErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
@@ -39,21 +37,6 @@ public class AuthService {
         return user.getNickname();
     }
 
-    @Transactional
-    public String updateRepositoryUrl(User authUser, UpdateUserRepositoryUrlRequestDto request) {
-
-        User user = userRepository.findById(authUser.getId())
-                .orElseThrow(() -> new RestApiException(CustomErrorCode.USER_NOT_FOUND));
-
-        if(checkRepositoryUrlAvailable(user.getNickname(), user.getRepositoryUrl())){
-
-            log.info("updateRepositoryUrl() - 사용자 레포지토리 URL 업데이트 성공");
-
-            return user.updateRepositoryUrl(request.getRepositoryUrl());
-        }else{
-            throw new RestApiException(CustomErrorCode.REPOSITORY_URL_NOT_FOUND);
-        }
-    }
 
     public Boolean checkRepositoryUrlAvailable(String nickname, String repositoryUrl){
         String response;

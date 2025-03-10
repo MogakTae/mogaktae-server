@@ -31,15 +31,13 @@ public class UserService {
                 .orElseThrow(() -> new RestApiException(CustomErrorCode.USER_NOT_FOUND));
 
         List<ChallengeSummaryResponseDto> completedChallenges = challengeService.getMyCompletedChallenges(user);
-        ChallengeSummaryResponseDto inProgressChallenges = challengeService.getMyInProgressChallenges(user);
+        List<ChallengeSummaryResponseDto> inProgressChallenges = challengeService.getMyInProgressChallenges(user);
 
         log.info("getMyPageInfo() - 사용자 정보 조회 완료({})", user.getNickname());
 
         return UserInfoResponseDto.builder()
                 .nickname(user.getNickname())
                 .profileImageUrl(user.getProfileImageUrl())
-                .repositoryUrl(user.getRepositoryUrl())
-                .tier(user.getTier().toString())
                 .inProgressChallenges(inProgressChallenges)
                 .completedChallenges(completedChallenges)
                 .build();

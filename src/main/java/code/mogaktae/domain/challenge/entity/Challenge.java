@@ -1,11 +1,9 @@
 package code.mogaktae.domain.challenge.entity;
 
+import code.mogaktae.domain.challenge.dto.req.ChallengeCreateRequestDto;
 import code.mogaktae.domain.userChallenge.entity.UserChallenge;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -25,7 +23,7 @@ public class Challenge {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 60)
     private String name;
 
     @Column(nullable = false, name = "challenge_image_url")
@@ -44,6 +42,16 @@ public class Challenge {
     @Column(nullable = false)
     private Long penalty;
 
-    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<UserChallenge> userChallenges = new ArrayList<>();
+
+    @Builder
+    protected Challenge(ChallengeCreateRequestDto request){
+        this.name = request.getName();
+        this.challengeImageUrl = request.getChallengeImageUrl();
+        this.startDate = LocalDate.now();
+        this.endDate = request.getEndDate();
+        this.dailyProblem = request.getDailyProblem();
+        this.penalty = request.getPenalty();
+    }
 }

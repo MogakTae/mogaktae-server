@@ -39,7 +39,7 @@ public class UserInfoResponseDto {
             description = "진행중인 챌린지",
             example = ""
     )
-    private final ChallengeSummaryResponseDto inProgressChallenges;
+    private final List<ChallengeSummaryResponseDto> inProgressChallenges;
 
     @Schema(
             description = "과거 진행했던 챌린지",
@@ -49,7 +49,7 @@ public class UserInfoResponseDto {
 
     @Builder
     private UserInfoResponseDto(String profileImageUrl, String nickname, String repositoryUrl, String tier,
-                                ChallengeSummaryResponseDto inProgressChallenges, List<ChallengeSummaryResponseDto> completedChallenges) {
+                                List<ChallengeSummaryResponseDto> inProgressChallenges, List<ChallengeSummaryResponseDto> completedChallenges) {
         this.profileImageUrl = profileImageUrl;
         this.nickname = nickname;
         this.repositoryUrl = repositoryUrl;

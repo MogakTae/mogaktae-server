@@ -20,6 +20,15 @@ public class UserChallenge {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private String repositoryUrl;
+
+    @Column(nullable = false)
+    private Long totalPenalty;
+
+    @Column(nullable = false)
+    private Boolean todaySolved;
+
     @ManyToOne
     @JoinColumn(name = "challenge_id", nullable = false)
     private Challenge challenge;
@@ -33,8 +42,10 @@ public class UserChallenge {
 
     @Builder
     private UserChallenge(Challenge challenge, User user) {
+        this.totalPenalty = 0L;
+        this.todaySolved = false;
         this.challenge = challenge;
         this.user = user;
-        this.isCompleted = LocalDate.now().isAfter(challenge.getEndDate()); // 챌린지 종료 여부 초기화
+        this.isCompleted = LocalDate.now().isAfter(challenge.getEndDate());
     }
 }

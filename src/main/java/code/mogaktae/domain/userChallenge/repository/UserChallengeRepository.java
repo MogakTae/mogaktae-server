@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UserChallengeRepository extends JpaRepository<UserChallenge, Long> {
     @Query("""
@@ -39,6 +38,8 @@ public interface UserChallengeRepository extends JpaRepository<UserChallenge, Lo
         WHERE uc.user = :user
         AND uc.isCompleted = false
     """)
-    Optional<ChallengeSummaryResponseDto> findInProgressChallengeByUser(@Param("user") User user);
+    List<ChallengeSummaryResponseDto> findInProgressChallengeByUser(@Param("user") User user);
+
+    Boolean existsByUserIdAndChallengeId(Long userId, Long challengeId);
 
 }

@@ -26,15 +26,8 @@ public class User {
     @Column(nullable = false)
     private String nickname;
 
-    @Column(nullable = false, name = "repository_url")
-    private String repositoryUrl;
-
     @Column(nullable = false, name = "profile_image_url")
     private String profileImageUrl;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = true)
-    private Tier tier = Tier.SEED;
 
     @Column(nullable = true, name = "daily_problem_solved")
     private Boolean dailyProblemSolved = false;
@@ -53,19 +46,13 @@ public class User {
     @Column(nullable = false)
     private String role = "ROLE_USER";
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<UserChallenge> userChallenges = new ArrayList<>();
 
 
     @Builder
     private User(SignUpRequestDto request){
         this.nickname = request.getNickname();
-        this.repositoryUrl = request.getRepositoryUrl();
         this.profileImageUrl = request.getProfileImageUrl();
-    }
-
-    public String updateRepositoryUrl(String repositoryUrl){
-        this.repositoryUrl = repositoryUrl;
-        return this.repositoryUrl;
     }
 }
