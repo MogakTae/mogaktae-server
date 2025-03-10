@@ -13,6 +13,9 @@ public enum CustomErrorCode implements ErrorCode {
     REPOSITORY_URL_NOT_FOUND(HttpStatus.NOT_FOUND, 404, "레포지토리 Url 조회에 실패하였습니다."),
     USER_NO_PERMISSION_TO_CHALLENGE(HttpStatus.UNAUTHORIZED ,401, "챌린지에 접근할 권한이 없습니다"),
 
+    // Challenge Error Code
+    CHALLENGE_NOT_FOUND(HttpStatus.NOT_FOUND, 404, "챌린지 조회에 실패하였습니다."),
+
     // RestTemplate res/req Error Code
     HTTP_REQUEST_FAILED(HttpStatus.SERVICE_UNAVAILABLE, 503, "외부 API 요청에 실패하였습니다."),
     JSON_PARSING_ERROR(HttpStatus.UNPROCESSABLE_ENTITY, 422, "외부 API 응답 파싱에 실패하였습니다."),

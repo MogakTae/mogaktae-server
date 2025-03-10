@@ -49,7 +49,6 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<UserChallenge> userChallenges = new ArrayList<>();
 
-
     @Builder
     private User(SignUpRequestDto request){
         this.nickname = request.getNickname();

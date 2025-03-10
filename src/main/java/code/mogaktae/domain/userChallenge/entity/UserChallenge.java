@@ -20,13 +20,13 @@ public class UserChallenge {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "repository_url")
     private String repositoryUrl;
 
-    @Column(nullable = false)
+    @Column(name = "total_penalty", nullable = false)
     private Long totalPenalty;
 
-    @Column(nullable = false)
+    @Column(name = "today_solved", nullable = false)
     private Boolean todaySolved;
 
     @ManyToOne

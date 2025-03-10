@@ -1,8 +1,10 @@
 package code.mogaktae.domain.challenge.service;
 
 import code.mogaktae.domain.challenge.dto.req.ChallengeCreateRequestDto;
+import code.mogaktae.domain.challenge.dto.res.ChallengeDetailsResponseDto;
 import code.mogaktae.domain.challenge.dto.res.ChallengeResponseDto;
 import code.mogaktae.domain.challenge.dto.res.ChallengeSummaryResponseDto;
+import code.mogaktae.domain.challenge.dto.res.UserChallengeSummaryDto;
 import code.mogaktae.domain.challenge.entity.Challenge;
 import code.mogaktae.domain.challenge.repository.ChallengeRepository;
 import code.mogaktae.domain.common.util.CursorBasedPaginationCollection;
@@ -43,11 +45,9 @@ public class ChallengeService {
 
         List<ChallengeSummaryResponseDto> inProgressChallenges = userChallengeRepository.findInProgressChallengeByUser(user);
 
-
         int size = inProgressChallenges.size();
 
         log.info("getInProgressChallenges() - {}의 {} 개의 진행중인 챌린지 조회 완료", user.getNickname(), size);
-
 
         return inProgressChallenges;
     }
@@ -96,15 +96,27 @@ public class ChallengeService {
         return true;
     }
 
+    @Transactional(readOnly = true)
+    public ChallengeDetailsResponseDto getChallengesDetails(User authUser, Long challengeId){
 
-//    @Transactional(readOnly = true)
-//    public void getChallengesDetails(User authUser, Long challengeId){
-//
-//        if(!userChallengeRepository.existsByUserIdAndChallengeId(authUser.getId(), challengeId))
-//            throw new RestApiException(CustomErrorCode.USER_NO_PERMISSION_TO_CHALLENGE);
-//
-//
-//
-//
-//    }
+        if(!userChallengeRepository.existsByUserIdAndChallengeId(authUser.getId(), challengeId))
+            throw new RestApiException(CustomErrorCode.USER_NO_PERMISSION_TO_CHALLENGE);
+
+        Challenge challenge = challengeRepository.findById(challengeId)
+                .orElseThrow(() -> new RestApiException(CustomErrorCode.CHALLENGE_NOT_FOUND));
+
+        List<UserChallengeSummaryDto> userChallengeSummaries = userChallengeRepository.findUserChallengeSummariesByChallengeId(challengeId);
+
+        Long totalPenalty = userChallengeSummaries.stream()
+                .mapToLong(UserChallengeSummaryDto::getPenalty)
+                .sum();
+
+        return ChallengeDetailsResponseDto.builder()
+                .name(challenge.getName())
+                .startDate(challenge.getStartDate().toString())
+                .endDate(challenge.getEndDate().toString())
+                .totalPenalty(totalPenalty)
+                .userChallengeSummaries(userChallengeSummaries)
+                .build();
+    }
 }
