@@ -9,6 +9,7 @@ import code.mogaktae.domain.user.repository.UserDocumentRepository;
 import code.mogaktae.domain.user.repository.UserRepository;
 import code.mogaktae.global.exception.entity.RestApiException;
 import code.mogaktae.global.exception.error.CustomErrorCode;
+import code.mogaktae.global.security.oauth.domain.common.OAuth2UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,8 +27,8 @@ public class UserService {
     private final UserDocumentRepository userDocumentRepository;
 
     @Transactional(readOnly = true)
-    public UserInfoResponseDto getMyPageInfo(User authUser){
-        User user = userRepository.findById(authUser.getId())
+    public UserInfoResponseDto getMyPageInfo(OAuth2UserDetailsImpl authUser){
+        User user = userRepository.findByNickname(authUser.getUsername())
                 .orElseThrow(() -> new RestApiException(CustomErrorCode.USER_NOT_FOUND));
 
         List<ChallengeSummaryResponseDto> completedChallenges = challengeService.getMyCompletedChallenges(user);

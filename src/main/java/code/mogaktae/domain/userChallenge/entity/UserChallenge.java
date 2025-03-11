@@ -29,6 +29,9 @@ public class UserChallenge {
     @Column(name = "today_solved", nullable = false)
     private Boolean todaySolved;
 
+    @Column(name = "start_baekJoon_tier", nullable = false)
+    private Long startBaekJoonTier;
+
     @ManyToOne
     @JoinColumn(name = "challenge_id", nullable = false)
     private Challenge challenge;
@@ -41,11 +44,12 @@ public class UserChallenge {
     private Boolean isCompleted = false;
 
     @Builder
-    private UserChallenge(Challenge challenge, User user) {
+    private UserChallenge(Challenge challenge, User user, Long tier) {
         this.totalPenalty = 0L;
         this.todaySolved = false;
         this.challenge = challenge;
         this.user = user;
+        this.startBaekJoonTier = tier;
         this.isCompleted = LocalDate.now().isAfter(challenge.getEndDate());
     }
 }

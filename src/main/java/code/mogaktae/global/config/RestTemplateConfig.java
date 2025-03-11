@@ -16,4 +16,12 @@ public class RestTemplateConfig {
                 .rootUri("https://api.github.com")
                 .build();
     }
+
+    @Bean
+    @Qualifier("solvedAcRestTemplate")
+    public RestTemplate solbedAcRestTemplate(RestTemplateBuilder restTemplateBuilder){
+        return restTemplateBuilder
+                .rootUri("https://solved.ac/api/v3")
+                .build();
+    }
 }

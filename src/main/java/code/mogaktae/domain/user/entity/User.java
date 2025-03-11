@@ -29,11 +29,8 @@ public class User {
     @Column(nullable = false, name = "profile_image_url")
     private String profileImageUrl;
 
-    @Column(nullable = true, name = "daily_problem_solved")
-    private Boolean dailyProblemSolved = false;
-
-    @Column(nullable = true, name = "penalty_sum")
-    private Long penaltySum = 0L;
+    @Column(nullable = false, name = "solved_ac_Id")
+    private String solvedAcId;
 
     @CreatedDate
     @Column(nullable = false, name = "created_at", updatable = false)
@@ -53,5 +50,6 @@ public class User {
     private User(SignUpRequestDto request){
         this.nickname = request.getNickname();
         this.profileImageUrl = request.getProfileImageUrl();
+        this.solvedAcId = request.getSolvedAcId();
     }
 }

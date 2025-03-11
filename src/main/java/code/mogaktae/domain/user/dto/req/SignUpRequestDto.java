@@ -20,17 +20,6 @@ public class SignUpRequestDto {
     private String nickname;
 
     @Schema(
-            description = "레포지토리 Url",
-            example = "https://github.com/xunxxoie/Haruni-server"
-    )
-    @Pattern(
-            regexp = "^https://github\\.com/.*$",
-            message = "레포지토리 Url 은 'https://github.com/'로 시작해야 합니다."
-    )
-    @NotBlank(message = "레포지토리 Url 이 비어있습니다.")
-    private String repositoryUrl;
-
-    @Schema(
             description = "프로필 이미지 Url",
             example = "https://avatars.githubusercontent.com/u/146558936?v=4"
     )
@@ -40,4 +29,11 @@ public class SignUpRequestDto {
     )
     @NotBlank(message = "프로필 이미지 Url 이 비어있습니다.")
     private String profileImageUrl;
+
+    @Schema(
+            description = "solved.ac 아이디",
+            example = "ahh052"
+    )
+    @NotBlank(message = "solved.ac 아이디가 비어있습니다.")
+    private String solvedAcId;
 }

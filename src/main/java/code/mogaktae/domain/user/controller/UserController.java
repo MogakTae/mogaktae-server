@@ -2,9 +2,9 @@ package code.mogaktae.domain.user.controller;
 
 import code.mogaktae.domain.common.dto.ResponseDto;
 import code.mogaktae.domain.user.dto.res.UserInfoResponseDto;
-import code.mogaktae.domain.user.entity.User;
 import code.mogaktae.domain.user.entity.UserDocument;
 import code.mogaktae.domain.user.service.UserService;
+import code.mogaktae.global.security.oauth.domain.common.OAuth2UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +24,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/me")
-    public ResponseEntity<ResponseDto<UserInfoResponseDto>> getMyPageInfo(@AuthenticationPrincipal User user){
+    public ResponseEntity<ResponseDto<UserInfoResponseDto>> getMyPageInfo(@AuthenticationPrincipal OAuth2UserDetailsImpl user){
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(userService.getMyPageInfo(user), "유저 정보 조회 성공"));
     }
 

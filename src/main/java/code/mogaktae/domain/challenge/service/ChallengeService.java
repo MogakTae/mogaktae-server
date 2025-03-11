@@ -1,6 +1,7 @@
 package code.mogaktae.domain.challenge.service;
 
 import code.mogaktae.domain.challenge.dto.req.ChallengeCreateRequestDto;
+import code.mogaktae.domain.challenge.dto.req.ChallengeJoinRequestDto;
 import code.mogaktae.domain.challenge.dto.res.ChallengeDetailsResponseDto;
 import code.mogaktae.domain.challenge.dto.res.ChallengeResponseDto;
 import code.mogaktae.domain.challenge.dto.res.ChallengeSummaryResponseDto;
@@ -14,20 +15,33 @@ import code.mogaktae.domain.userChallenge.entity.UserChallenge;
 import code.mogaktae.domain.userChallenge.repository.UserChallengeRepository;
 import code.mogaktae.global.exception.entity.RestApiException;
 import code.mogaktae.global.exception.error.CustomErrorCode;
-import lombok.RequiredArgsConstructor;
+import code.mogaktae.global.security.oauth.domain.common.OAuth2UserDetailsImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class ChallengeService {
 
+    public ChallengeService(@Qualifier("solvedAcRestTemplate") RestTemplate restTemplate, UserRepository userRepository,
+                            UserChallengeRepository userChallengeRepository, ChallengeRepository challengeRepository) {
+        this.restTemplate = restTemplate;
+        this.userRepository = userRepository;
+        this.userChallengeRepository = userChallengeRepository;
+        this.challengeRepository = challengeRepository;
+    }
+
+    private final RestTemplate restTemplate;
     private final UserRepository userRepository;
     private final UserChallengeRepository userChallengeRepository;
     private final ChallengeRepository challengeRepository;
@@ -66,7 +80,7 @@ public class ChallengeService {
     }
 
     @Transactional
-    public Boolean createChallenge(User authUser, ChallengeCreateRequestDto request){
+    public Long createChallenge(OAuth2UserDetailsImpl authUser, ChallengeCreateRequestDto request){
 
         Challenge challenge = Challenge.builder()
                 .request(request)
@@ -74,32 +88,33 @@ public class ChallengeService {
 
         challengeRepository.save(challenge);
 
-        request.getUserNicknames().add(authUser.getNickname());
+        User user = userRepository.findByNickname(authUser.getUsername())
+                        .orElseThrow(() -> new RestApiException(CustomErrorCode.USER_NOT_FOUND));
 
-        request.getUserNicknames().forEach(nickname -> {
-            User user = userRepository.findByNickname(nickname)
-                    .orElseThrow(() -> new RestApiException(CustomErrorCode.USER_NOT_FOUND));
+        UserChallenge userChallenge = UserChallenge.builder()
+                        .user(user)
+                        .challenge(challenge)
+                        .build();
 
-            UserChallenge userChallenge = UserChallenge.builder()
-                    .user(user)
-                    .challenge(challenge)
-                    .build();
+        challenge.getUserChallenges().add(userChallenge);
+        user.getUserChallenges().add(userChallenge);
 
-            challenge.getUserChallenges().add(userChallenge);
-            user.getUserChallenges().add(userChallenge);
-
-            userChallengeRepository.save(userChallenge);
-        });
+        userChallengeRepository.save(userChallenge);
 
         log.info("createChallenge() - 챌린지 생성 완료");
 
-        return true;
+        return challenge.getId();
     }
 
     @Transactional(readOnly = true)
-    public ChallengeDetailsResponseDto getChallengesDetails(User authUser, Long challengeId){
+    public ChallengeDetailsResponseDto getChallengesDetails(OAuth2UserDetailsImpl authUser, Long challengeId){
 
-        if(!userChallengeRepository.existsByUserIdAndChallengeId(authUser.getId(), challengeId))
+        // TODO 쿼리 최적화 작업 필요
+
+        User user = userRepository.findByNickname(authUser.getUsername())
+                .orElseThrow(() -> new RestApiException(CustomErrorCode.USER_NOT_FOUND));
+
+        if(!userChallengeRepository.existsByUserIdAndChallengeId(user.getId(), challengeId))
             throw new RestApiException(CustomErrorCode.USER_NO_PERMISSION_TO_CHALLENGE);
 
         Challenge challenge = challengeRepository.findById(challengeId)
@@ -118,5 +133,46 @@ public class ChallengeService {
                 .totalPenalty(totalPenalty)
                 .userChallengeSummaries(userChallengeSummaries)
                 .build();
+    }
+
+    @Transactional
+    public Long joinChallenge(OAuth2UserDetailsImpl authUser, ChallengeJoinRequestDto request){
+        User user = userRepository.findByNickname(authUser.getUsername())
+                .orElseThrow(() -> new RestApiException(CustomErrorCode.USER_NOT_FOUND));
+
+        Challenge challenge = challengeRepository.findById(request.getChallengeId())
+                .orElseThrow(() -> new RestApiException(CustomErrorCode.CHALLENGE_NOT_FOUND));
+
+        String endPoint = UriComponentsBuilder.fromUriString("/user/show")
+                .queryParam("handle", user.getSolvedAcId())
+                .toUriString();
+
+        Map<String, Object> response;
+        try{
+            response = restTemplate.getForObject(
+                    endPoint,
+                    Map.class
+            );
+        }catch (HttpClientErrorException e){
+            log.error("joinChallenge() - 챌린지 참여 실패. solvedAc 백준 티어 가져오기 실패");
+            throw new RestApiException(CustomErrorCode.HTTP_REQUEST_FAILED);
+        }
+
+        Long tier = ((Number) response.get("tier")).longValue();
+
+        UserChallenge userChallenge = UserChallenge.builder()
+                        .user(user)
+                        .challenge(challenge)
+                        .tier(tier)
+                        .build();
+
+        challenge.getUserChallenges().add(userChallenge);
+        user.getUserChallenges().add(userChallenge);
+
+        userChallengeRepository.save(userChallenge);
+
+        log.info("joinChallenge() - 챌린지 참여 성공");
+
+        return challenge.getId();
     }
 }

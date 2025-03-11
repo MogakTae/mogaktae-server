@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Schema(description = "챌린지 생성 Request")
 @Getter
@@ -51,10 +50,10 @@ public class ChallengeCreateRequestDto {
     @Min(value = 0)
     private Long penalty;
 
-    @Schema(
-            description = "챌린지 동반 참여자 닉네임",
-            example = "xunxxoie, joonseo ..."
-    )
-    @Size(min = 1, message = "챌린지 생성을 위해서는 최소 2명 이상의 참여자가 필요합니다.")
-    private List<String> userNicknames;
+//    @Schema(
+//            description = "챌린지 동반 참여자 닉네임",
+//            example = "xunxxoie, joonseo ..."
+//    )
+//    @Size(min = 1, message = "챌린지 생성을 위해서는 최소 2명 이상의 참여자가 필요합니다.")
+//    private List<String> userNicknames;
 }
