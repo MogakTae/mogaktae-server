@@ -26,7 +26,7 @@ public class ChallengeController {
 
     @GetMapping("/info")
     public ResponseEntity<ResponseDto<ChallengeResponseDto>> getChallengesSummary(@Valid @RequestBody ChallengeRequestDto request){
-        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(challengeService.getChallengesSummary(request.getSize(), request.getLastCursorId()), "챌린지 요약 조회 성공"));
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(challengeService.getChallengesSummary(request.getSize(), request.getLastCursorId()), "요약 챌린지 조회 성공"));
     }
 
     @GetMapping("/info/details")
