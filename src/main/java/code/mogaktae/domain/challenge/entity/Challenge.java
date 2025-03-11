@@ -40,7 +40,7 @@ public class Challenge {
     private Long dailyProblem;
 
     @Column(nullable = false)
-    private Long penalty;
+    private Long penaltyPerOnce;
 
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<UserChallenge> userChallenges = new ArrayList<>();
@@ -52,6 +52,6 @@ public class Challenge {
         this.startDate = LocalDate.now();
         this.endDate = request.getEndDate();
         this.dailyProblem = request.getDailyProblem();
-        this.penalty = request.getPenalty();
+        this.penaltyPerOnce = request.getPenaltyPerOnce();
     }
 }

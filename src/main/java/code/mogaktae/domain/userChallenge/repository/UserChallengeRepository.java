@@ -56,4 +56,18 @@ public interface UserChallengeRepository extends JpaRepository<UserChallenge, Lo
         WHERE uc.challenge.id = :challengeId
     """)
     List<UserChallengeSummaryDto> findUserChallengeSummariesByChallengeId(@Param("challengeId") Long challengeId);
+
+    @Query("SELECT COUNT(uc) FROM UserChallenge uc WHERE uc.user.id = :userId AND uc.isCompleted = false")
+    long countUserChallenge(@Param("userId") Long userId);
+
+    @Query("""
+        SELECT COUNT(uc) > 0
+        FROM UserChallenge uc
+        JOIN uc.user u
+        WHERE u.nickname = :nickname
+        AND uc.challenge.id = :challengeId
+    """)
+    Boolean existsByNicknameAndChallengeId(@Param("nickname") String nickname, @Param("challengeId") Long challengeId);
+
+    boolean existsByRepositoryUrl(String repositoryUrl);
 }

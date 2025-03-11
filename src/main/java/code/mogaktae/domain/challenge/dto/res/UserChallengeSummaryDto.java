@@ -7,7 +7,6 @@ import lombok.Getter;
 @Getter
 public class UserChallengeSummaryDto {
 
-
     @Schema(
             description = "사용자 아이콘 URL",
             example = "https://avatars.githubusercontent.com/u/146558936?s=400&u=beebee044bba79edde84d0a688f3c105441c658f&v=4"
@@ -46,5 +45,4 @@ public class UserChallengeSummaryDto {
         this.penalty = penalty;
         this.todaySolved = todaySolved;
     }
-
 }

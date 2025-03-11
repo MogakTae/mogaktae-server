@@ -44,12 +44,14 @@ public class UserChallenge {
     private Boolean isCompleted = false;
 
     @Builder
-    private UserChallenge(Challenge challenge, User user, Long tier) {
+    private UserChallenge(Challenge challenge, User user, String repositoryUrl, Long tier) {
+        this.user = user;
+        this.challenge = challenge;
+        this.repositoryUrl = repositoryUrl;
+        this.startBaekJoonTier = tier;
+
         this.totalPenalty = 0L;
         this.todaySolved = false;
-        this.challenge = challenge;
-        this.user = user;
-        this.startBaekJoonTier = tier;
         this.isCompleted = LocalDate.now().isAfter(challenge.getEndDate());
     }
 }

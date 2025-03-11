@@ -19,7 +19,7 @@ public class GitController {
 
     private final AuthService authService;
 
-    @PostMapping("/repository-url/confirm")
+    @PostMapping("/repository-url/check")
     public ResponseEntity<ResponseDto<Boolean>> checkRepositoryUrlAvailable(@Valid @RequestBody CheckRepositoryUrlRequestDto request){
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(authService.checkRepositoryUrlAvailable(request.getNickname(), request.getRepositoryUrl()), "레포지토리 URL 검사 완료"));
     }

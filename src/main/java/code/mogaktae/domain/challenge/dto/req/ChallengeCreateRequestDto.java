@@ -25,8 +25,15 @@ public class ChallengeCreateRequestDto {
             description = "챌린지 이미지 URL",
             example = "https://s3.amazonbucket/mogaktae/1"
     )
-    @NotBlank(message = "챌린지명이 비어있습니다.")
+    @NotBlank(message = "챌린지 배경이미지 URL이 비어있습니다.")
     private String challengeImageUrl;
+
+    @Schema(
+            description = "깃허브 레포지토리 URL",
+            example = "https://github.com/9oormthon-univ/2024_DANPOONG_TEAM_19_BE"
+    )
+    @NotBlank(message = "깃허브 레포지토리 URL이 비어있습니다.")
+    private String repositoryUrl;
 
     @Schema(
             description = "챌린지 종료일",
@@ -48,12 +55,5 @@ public class ChallengeCreateRequestDto {
             example = "5000"
     )
     @Min(value = 0)
-    private Long penalty;
-
-//    @Schema(
-//            description = "챌린지 동반 참여자 닉네임",
-//            example = "xunxxoie, joonseo ..."
-//    )
-//    @Size(min = 1, message = "챌린지 생성을 위해서는 최소 2명 이상의 참여자가 필요합니다.")
-//    private List<String> userNicknames;
+    private Long penaltyPerOnce;
 }

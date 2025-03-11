@@ -2,6 +2,7 @@ package code.mogaktae.domain.user.service;
 
 import code.mogaktae.domain.challenge.dto.res.ChallengeSummaryResponseDto;
 import code.mogaktae.domain.challenge.service.ChallengeService;
+import code.mogaktae.domain.common.util.SolvedAcUtils;
 import code.mogaktae.domain.user.dto.res.UserInfoResponseDto;
 import code.mogaktae.domain.user.entity.User;
 import code.mogaktae.domain.user.entity.UserDocument;
@@ -22,6 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
 
+    private final SolvedAcUtils solvedAcUtils;
     private final ChallengeService challengeService;
     private final UserRepository userRepository;
     private final UserDocumentRepository userDocumentRepository;
@@ -36,9 +38,12 @@ public class UserService {
 
         log.info("getMyPageInfo() - 사용자 정보 조회 완료({})", user.getNickname());
 
+        Long tier = solvedAcUtils.getUserBaekJoonTier(user.getSolvedAcId());
+
         return UserInfoResponseDto.builder()
                 .nickname(user.getNickname())
                 .profileImageUrl(user.getProfileImageUrl())
+                .tier(tier)
                 .inProgressChallenges(inProgressChallenges)
                 .completedChallenges(completedChallenges)
                 .build();

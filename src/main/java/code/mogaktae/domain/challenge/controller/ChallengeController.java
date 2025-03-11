@@ -24,21 +24,21 @@ public class ChallengeController {
 
     private final ChallengeService challengeService;
 
+    @PostMapping
+    public ResponseEntity<ResponseDto<Long>> createChallenges(@AuthenticationPrincipal OAuth2UserDetailsImpl user,
+                                                              @Valid @RequestBody ChallengeCreateRequestDto request){
+        return ResponseEntity.status(HttpStatus.CREATED).body(ResponseDto.of(challengeService.createChallenge(user, request), "챌린지 생성 성공"));
+    }
+
     @GetMapping("/info")
     public ResponseEntity<ResponseDto<ChallengeResponseDto>> getChallengesSummary(@Valid @RequestBody ChallengeRequestDto request){
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(challengeService.getChallengesSummary(request.getSize(), request.getLastCursorId()), "요약 챌린지 조회 성공"));
     }
 
     @GetMapping("/info/details")
-    public ResponseEntity<ResponseDto<ChallengeDetailsResponseDto>> getChallengesDetails(@AuthenticationPrincipal OAuth2UserDetailsImpl user,
+    public ResponseEntity<ResponseDto<ChallengeDetailsResponseDto>> getChallengesDetail(@AuthenticationPrincipal OAuth2UserDetailsImpl user,
                                                                                          @RequestParam Long challengeId){
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(challengeService.getChallengesDetails(user, challengeId), "챌린지 상세 조회 완료"));
-    }
-
-    @PostMapping
-    public ResponseEntity<ResponseDto<Long>> createChallenges(@AuthenticationPrincipal OAuth2UserDetailsImpl user,
-                                                              @Valid @RequestBody ChallengeCreateRequestDto request){
-        return ResponseEntity.status(HttpStatus.CREATED).body(ResponseDto.of(challengeService.createChallenge(user, request), "챌린지 생성 성공"));
     }
 
     @PostMapping("/join")
