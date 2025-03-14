@@ -61,7 +61,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     @Transactional
     public TokenResponseDto oAuth2Login(Authentication authentication){
-        log.info("[AuthService - oAuth2Login()] : In");
 
         return jwtTokenProvider.generateToken(authentication);
     }

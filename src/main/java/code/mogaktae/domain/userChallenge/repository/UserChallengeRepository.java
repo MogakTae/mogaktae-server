@@ -4,6 +4,7 @@ import code.mogaktae.domain.challenge.dto.res.ChallengeSummaryResponseDto;
 import code.mogaktae.domain.challenge.dto.res.UserChallengeSummaryDto;
 import code.mogaktae.domain.user.entity.User;
 import code.mogaktae.domain.userChallenge.entity.UserChallenge;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -71,6 +72,7 @@ public interface UserChallengeRepository extends JpaRepository<UserChallenge, Lo
 
     boolean existsByRepositoryUrl(String repositoryUrl);
 
+    @EntityGraph(attributePaths = {"user"})
     @Query("SELECT uc FROM UserChallenge uc WHERE uc.challenge.id = :challengeId ORDER BY uc.totalSolvedProblem DESC")
     List<UserChallenge> findByChallengeId(@Param("challengeId") Long challengeId);
 }

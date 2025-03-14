@@ -167,10 +167,11 @@ public class ChallengeService {
         User user = userRepository.findByNickname(authUser.getName())
                 .orElseThrow(() -> new RestApiException(CustomErrorCode.USER_NOT_FOUND));
 
-        if (userChallengeRepository.existsByUserIdAndChallengeId(user.getId(), challengeId)) {
+        if (userChallengeRepository.existsByUserIdAndChallengeId(user.getId(), challengeId))
             throw new RestApiException(CustomErrorCode.USER_NO_PERMISSION_TO_CHALLENGE);
-        }
 
-        return redisCacheService.getCachedChallengeResult(challengeId);
+
+        return redisCacheService.getChallengeResult(challengeId);
     }
+
 }

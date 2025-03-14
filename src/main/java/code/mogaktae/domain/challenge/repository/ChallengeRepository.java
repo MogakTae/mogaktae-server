@@ -9,6 +9,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @Repository
 public interface ChallengeRepository extends JpaRepository<Challenge, Long> {
 
@@ -26,4 +29,6 @@ public interface ChallengeRepository extends JpaRepository<Challenge, Long> {
         ORDER BY c.id DESC
     """)
     Page<ChallengeSummaryResponseDto> findByIdLessThanOrderByIdDesc(@Param("lastCursorId") Long lastCursorId, Pageable pageable);
+
+    List<Challenge> findAllByEndDate(LocalDate endDate);
 }
