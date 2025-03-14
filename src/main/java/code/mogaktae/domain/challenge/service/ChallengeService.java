@@ -32,13 +32,14 @@ import java.util.List;
 public class ChallengeService {
 
     private final SolvedAcUtils solvedAcUtils;
+
     private final UserRepository userRepository;
     private final UserChallengeRepository userChallengeRepository;
     private final ChallengeRepository challengeRepository;
 
     @Transactional(readOnly = true)
-    public ChallengeResponseDto getChallengesSummary(int size, Long lastCursorId){
-        PageRequest pageRequest = PageRequest.of(0, size+1);
+    public ChallengeResponseDto getChallengesSummary(int size, Long lastCursorId) {
+        PageRequest pageRequest = PageRequest.of(0, size + 1);
 
         Page<ChallengeSummaryResponseDto> challenges = challengeRepository.findByIdLessThanOrderByIdDesc(lastCursorId, pageRequest);
 
@@ -70,7 +71,7 @@ public class ChallengeService {
     }
 
     @Transactional(readOnly = true)
-    public ChallengeDetailsResponseDto getChallengesDetails(OAuth2UserDetailsImpl authUser, Long challengeId){
+    public ChallengeDetailsResponseDto getChallengesDetails(OAuth2UserDetailsImpl authUser, Long challengeId) {
 
         if (!userChallengeRepository.existsByNicknameAndChallengeId(authUser.getUsername(), challengeId))
             throw new RestApiException(CustomErrorCode.USER_NO_PERMISSION_TO_CHALLENGE);
@@ -97,12 +98,12 @@ public class ChallengeService {
 
 
     @Transactional
-    public Long createChallenge(OAuth2UserDetailsImpl authUser, ChallengeCreateRequestDto request){
+    public Long createChallenge(OAuth2UserDetailsImpl authUser, ChallengeCreateRequestDto request) {
 
         User user = userRepository.findByNickname(authUser.getUsername())
                 .orElseThrow(() -> new RestApiException(CustomErrorCode.USER_NOT_FOUND));
 
-        if(userChallengeRepository.countUserChallenge(user.getId()) > 3)
+        if (userChallengeRepository.countUserChallenge(user.getId()) > 3)
             throw new RestApiException(CustomErrorCode.CHALLENGE_MAX_PARTICIPATION_REACHED);
 
         Challenge challenge = Challenge.builder()
@@ -131,7 +132,7 @@ public class ChallengeService {
     }
 
     @Transactional
-    public Long joinChallenge(OAuth2UserDetailsImpl authUser, ChallengeJoinRequestDto request){
+    public Long joinChallenge(OAuth2UserDetailsImpl authUser, ChallengeJoinRequestDto request) {
         User user = userRepository.findByNickname(authUser.getUsername())
                 .orElseThrow(() -> new RestApiException(CustomErrorCode.USER_NOT_FOUND));
 
@@ -141,11 +142,11 @@ public class ChallengeService {
         Long tier = solvedAcUtils.getUserBaekJoonTier(user.getSolvedAcId());
 
         UserChallenge userChallenge = UserChallenge.builder()
-                        .user(user)
-                        .challenge(challenge)
-                        .repositoryUrl(request.getRepositoryUrl())
-                        .tier(tier)
-                        .build();
+                .user(user)
+                .challenge(challenge)
+                .repositoryUrl(request.getRepositoryUrl())
+                .tier(tier)
+                .build();
 
         challenge.getUserChallenges().add(userChallenge);
         user.getUserChallenges().add(userChallenge);
@@ -157,3 +158,9 @@ public class ChallengeService {
         return challenge.getId();
     }
 }
+
+//    @Transactional
+//    public ChallengeResultResponseDto getChallengeResult(OAuth2UserDetailsImpl authUser, Long challengeId){
+//
+//    }
+//}

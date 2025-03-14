@@ -26,6 +26,17 @@ services:
     networks:
       - es-bridge
 
+  redis:
+    image: redis:latest
+    container_name: mogaktae-redis
+    command: redis-server --requirepass sider-eatkagom
+    environment:
+      - REDIS_PASSWORD=sider-eatkagom
+    ports:
+      - 6379:6379
+    networks:
+      - es-bridge
+
 networks:
   es-bridge:
     driver: bridge

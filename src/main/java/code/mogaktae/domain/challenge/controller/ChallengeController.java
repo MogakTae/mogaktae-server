@@ -46,4 +46,10 @@ public class ChallengeController {
                                                             @Valid @RequestBody ChallengeJoinRequestDto request){
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(challengeService.joinChallenge(user, request), "챌린지 참여 성공"));
     }
+
+//    @GetMapping("/results")
+//    public ResponseEntity<ResponseDto<ChallengeResultResponseDto>> getChallengeResult(@AuthenticationPrincipal OAuth2UserDetailsImpl user,
+//                                                                                      @RequestParam Long challengeId){
+//        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(challengeService.getChallengeResult(user, challengeId), "챌린지 결과 조회 성공"));
+//    }
 }
