@@ -70,4 +70,7 @@ public interface UserChallengeRepository extends JpaRepository<UserChallenge, Lo
     Boolean existsByNicknameAndChallengeId(@Param("nickname") String nickname, @Param("challengeId") Long challengeId);
 
     boolean existsByRepositoryUrl(String repositoryUrl);
+
+    @Query("SELECT uc FROM UserChallenge uc WHERE uc.challenge.id = :challengeId ORDER BY uc.totalSolvedProblem DESC")
+    List<UserChallenge> findByChallengeId(@Param("challengeId") Long challengeId);
 }

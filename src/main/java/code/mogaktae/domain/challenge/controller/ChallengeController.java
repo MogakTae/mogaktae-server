@@ -7,6 +7,7 @@ import code.mogaktae.domain.challenge.dto.res.ChallengeDetailsResponseDto;
 import code.mogaktae.domain.challenge.dto.res.ChallengeResponseDto;
 import code.mogaktae.domain.challenge.service.ChallengeService;
 import code.mogaktae.domain.common.dto.ResponseDto;
+import code.mogaktae.domain.result.dto.res.ChallengeResultResponseDto;
 import code.mogaktae.global.security.oauth.domain.common.OAuth2UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -35,9 +36,9 @@ public class ChallengeController {
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(challengeService.getChallengesSummary(request.getSize(), request.getLastCursorId()), "요약 챌린지 조회 성공"));
     }
 
-    @GetMapping("/info/details")
+    @GetMapping("/info/details/{challengeId}")
     public ResponseEntity<ResponseDto<ChallengeDetailsResponseDto>> getChallengesDetail(@AuthenticationPrincipal OAuth2UserDetailsImpl user,
-                                                                                         @RequestParam Long challengeId){
+                                                                                         @PathVariable Long challengeId){
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(challengeService.getChallengesDetails(user, challengeId), "챌린지 상세 조회 완료"));
     }
 
@@ -47,9 +48,9 @@ public class ChallengeController {
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(challengeService.joinChallenge(user, request), "챌린지 참여 성공"));
     }
 
-//    @GetMapping("/results")
-//    public ResponseEntity<ResponseDto<ChallengeResultResponseDto>> getChallengeResult(@AuthenticationPrincipal OAuth2UserDetailsImpl user,
-//                                                                                      @RequestParam Long challengeId){
-//        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(challengeService.getChallengeResult(user, challengeId), "챌린지 결과 조회 성공"));
-//    }
+    @GetMapping("/results/{challengeId}")
+    public ResponseEntity<ResponseDto<ChallengeResultResponseDto>> getChallengeResult(@AuthenticationPrincipal OAuth2UserDetailsImpl user,
+                                                                                      @PathVariable Long challengeId){
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(challengeService.getChallengeResult(user, challengeId), "챌린지 결과 조회 성공"));
+    }
 }

@@ -10,6 +10,8 @@ import code.mogaktae.domain.challenge.entity.Challenge;
 import code.mogaktae.domain.challenge.repository.ChallengeRepository;
 import code.mogaktae.domain.common.util.CursorBasedPaginationCollection;
 import code.mogaktae.domain.common.util.SolvedAcUtils;
+import code.mogaktae.domain.redis.service.RedisCacheService;
+import code.mogaktae.domain.result.dto.res.ChallengeResultResponseDto;
 import code.mogaktae.domain.user.entity.User;
 import code.mogaktae.domain.user.repository.UserRepository;
 import code.mogaktae.domain.userChallenge.entity.UserChallenge;
@@ -32,6 +34,8 @@ import java.util.List;
 public class ChallengeService {
 
     private final SolvedAcUtils solvedAcUtils;
+
+    private final RedisCacheService redisCacheService;
 
     private final UserRepository userRepository;
     private final UserChallengeRepository userChallengeRepository;
@@ -96,7 +100,6 @@ public class ChallengeService {
                 .build();
     }
 
-
     @Transactional
     public Long createChallenge(OAuth2UserDetailsImpl authUser, ChallengeCreateRequestDto request) {
 
@@ -157,10 +160,17 @@ public class ChallengeService {
 
         return challenge.getId();
     }
-}
 
-//    @Transactional
-//    public ChallengeResultResponseDto getChallengeResult(OAuth2UserDetailsImpl authUser, Long challengeId){
-//
-//    }
-//}
+
+    public ChallengeResultResponseDto getChallengeResult(OAuth2UserDetailsImpl authUser, Long challengeId) {
+
+        User user = userRepository.findByNickname(authUser.getName())
+                .orElseThrow(() -> new RestApiException(CustomErrorCode.USER_NOT_FOUND));
+
+        if (userChallengeRepository.existsByUserIdAndChallengeId(user.getId(), challengeId)) {
+            throw new RestApiException(CustomErrorCode.USER_NO_PERMISSION_TO_CHALLENGE);
+        }
+
+        return redisCacheService.getCachedChallengeResult(challengeId);
+    }
+}

@@ -30,7 +30,13 @@ public class UserChallenge {
     private Boolean todaySolved;
 
     @Column(name = "start_baekJoon_tier", nullable = false)
-    private Long startBaekJoonTier;
+    private Long startTier;
+
+    @Column(name = "total_solved_problem", nullable = false)
+    private Long totalSolvedProblem;
+
+    @Column(name = "today_solved_problem", nullable = false)
+    private Long todaySolvedProblem;
 
     @ManyToOne
     @JoinColumn(name = "challenge_id", nullable = false)
@@ -48,10 +54,12 @@ public class UserChallenge {
         this.user = user;
         this.challenge = challenge;
         this.repositoryUrl = repositoryUrl;
-        this.startBaekJoonTier = tier;
+        this.startTier = tier;
 
         this.totalPenalty = 0L;
         this.todaySolved = false;
+        this.todaySolvedProblem = 0L;
+        this.totalSolvedProblem = 0L;
         this.isCompleted = LocalDate.now().isAfter(challenge.getEndDate());
     }
 }
