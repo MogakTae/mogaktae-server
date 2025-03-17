@@ -1,6 +1,7 @@
 package code.mogaktae.domain.redis.service;
 
 
+import code.mogaktae.domain.alarm.service.AlarmService;
 import code.mogaktae.domain.challenge.entity.Challenge;
 import code.mogaktae.domain.challenge.repository.ChallengeRepository;
 import code.mogaktae.domain.common.util.SolvedAcUtils;
@@ -24,6 +25,8 @@ public class RedisCacheService {
 
     private final SolvedAcUtils solvedAcUtils;
 
+    private final AlarmService alarmService;
+
     private final ChallengeRepository challengeRepository;
     private final UserChallengeRepository userChallengeRepository;
 
@@ -37,6 +40,11 @@ public class RedisCacheService {
 
         List<PersonalResult> personalResults = userChallengeResults.stream()
                 .map(userChallenge -> {
+
+                    alarmService.sendChallengeEndAlarm(userChallenge.getUser(), userChallenge.getChallenge());
+
+                    log.info("getChallengeResult() - 챌린지 종료 알림 저장 완료");
+
                     Long tier = solvedAcUtils.getUserBaekJoonTier(userChallenge.getUser().getSolvedAcId());
 
                     return PersonalResult.builder()
@@ -47,6 +55,8 @@ public class RedisCacheService {
                 .toList();
 
         log.info("getChallengeResult() - 챌린지 결과 조회 완료");
+
+
 
         return ChallengeResultResponseDto.builder()
                 .challengeName(challenge.getName())

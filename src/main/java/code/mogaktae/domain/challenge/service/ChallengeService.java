@@ -1,5 +1,6 @@
 package code.mogaktae.domain.challenge.service;
 
+import code.mogaktae.domain.alarm.service.AlarmService;
 import code.mogaktae.domain.challenge.dto.req.ChallengeCreateRequestDto;
 import code.mogaktae.domain.challenge.dto.req.ChallengeJoinRequestDto;
 import code.mogaktae.domain.challenge.dto.res.ChallengeDetailsResponseDto;
@@ -35,6 +36,7 @@ public class ChallengeService {
 
     private final SolvedAcUtils solvedAcUtils;
 
+    private final AlarmService alarmService;
     private final RedisCacheService redisCacheService;
 
     private final UserRepository userRepository;
@@ -128,6 +130,10 @@ public class ChallengeService {
         user.getUserChallenges().add(userChallenge);
 
         userChallengeRepository.save(userChallenge);
+
+        alarmService.sendChallengeJoinAlarm(user, challenge, request.getParticipants());
+
+        log.info("createChallenge() - 챌린지 참여 알림 저장 완료");
 
         log.info("createChallenge() - 챌린지 생성 완료");
 

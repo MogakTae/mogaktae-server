@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Schema(description = "챌린지 생성 Request")
 @Getter
@@ -56,4 +57,10 @@ public class ChallengeCreateRequestDto {
     )
     @Min(value = 0)
     private Long penaltyPerOnce;
+
+    @Schema(
+            description = "챌린지 참여자 닉네임 리스트",
+            example = ""
+    )
+    private List<String> participants;
 }

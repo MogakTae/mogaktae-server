@@ -1,5 +1,6 @@
 package code.mogaktae.domain.user.entity;
 
+import code.mogaktae.domain.alarm.entity.Alarm;
 import code.mogaktae.domain.user.dto.req.SignUpRequestDto;
 import code.mogaktae.domain.userChallenge.entity.UserChallenge;
 import jakarta.persistence.*;
@@ -43,13 +44,21 @@ public class User {
     @Column(nullable = false)
     private String role = "ROLE_USER";
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<UserChallenge> userChallenges = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "user_id")
+    private List<Alarm> alarms = new ArrayList<>();
 
     @Builder
     private User(SignUpRequestDto request){
         this.nickname = request.getNickname();
         this.profileImageUrl = request.getProfileImageUrl();
         this.solvedAcId = request.getSolvedAcId();
+    }
+
+    public void addAlarm(Alarm alarm){
+        this.alarms.add(alarm);
     }
 }
