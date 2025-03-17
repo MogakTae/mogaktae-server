@@ -41,7 +41,7 @@ public class RedisCacheService {
         List<PersonalResult> personalResults = userChallengeResults.stream()
                 .map(userChallenge -> {
 
-                    alarmService.sendChallengeEndAlarm(userChallenge.getUser(), userChallenge.getChallenge());
+                    alarmService.sendChallengeEndAlarm(userChallenge.getUser(), userChallenge.getChallenge().getName());
 
                     log.info("getChallengeResult() - 챌린지 종료 알림 저장 완료");
 

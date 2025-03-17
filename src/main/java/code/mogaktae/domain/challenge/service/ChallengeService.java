@@ -131,7 +131,7 @@ public class ChallengeService {
 
         userChallengeRepository.save(userChallenge);
 
-        alarmService.sendChallengeJoinAlarm(user, challenge, request.getParticipants());
+        alarmService.sendChallengeJoinAlarm(user.getNickname(), challenge.getName(), request.getParticipants());
 
         log.info("createChallenge() - 챌린지 참여 알림 저장 완료");
 

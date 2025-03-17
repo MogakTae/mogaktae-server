@@ -10,14 +10,18 @@ import org.springframework.data.annotation.CreatedDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "alarms")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "alarms")
 public class Alarm {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 50)
+    private AlarmType alarmType;
 
     @Column(nullable = false, name = "challenge_name")
     private String challengeName;
@@ -25,18 +29,14 @@ public class Alarm {
     @Column(nullable = false, name = "sender_nickname")
     private String senderNickname;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 50)
-    private AlarmType alarmType;
-
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @Builder
-    protected Alarm(String senderNickname, AlarmType alarmType, String challengeName) {
-        this.senderNickname = senderNickname;
+    private Alarm(AlarmType alarmType, String challengeName, String senderNickname) {
         this.alarmType = alarmType;
         this.challengeName = challengeName;
+        this.senderNickname = senderNickname;
     }
 }

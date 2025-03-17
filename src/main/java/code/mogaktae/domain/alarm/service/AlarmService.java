@@ -3,7 +3,6 @@ package code.mogaktae.domain.alarm.service;
 import code.mogaktae.domain.alarm.entity.Alarm;
 import code.mogaktae.domain.alarm.entity.AlarmType;
 import code.mogaktae.domain.alarm.repository.AlarmRepository;
-import code.mogaktae.domain.challenge.entity.Challenge;
 import code.mogaktae.domain.user.entity.User;
 import code.mogaktae.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,37 +23,38 @@ public class AlarmService {
 
     @Async
     @Transactional
-    public void sendChallengeJoinAlarm(User sender, Challenge challenge, List<String> participants){
+    public void sendChallengeJoinAlarm(String challengeName, String senderNickname, List<String> nicknames){
 
-        Alarm alarm = Alarm.builder()
-                .senderNickname(sender.getNickname())
+        Alarm joinAlarm = Alarm.builder()
                 .alarmType(AlarmType.JOIN)
-                .challengeName(challenge.getName())
+                .challengeName(challengeName)
+                .senderNickname(senderNickname)
                 .build();
 
-        List<User> users = userRepository.findByNicknameIn(participants);
+        List<User> participants = userRepository.findByNicknameIn(nicknames);
 
-        if(users.isEmpty()) {
-            log.error("sendChallengeJoinAlarm() - 참여자 조회 실패");
+        if(participants.isEmpty()){
+            log.warn("sendChallengeJoinAlarm() - 조회된 참여자가 없습니다.");
             return;
         }
 
-        users.forEach(user -> {
-            user.addAlarm(alarm);
+        participants.forEach(participant -> {
+            participant.addAlarm(joinAlarm);
         });
     }
 
     @Async
     @Transactional
-    public void sendChallengeEndAlarm(User user, Challenge challenge){
-        Alarm alarm = Alarm.builder()
-                .senderNickname("ADMIN")
+    public void sendChallengeEndAlarm(User user, String challengeName){
+
+        Alarm endAlarm = Alarm.builder()
                 .alarmType(AlarmType.END)
-                .challengeName(challenge.getName())
+                .challengeName(challengeName)
+                .senderNickname("")
                 .build();
 
-        user.addAlarm(alarm);
+        alarmRepository.save(endAlarm);
 
-        alarmRepository.save(alarm);
+        user.addAlarm(endAlarm);
     }
 }
