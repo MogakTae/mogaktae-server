@@ -48,7 +48,7 @@ public class Challenge {
     @Builder
     protected Challenge(ChallengeCreateRequestDto request){
         this.name = request.getName();
-        this.challengeImageUrl = request.getChallengeImageUrl();
+        this.challengeImageUrl = request.getImageUrl();
         this.startDate = LocalDate.now();
         this.endDate = request.getEndDate();
         this.dailyProblem = request.getDailyProblem();

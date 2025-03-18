@@ -6,7 +6,6 @@ import code.mogaktae.domain.challenge.dto.req.ChallengeJoinRequestDto;
 import code.mogaktae.domain.challenge.dto.res.ChallengeDetailsResponseDto;
 import code.mogaktae.domain.challenge.dto.res.ChallengeResponseDto;
 import code.mogaktae.domain.challenge.dto.res.ChallengeSummaryResponseDto;
-import code.mogaktae.domain.challenge.dto.res.UserChallengeSummaryDto;
 import code.mogaktae.domain.challenge.entity.Challenge;
 import code.mogaktae.domain.challenge.repository.ChallengeRepository;
 import code.mogaktae.domain.common.util.CursorBasedPaginationCollection;
@@ -56,59 +55,42 @@ public class ChallengeService {
         return ChallengeResponseDto.of(collection, challengeRepository.count());
     }
 
-    public List<ChallengeSummaryResponseDto> getMyCompletedChallenges(User user) {
+    public List<ChallengeSummaryResponseDto> getMyCompletedChallenges(Long userId) {
 
-        List<ChallengeSummaryResponseDto> completedChallenges = userChallengeRepository.findCompletedChallengesByUser(user);
+        List<ChallengeSummaryResponseDto> completedChallenges = userChallengeRepository.findCompletedChallengesByUser(userId);
 
-        log.info("getCompletedChallenges() - {}의 {} 개의 완료된 챌린지 조회 완료", user.getNickname(), completedChallenges.size());
+        log.info("getCompletedChallenges() - {} 개의 완료된 챌린지 조회 완료", completedChallenges.size());
 
         return completedChallenges;
     }
 
-    public List<ChallengeSummaryResponseDto> getMyInProgressChallenges(User user) {
+    public List<ChallengeSummaryResponseDto> getMyInProgressChallenges(Long userId) {
 
-        List<ChallengeSummaryResponseDto> inProgressChallenges = userChallengeRepository.findInProgressChallengeByUser(user);
+        List<ChallengeSummaryResponseDto> inProgressChallenges = userChallengeRepository.findInProgressChallengeByUser(userId);
 
         int size = inProgressChallenges.size();
 
-        log.info("getInProgressChallenges() - {}의 {} 개의 진행중인 챌린지 조회 완료", user.getNickname(), size);
+        log.info("getInProgressChallenges() - {} 개의 진행중인 챌린지 조회 완료", size);
 
         return inProgressChallenges;
     }
 
     @Transactional(readOnly = true)
-    public ChallengeDetailsResponseDto getChallengesDetails(OAuth2UserDetailsImpl authUser, Long challengeId) {
+    public ChallengeDetailsResponseDto getChallengeDetails(OAuth2UserDetailsImpl authUser, Long challengeId) {
 
         if (!userChallengeRepository.existsByNicknameAndChallengeId(authUser.getUsername(), challengeId))
             throw new RestApiException(CustomErrorCode.USER_NO_PERMISSION_TO_CHALLENGE);
 
-        Challenge challenge = challengeRepository.findById(challengeId)
-                .orElseThrow(() -> new RestApiException(CustomErrorCode.CHALLENGE_NOT_FOUND));
-
-        List<UserChallengeSummaryDto> userChallengeSummaries = userChallengeRepository.findUserChallengeSummariesByChallengeId(challengeId);
-
-        Long totalPenalty = userChallengeSummaries.stream()
-                .mapToLong(UserChallengeSummaryDto::getPenalty)
-                .sum();
-
-        log.info("getChallengesDetails() - 챌린지 상세정보 조회 완료");
-
-        return ChallengeDetailsResponseDto.builder()
-                .name(challenge.getName())
-                .startDate(challenge.getStartDate().toString())
-                .endDate(challenge.getEndDate().toString())
-                .totalPenalty(totalPenalty)
-                .userChallengeSummaries(userChallengeSummaries)
-                .build();
+        return redisCacheService.getChallengeDetails(challengeId);
     }
 
     @Transactional
     public Long createChallenge(OAuth2UserDetailsImpl authUser, ChallengeCreateRequestDto request) {
 
-        User user = userRepository.findByNickname(authUser.getUsername())
+        User headUser = userRepository.findByNickname(authUser.getUsername())
                 .orElseThrow(() -> new RestApiException(CustomErrorCode.USER_NOT_FOUND));
 
-        if (userChallengeRepository.countUserChallenge(user.getId()) > 3)
+        if (userChallengeRepository.countUserChallenge(headUser.getId()) > 3)
             throw new RestApiException(CustomErrorCode.CHALLENGE_MAX_PARTICIPATION_REACHED);
 
         Challenge challenge = Challenge.builder()
@@ -117,21 +99,21 @@ public class ChallengeService {
 
         challengeRepository.save(challenge);
 
-        Long tier = solvedAcUtils.getUserBaekJoonTier(user.getSolvedAcId());
+        Long tier = solvedAcUtils.getUserBaekJoonTier(headUser.getSolvedAcId());
 
         UserChallenge userChallenge = UserChallenge.builder()
-                .user(user)
+                .user(headUser)
                 .challenge(challenge)
                 .repositoryUrl(request.getRepositoryUrl())
                 .tier(tier)
                 .build();
 
         challenge.getUserChallenges().add(userChallenge);
-        user.getUserChallenges().add(userChallenge);
+        headUser.getUserChallenges().add(userChallenge);
 
         userChallengeRepository.save(userChallenge);
 
-        alarmService.sendChallengeJoinAlarm(user.getNickname(), challenge.getName(), request.getParticipants());
+        alarmService.sendChallengeJoinAlarm(headUser.getNickname(), challenge.getName(), request.getParticipants());
 
         log.info("createChallenge() - 챌린지 참여 알림 저장 완료");
 

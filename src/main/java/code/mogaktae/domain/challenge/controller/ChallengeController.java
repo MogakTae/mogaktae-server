@@ -39,7 +39,7 @@ public class ChallengeController {
     @GetMapping("/info/details/{challengeId}")
     public ResponseEntity<ResponseDto<ChallengeDetailsResponseDto>> getChallengesDetail(@AuthenticationPrincipal OAuth2UserDetailsImpl user,
                                                                                          @PathVariable Long challengeId){
-        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(challengeService.getChallengesDetails(user, challengeId), "챌린지 상세 조회 완료"));
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(challengeService.getChallengeDetails(user, challengeId), "챌린지 상세 조회 완료"));
     }
 
     @PostMapping("/join")

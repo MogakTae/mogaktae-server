@@ -15,7 +15,7 @@ public class ChallengeDetailsResponseDto {
             description = "챌린지명",
             example = "알고리즘 스터디"
     )
-    private final String name;
+    private final String challengeName;
 
     @Schema(
             description = "시작일",
@@ -43,8 +43,8 @@ public class ChallengeDetailsResponseDto {
 
 
     @Builder
-    protected ChallengeDetailsResponseDto(String name, String startDate, String endDate, Long totalPenalty, List<UserChallengeSummaryDto> userChallengeSummaries) {
-        this.name = name;
+    protected ChallengeDetailsResponseDto(String challengeName, String startDate, String endDate, Long totalPenalty, List<UserChallengeSummaryDto> userChallengeSummaries) {
+        this.challengeName = challengeName;
         this.startDate = startDate;
         this.endDate = endDate;
         this.totalPenalty = totalPenalty;

@@ -2,7 +2,6 @@ package code.mogaktae.domain.userChallenge.repository;
 
 import code.mogaktae.domain.challenge.dto.res.ChallengeSummaryResponseDto;
 import code.mogaktae.domain.challenge.dto.res.UserChallengeSummaryDto;
-import code.mogaktae.domain.user.entity.User;
 import code.mogaktae.domain.userChallenge.entity.UserChallenge;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,10 +21,10 @@ public interface UserChallengeRepository extends JpaRepository<UserChallenge, Lo
             uc.challenge.endDate
         )
         FROM UserChallenge uc
-        WHERE uc.user = :user
+        WHERE uc.user.id = :userId
         AND uc.isCompleted = true
     """)
-    List<ChallengeSummaryResponseDto> findCompletedChallengesByUser(@Param("user") User user);
+    List<ChallengeSummaryResponseDto> findCompletedChallengesByUser(@Param("userId") Long userId);
 
     @Query("""
         SELECT new code.mogaktae.domain.challenge.dto.res.ChallengeSummaryResponseDto(
@@ -37,10 +36,10 @@ public interface UserChallengeRepository extends JpaRepository<UserChallenge, Lo
             uc.challenge.endDate
         )
         FROM UserChallenge uc
-        WHERE uc.user = :user
+        WHERE uc.user.id = :userId
         AND uc.isCompleted = false
     """)
-    List<ChallengeSummaryResponseDto> findInProgressChallengeByUser(@Param("user") User user);
+    List<ChallengeSummaryResponseDto> findInProgressChallengeByUser(@Param("userId") Long userId);
 
     Boolean existsByUserIdAndChallengeId(Long userId, Long challengeId);
 

@@ -24,7 +24,9 @@ import java.util.List;
 public class UserService {
 
     private final SolvedAcUtils solvedAcUtils;
+
     private final ChallengeService challengeService;
+
     private final UserRepository userRepository;
     private final UserDocumentRepository userDocumentRepository;
 
@@ -33,8 +35,8 @@ public class UserService {
         User user = userRepository.findByNickname(authUser.getUsername())
                 .orElseThrow(() -> new RestApiException(CustomErrorCode.USER_NOT_FOUND));
 
-        List<ChallengeSummaryResponseDto> completedChallenges = challengeService.getMyCompletedChallenges(user);
-        List<ChallengeSummaryResponseDto> inProgressChallenges = challengeService.getMyInProgressChallenges(user);
+        List<ChallengeSummaryResponseDto> completedChallenges = challengeService.getMyCompletedChallenges(user.getId());
+        List<ChallengeSummaryResponseDto> inProgressChallenges = challengeService.getMyInProgressChallenges(user.getId());
 
         log.info("getMyPageInfo() - 사용자 정보 조회 완료({})", user.getNickname());
 

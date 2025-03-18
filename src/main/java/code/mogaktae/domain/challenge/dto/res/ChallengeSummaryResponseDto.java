@@ -26,7 +26,7 @@ public class ChallengeSummaryResponseDto {
             description = "챌린지 이름",
             example = "알고리즘 스터디"
     )
-    private final String name;
+    private final String challengeName;
 
     @Schema(
             description = "하루당 문제 풀이 수",
@@ -47,10 +47,10 @@ public class ChallengeSummaryResponseDto {
     private final LocalDate endDate;
 
     @Builder
-    private ChallengeSummaryResponseDto(Long id, String challengeImageUrl, String name, Long dailyProblem, LocalDate startDate, LocalDate endDate) {
+    private ChallengeSummaryResponseDto(Long id, String challengeImageUrl, String challengeName, Long dailyProblem, LocalDate startDate, LocalDate endDate) {
         this.id = id;
         this.challengeImageUrl = challengeImageUrl;
-        this.name = name;
+        this.challengeName = challengeName;
         this.dailyProblem = dailyProblem;
         this.startDate = startDate;
         this.endDate = endDate;
