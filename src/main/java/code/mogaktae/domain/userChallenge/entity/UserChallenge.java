@@ -1,65 +1,59 @@
 package code.mogaktae.domain.userChallenge.entity;
 
-import code.mogaktae.domain.challenge.entity.Challenge;
-import code.mogaktae.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
+@Table(name = "user_challenge")
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "user_challenges")
 public class UserChallenge {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "repository_url")
-    private String repositoryUrl;
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 
-    @Column(name = "total_penalty", nullable = false)
-    private Long totalPenalty;
+    @Column(name = "challenge_id", nullable = false)
+    private Long challengeId;
+
+    @Column(name = "repository_url", nullable = false)
+    private String repositoryUrl;
 
     @Column(name = "today_solved", nullable = false)
     private Boolean todaySolved;
 
-    @Column(name = "start_baekJoon_tier", nullable = false)
+    @Column(name = "start_tier", nullable = false)
     private Long startTier;
+
+    @Column(name = "end_tier", nullable = false)
+    private Long endTier;
 
     @Column(name = "total_solved_problem", nullable = false)
     private Long totalSolvedProblem;
 
-    @Column(name = "today_solved_problem", nullable = false)
-    private Long todaySolvedProblem;
-
-    @ManyToOne
-    @JoinColumn(name = "challenge_id", nullable = false)
-    private Challenge challenge;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(name = "total_penalty", nullable = false)
+    private Long totalPenalty;
 
     @Column(nullable = false, name = "is_completed")
     private Boolean isCompleted = false;
 
     @Builder
-    private UserChallenge(Challenge challenge, User user, String repositoryUrl, Long tier) {
-        this.user = user;
-        this.challenge = challenge;
+    private UserChallenge(Long userId, Long challengeId, String repositoryUrl, Long tier) {
+        this.userId = userId;
+        this.challengeId = challengeId;
         this.repositoryUrl = repositoryUrl;
         this.startTier = tier;
+        this.endTier = tier;
 
         this.totalPenalty = 0L;
         this.todaySolved = false;
-        this.todaySolvedProblem = 0L;
         this.totalSolvedProblem = 0L;
-        this.isCompleted = LocalDate.now().isAfter(challenge.getEndDate());
+        this.isCompleted = false;
     }
 }

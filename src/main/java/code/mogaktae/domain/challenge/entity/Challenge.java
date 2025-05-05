@@ -1,22 +1,18 @@
 package code.mogaktae.domain.challenge.entity;
 
 import code.mogaktae.domain.challenge.dto.req.ChallengeCreateRequestDto;
-import code.mogaktae.domain.userChallenge.entity.UserChallenge;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
+@Table(name = "challenge")
 @Entity
 @Getter
-@AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "challenges")
 public class Challenge {
 
     @Id
@@ -39,11 +35,8 @@ public class Challenge {
     @Column(nullable = false, name = "daily_problem")
     private Long dailyProblem;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "penalty_per_once")
     private Long penaltyPerOnce;
-
-    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<UserChallenge> userChallenges = new ArrayList<>();
 
     @Builder
     protected Challenge(ChallengeCreateRequestDto request){

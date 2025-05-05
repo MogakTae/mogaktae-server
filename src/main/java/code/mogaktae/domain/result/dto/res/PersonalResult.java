@@ -28,13 +28,13 @@ public class PersonalResult {
     private final String nickname;
 
     @Schema(
-            description = "챌린지 시작 당시 티어",
+            description = "챌린지 시작 티어",
             example = "10"
     )
     private final Long startTier;
 
     @Schema(
-            description = "챌린지 종료 당시 티어",
+            description = "챌린지 종료 티어",
             example = "11"
     )
     private final Long endTier;

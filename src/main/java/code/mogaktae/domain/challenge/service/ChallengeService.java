@@ -102,14 +102,11 @@ public class ChallengeService {
         Long tier = solvedAcUtils.getUserBaekJoonTier(headUser.getSolvedAcId());
 
         UserChallenge userChallenge = UserChallenge.builder()
-                .user(headUser)
-                .challenge(challenge)
+                .userId(headUser.getId())
+                .challengeId(challenge.getId())
                 .repositoryUrl(request.getRepositoryUrl())
                 .tier(tier)
                 .build();
-
-        challenge.getUserChallenges().add(userChallenge);
-        headUser.getUserChallenges().add(userChallenge);
 
         userChallengeRepository.save(userChallenge);
 
@@ -133,14 +130,11 @@ public class ChallengeService {
         Long tier = solvedAcUtils.getUserBaekJoonTier(user.getSolvedAcId());
 
         UserChallenge userChallenge = UserChallenge.builder()
-                .user(user)
-                .challenge(challenge)
+                .userId(user.getId())
+                .challengeId(challenge.getId())
                 .repositoryUrl(request.getRepositoryUrl())
                 .tier(tier)
                 .build();
-
-        challenge.getUserChallenges().add(userChallenge);
-        user.getUserChallenges().add(userChallenge);
 
         userChallengeRepository.save(userChallenge);
 
