@@ -42,7 +42,7 @@ public class ChallengeResponseDto {
         if(challengeSummaries.isLastCursor())
             return ChallengeResponseDto.noNextCursorResponse(challengeSummaries.getContents(), totalSize);
 
-        return ChallengeResponseDto.hasNextCursorResponse(challengeSummaries.getContents(), totalSize, challengeSummaries.getNextCursor().getId());
+        return ChallengeResponseDto.hasNextCursorResponse(challengeSummaries.getContents(), totalSize, challengeSummaries.getNextCursor().getChallengeId());
     }
 
     private static ChallengeResponseDto noNextCursorResponse(List<ChallengeSummaryResponseDto> challengeSummaries, long totalSize){

@@ -57,20 +57,18 @@ public class ChallengeService {
 
     public List<ChallengeSummaryResponseDto> getMyCompletedChallenges(Long userId) {
 
-        List<ChallengeSummaryResponseDto> completedChallenges = userChallengeRepository.findCompletedChallengesByUser(userId);
+        List<ChallengeSummaryResponseDto> completedChallenges = userChallengeRepository.findChallengesByUserIdAndIsCompleted(userId, true);
 
-        log.info("getCompletedChallenges() - {} 개의 완료된 챌린지 조회 완료", completedChallenges.size());
+        log.info("getInProgressChallenges() - userId = {}의 완료된 챌린지 조회 완료", userId);
 
         return completedChallenges;
     }
 
     public List<ChallengeSummaryResponseDto> getMyInProgressChallenges(Long userId) {
 
-        List<ChallengeSummaryResponseDto> inProgressChallenges = userChallengeRepository.findInProgressChallengeByUser(userId);
+        List<ChallengeSummaryResponseDto> inProgressChallenges = userChallengeRepository.findChallengesByUserIdAndIsCompleted(userId, false);
 
-        int size = inProgressChallenges.size();
-
-        log.info("getInProgressChallenges() - {} 개의 진행중인 챌린지 조회 완료", size);
+        log.info("getInProgressChallenges() - userId = {}의 진행중인 챌린지 조회 완료", userId);
 
         return inProgressChallenges;
     }

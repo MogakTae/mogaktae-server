@@ -1,7 +1,7 @@
 package code.mogaktae.domain.challenge.dto.res;
 
+import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
@@ -14,7 +14,7 @@ public class ChallengeSummaryResponseDto {
             description = "챌린지 id",
             example = "10"
     )
-    private final Long id;
+    private final Long challengeId;
 
     @Schema(
             description = "챌린지 이미지 URL",
@@ -46,9 +46,9 @@ public class ChallengeSummaryResponseDto {
     )
     private final LocalDate endDate;
 
-    @Builder
-    private ChallengeSummaryResponseDto(Long id, String challengeImageUrl, String challengeName, Long dailyProblem, LocalDate startDate, LocalDate endDate) {
-        this.id = id;
+    @QueryProjection
+    public ChallengeSummaryResponseDto(Long challengeId, String challengeImageUrl, String challengeName, Long dailyProblem, LocalDate startDate, LocalDate endDate) {
+        this.challengeId = challengeId;
         this.challengeImageUrl = challengeImageUrl;
         this.challengeName = challengeName;
         this.dailyProblem = dailyProblem;

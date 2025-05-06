@@ -21,6 +21,9 @@ public class Alarm {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, name = "user_id")
+    private Long userId;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 50)
     private AlarmType alarmType;
@@ -36,9 +39,11 @@ public class Alarm {
     private LocalDateTime createdAt;
 
     @Builder
-    private Alarm(AlarmType alarmType, String challengeName, String senderNickname) {
+    private Alarm(Long userId, AlarmType alarmType, String challengeName, String senderNickname) {
+        this.userId = userId;
         this.alarmType = alarmType;
         this.challengeName = challengeName;
         this.senderNickname = senderNickname;
     }
+
 }

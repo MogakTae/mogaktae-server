@@ -1,7 +1,7 @@
 package code.mogaktae.domain.challenge.dto.res;
 
+import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
 import lombok.Getter;
 
 @Getter
@@ -37,8 +37,8 @@ public class UserChallengeSummaryDto {
     )
     private final Boolean todaySolved;
 
-    @Builder
-    protected UserChallengeSummaryDto(String profileImageUrl, String repositoryUrl, String nickname, Long penalty, Boolean todaySolved) {
+    @QueryProjection
+    public UserChallengeSummaryDto(String profileImageUrl, String repositoryUrl, String nickname, Long penalty, Boolean todaySolved) {
         this.profileImageUrl = profileImageUrl;
         this.repositoryUrl = repositoryUrl;
         this.nickname = nickname;

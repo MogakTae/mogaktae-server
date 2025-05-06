@@ -19,11 +19,11 @@ public class ChallengeResultResponseDto {
     @Schema(
             description = "개인별 챌린지 결과"
     )
-    private final List<PersonalResult> personalResults;
+    private final List<PersonalResultDto> personalResultDtos;
 
     @Builder
-    private ChallengeResultResponseDto(String challengeName, List<PersonalResult> personalResults) {
+    private ChallengeResultResponseDto(String challengeName, List<PersonalResultDto> personalResultDtos) {
         this.challengeName = challengeName;
-        this.personalResults = personalResults;
+        this.personalResultDtos = personalResultDtos;
     }
 }

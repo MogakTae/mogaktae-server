@@ -25,21 +25,22 @@ public class AlarmService {
     @Transactional
     public void sendChallengeJoinAlarm(String challengeName, String senderNickname, List<String> nicknames){
 
-        Alarm joinAlarm = Alarm.builder()
-                .alarmType(AlarmType.JOIN)
-                .challengeName(challengeName)
-                .senderNickname(senderNickname)
-                .build();
+        List<Long> participantsIds = userRepository.findUserIdByNicknameIn(nicknames);
 
-        List<User> participants = userRepository.findByNicknameIn(nicknames);
-
-        if(participants.isEmpty()){
+        if(participantsIds.isEmpty()){
             log.warn("sendChallengeJoinAlarm() - 조회된 참여자가 없습니다.");
             return;
         }
 
-        participants.forEach(participant -> {
-            participant.addAlarm(joinAlarm);
+        participantsIds.forEach(userId -> {
+            Alarm joinAlarm = Alarm.builder()
+                    .userId(userId)
+                    .alarmType(AlarmType.JOIN)
+                    .challengeName(challengeName)
+                    .senderNickname(senderNickname)
+                    .build();
+
+            alarmRepository.save(joinAlarm);
         });
     }
 
@@ -48,13 +49,12 @@ public class AlarmService {
     public void sendChallengeEndAlarm(User user, String challengeName){
 
         Alarm endAlarm = Alarm.builder()
+                .userId(user.getId())
                 .alarmType(AlarmType.END)
                 .challengeName(challengeName)
                 .senderNickname("")
                 .build();
 
         alarmRepository.save(endAlarm);
-
-        user.addAlarm(endAlarm);
     }
 }
