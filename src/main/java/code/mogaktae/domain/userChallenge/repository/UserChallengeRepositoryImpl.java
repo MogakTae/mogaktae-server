@@ -88,14 +88,15 @@ public class UserChallengeRepositoryImpl implements UserChallengeRepositoryCusto
     }
 
     @Override
-    public List<UserChallengeSummaryDto> findUserChallengeSummariesByChallengeId(Long challengeId){
+    public List<UserChallengeSummaryDto> findUserChallengeSummariesByChallengeId(Long challengeId, Long dailyProblem){
         return jpaQueryFactory
                 .select(new QUserChallengeSummaryDto(
                         user.profileImageUrl,
                         userChallenge.repositoryUrl,
                         user.nickname,
                         userChallenge.totalPenalty,
-                        userChallenge.todaySolved
+                        userChallenge.todaySolvedProblem,
+                        userChallenge.todaySolvedProblem.goe(dailyProblem)
                 ))
                 .from(userChallenge)
                 .join(user).on(userChallenge.userId.eq(user.id))

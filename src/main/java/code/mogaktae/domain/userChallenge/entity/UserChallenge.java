@@ -25,9 +25,6 @@ public class UserChallenge {
     @Column(name = "repository_url", nullable = false)
     private String repositoryUrl;
 
-    @Column(name = "today_solved", nullable = false)
-    private Boolean todaySolved;
-
     @Column(name = "start_tier", nullable = false)
     private Long startTier;
 
@@ -36,6 +33,9 @@ public class UserChallenge {
 
     @Column(name = "total_solved_problem", nullable = false)
     private Long totalSolvedProblem;
+
+    @Column(name = "today_solved_problem", nullable = false)
+    private Long todaySolvedProblem;
 
     @Column(name = "total_penalty", nullable = false)
     private Long totalPenalty;
@@ -52,17 +52,17 @@ public class UserChallenge {
         this.endTier = tier;
 
         this.totalPenalty = 0L;
-        this.todaySolved = false;
+        this.todaySolvedProblem = 0L;
         this.totalSolvedProblem = 0L;
         this.isCompleted = false;
     }
 
     public void updateSolveStatus(){
         this.totalSolvedProblem += 1;
-        this.todaySolved = true;
+        this.todaySolvedProblem += 1;
     }
 
     public void resetSolveStatus(){
-        this.todaySolved = false;
+        this.todaySolvedProblem = 0L;
     }
 }

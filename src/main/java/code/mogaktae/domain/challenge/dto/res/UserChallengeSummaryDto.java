@@ -32,17 +32,24 @@ public class UserChallengeSummaryDto {
     private final Long penalty;
 
     @Schema(
+            description = "당일 푼 문제수",
+            example = "3"
+    )
+    private final Long todaySolvedProblem;
+
+    @Schema(
             description = "당일 문제 풀이 여부",
             example = "true"
     )
     private final Boolean todaySolved;
 
     @QueryProjection
-    public UserChallengeSummaryDto(String profileImageUrl, String repositoryUrl, String nickname, Long penalty, Boolean todaySolved) {
+    public UserChallengeSummaryDto(String profileImageUrl, String repositoryUrl, String nickname, Long penalty, Long todaySolvedProblem, Boolean todaySolved) {
         this.profileImageUrl = profileImageUrl;
         this.repositoryUrl = repositoryUrl;
         this.nickname = nickname;
         this.penalty = penalty;
+        this.todaySolvedProblem = todaySolvedProblem;
         this.todaySolved = todaySolved;
     }
 }

@@ -18,7 +18,7 @@ public interface UserChallengeRepositoryCustom {
 
     List<ChallengeSummaryResponseDto> findChallengesByUserIdAndIsCompleted(Long userId, Boolean isCompleted);
 
-    List<UserChallengeSummaryDto> findUserChallengeSummariesByChallengeId(Long challengeId);
+    List<UserChallengeSummaryDto> findUserChallengeSummariesByChallengeId(Long challengeId, Long dailyProblem);
 
     Optional<UserChallenge> findByUserNicknameAndRepositoryUrl(String nickname, String repositoryUrl);
 

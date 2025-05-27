@@ -80,14 +80,14 @@ public class ChallengeService {
         Challenge challenge = challengeRepository.findById(challengeId)
                 .orElseThrow(() -> new RestApiException(CustomErrorCode.CHALLENGE_NOT_FOUND));
 
-        List<UserChallengeSummaryDto> userChallengeSummaries = userChallengeRepository.findUserChallengeSummariesByChallengeId(challengeId);
+        List<UserChallengeSummaryDto> userChallengeSummaries = userChallengeRepository.findUserChallengeSummariesByChallengeId(challengeId, challenge.getDailyProblem());
 
         Long totalPenalty = userChallengeSummaries.stream()
                 .mapToLong(UserChallengeSummaryDto::getPenalty)
                 .sum();
 
         Long todaySolvedUsers = userChallengeSummaries.stream()
-                .filter(UserChallengeSummaryDto::getTodaySolved)
+                .filter(summary -> summary.getTodaySolvedProblem() >= challenge.getDailyProblem())
                 .count();
 
         log.info("getChallengeDetails() - 챌린지 상세정보 조회 완료");
