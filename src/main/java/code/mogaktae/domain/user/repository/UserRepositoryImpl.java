@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import static code.mogaktae.domain.user.entity.QUser.user;
 
@@ -21,5 +22,15 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 .from(user)
                 .where(user.nickname.in(nicknames))
                 .fetch();
+    }
+
+    @Override
+    public Optional<String> findSolvedAcIdByNickname(String nickname){
+        return Optional.ofNullable(jpaQueryFactory
+                .select(user.solvedAcId)
+                .from(user)
+                .where(user.nickname.eq(nickname))
+                .fetchOne()
+        );
     }
 }

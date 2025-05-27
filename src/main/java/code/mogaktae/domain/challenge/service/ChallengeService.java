@@ -175,8 +175,25 @@ public class ChallengeService {
         return redisCacheService.getChallengeResult(challengeId);
     }
 
-    public Map<String, Object> pushCodingTestCommit(Map<String, Object> request){
-        return request;
-    }
+    @Transactional
+    public Boolean pushCodingTestCommit(Map<String, Object> request){
+       PushInfoDto pushInfo = gitHubUtils.getPushInfoFromRequest(request);
 
+       UserChallenge userChallenge = userChallengeRepository.findByUserNicknameAndRepositoryUrl(pushInfo.getPusher(), pushInfo.getUrl())
+               .orElseThrow(() -> new RestApiException(CustomErrorCode.USERCHALLENGE_NOT_FOUND));
+
+       String solvedAcId = userRepository.findSolvedAcIdByNickname(pushInfo.getPusher())
+               .orElseThrow(() -> new RestApiException(CustomErrorCode.USER_NOT_FOUND));
+
+       Long targetProblemId = gitHubUtils.getProblemIdFromCommitMessage(pushInfo.getCommitMessage());
+
+       if(solvedAcUtils.checkUserSolvedProblem(solvedAcId, targetProblemId)){
+            throw new RestApiException(CustomErrorCode.USER_NOT_SOLVE_TARGET_PROBLEM);
+       }else{
+            userChallenge.updateSolveStatus();
+            log.info("pushCodingTestCommit() - 커밋사항 반영 완료 {} {}", pushInfo.getPusher(), pushInfo.getCommitMessage());
+
+            return true;
+       }
+    }
 }

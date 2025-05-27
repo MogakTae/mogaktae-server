@@ -1,8 +1,8 @@
 package code.mogaktae.domain.common.util;
 
+import code.mogaktae.domain.challenge.dto.res.PushInfoDto;
 import code.mogaktae.global.exception.entity.RestApiException;
 import code.mogaktae.global.exception.error.CustomErrorCode;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -40,28 +40,46 @@ public class GitHubUtils {
         return response;
     }
 
-    public void checkWebhookRequestBody(Map<String, Object> requestBody){
-        try {
-            // JSON 형태로 예쁘게 출력
-            String jsonString = objectMapper.writerWithDefaultPrettyPrinter()
-                    .writeValueAsString(requestBody);
-            log.info("=== GitHub Webhook Request Body ===");
-            log.info("\n{}", jsonString);
-            log.info("================================");
+    public PushInfoDto getPushInfoFromRequest(Map<String, Object> requestBody){
+        String url = null;
+        String pusher = null;
+        String message = null;
 
-            // 주요 필드들만 따로 출력
-            log.info("ref: {}", requestBody.get("ref"));
-            log.info("pusher: {}", requestBody.get("pusher"));
+        Map<String, Object> repository = (Map<String, Object>) requestBody.get("repository");
+        if (repository != null) url = (String) repository.get("url");
 
-            if (requestBody.containsKey("commits")) {
-                List<?> commits = (List<?>) requestBody.get("commits");
-                log.info("commits count: {}", commits.size());
+        Map<String, Object> pusherName = (Map<String, Object>) requestBody.get("pusher");
+        if (pusherName != null) pusher = (String) pusherName.get("name");
+
+
+        List<Map<String, Object>> commits = (List<Map<String, Object>>) requestBody.get("commits");
+        if (commits != null && !commits.isEmpty()) {
+            Map<String, Object> firstCommit = commits.get(0);
+            if (firstCommit != null) {
+                message = (String) firstCommit.get("message");
             }
+        }
 
-        } catch (JsonProcessingException e) {
-            log.error("JSON 변환 실패", e);
-            // JSON 변환 실패시 기본 toString() 사용
-            log.info("Request Body (toString): {}", requestBody);
+        if(url != null && pusher != null && message != null){
+            log.info("getPushInfoFromRequest() - {}의 {} 이벤트 수신 완료", pusher, message);
+            return PushInfoDto.builder()
+                    .url(url)
+                    .pusher(pusher)
+                    .commitMessage(message)
+                    .build();
+        }else{
+            log.warn("getPushInfoFromRequest() - Github Webhook 이벤트 처리 실패");
+            throw new RestApiException(CustomErrorCode.HTTP_REQUEST_FAILED);
+        }
+    }
+
+    public Long getProblemIdFromCommitMessage(String commitMessage){
+        String[] words = commitMessage.split(" ");
+
+        if(words.length >= 2 && words[1].matches("\\d{4,5}")) {
+            return Long.parseLong(words[1]);
+        }else{
+            throw new RestApiException(CustomErrorCode.NOT_AVAILABLE_COMMIT_MESSAGE);
         }
     }
 }

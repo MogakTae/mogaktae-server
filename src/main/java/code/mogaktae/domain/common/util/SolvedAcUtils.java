@@ -9,6 +9,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -35,10 +36,42 @@ public class SolvedAcUtils {
                     Map.class
             );
         }catch (HttpClientErrorException e){
-            log.error("joinChallenge() - 챌린지 참여 실패. solvedAc 백준 티어 가져오기 실패");
+            log.error("getUserBaekJoonTier() - solvedAc 백준 티어 가져오기 실패");
             throw new RestApiException(CustomErrorCode.HTTP_REQUEST_FAILED);
         }
 
         return ((Number) response.get("tier")).longValue();
+    }
+
+    public Boolean checkUserSolvedProblem(String solvedAcId, Long targetProblemId){
+        String endPoint = UriComponentsBuilder.fromUriString("/user/top_100")
+                .queryParam("handle", solvedAcId)
+                .toUriString();
+
+        Map<String, Object> response;
+
+        try{
+            response = restTemplate.getForObject(
+                    endPoint,
+                    Map.class
+            );
+        }catch (HttpClientErrorException e){
+            log.error("checkUserSolvedProblem() - solvedAc 사용자 해결한 문제 조회 실패");
+            throw new RestApiException(CustomErrorCode.HTTP_REQUEST_FAILED);
+        }
+
+        List<Map<String, Object>> items = (List<Map<String, Object>>) response.get("items");
+
+        if(items.isEmpty())
+            return false;
+
+        for (Map<String, Object> problem : items){
+            Long problemId = ((Number) problem.get("problemId")).longValue();
+
+            if(problemId.equals(targetProblemId))
+                return true;
+        }
+
+        return false;
     }
 }

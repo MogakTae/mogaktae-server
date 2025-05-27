@@ -3,8 +3,10 @@ package code.mogaktae.domain.userChallenge.repository;
 import code.mogaktae.domain.challenge.dto.res.ChallengeSummaryResponseDto;
 import code.mogaktae.domain.challenge.dto.res.UserChallengeSummaryDto;
 import code.mogaktae.domain.result.dto.res.PersonalResultDto;
+import code.mogaktae.domain.userChallenge.entity.UserChallenge;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserChallengeRepositoryCustom {
 
@@ -17,4 +19,6 @@ public interface UserChallengeRepositoryCustom {
     List<ChallengeSummaryResponseDto> findChallengesByUserIdAndIsCompleted(Long userId, Boolean isCompleted);
 
     List<UserChallengeSummaryDto> findUserChallengeSummariesByChallengeId(Long challengeId);
+
+    Optional<UserChallenge> findByUserNicknameAndRepositoryUrl(String nickname, String repositoryUrl);
 }

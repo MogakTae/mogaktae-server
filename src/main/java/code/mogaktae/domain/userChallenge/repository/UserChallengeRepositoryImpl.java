@@ -6,11 +6,13 @@ import code.mogaktae.domain.challenge.dto.res.QUserChallengeSummaryDto;
 import code.mogaktae.domain.challenge.dto.res.UserChallengeSummaryDto;
 import code.mogaktae.domain.result.dto.res.PersonalResultDto;
 import code.mogaktae.domain.result.dto.res.QPersonalResultDto;
+import code.mogaktae.domain.userChallenge.entity.UserChallenge;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import static code.mogaktae.domain.challenge.entity.QChallenge.challenge;
 import static code.mogaktae.domain.user.entity.QUser.user;
@@ -102,5 +104,18 @@ public class UserChallengeRepositoryImpl implements UserChallengeRepositoryCusto
                         userChallenge.isCompleted.isFalse()
                 )
                 .fetch();
+    }
+
+    @Override
+    public Optional<UserChallenge> findByUserNicknameAndRepositoryUrl(String nickname, String repositoryUrl) {
+        return Optional.ofNullable(jpaQueryFactory
+                .selectFrom(userChallenge)
+                .join(user).on(userChallenge.userId.eq(user.id))
+                .where(
+                        user.nickname.eq(nickname)
+                                .and(userChallenge.repositoryUrl.eq(repositoryUrl))
+                                .and(userChallenge.isCompleted.eq(false))
+                )
+                .fetchOne());
     }
 }

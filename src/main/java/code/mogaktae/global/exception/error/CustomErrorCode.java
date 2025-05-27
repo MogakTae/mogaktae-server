@@ -15,6 +15,8 @@ public enum CustomErrorCode implements ErrorCode {
     // Challenge Error Code
     CHALLENGE_NOT_FOUND(HttpStatus.NOT_FOUND, 404, "챌린지 조회에 실패하였습니다."),
     CHALLENGE_MAX_PARTICIPATION_REACHED(HttpStatus.BAD_REQUEST, 400, "사용자가 이미 3개의 챌린지에 창여중입니다"),
+    USERCHALLENGE_NOT_FOUND(HttpStatus.NOT_FOUND, 404, "유효하지 않은 닉네임과 레포지토리 주소입니다."),
+    USER_NOT_SOLVE_TARGET_PROBLEM(HttpStatus.BAD_REQUEST, 400, "풀지 않은 문제입니다."),
 
     // RestTemplate res/req Error Code
     HTTP_REQUEST_FAILED(HttpStatus.SERVICE_UNAVAILABLE, 503, "외부 API 요청에 실패하였습니다."),
@@ -23,6 +25,7 @@ public enum CustomErrorCode implements ErrorCode {
     // GitHub Error Code
     REPOSITORY_URL_DUPLICATE(HttpStatus.BAD_REQUEST, 400, "중복되는 레포지토리 주소입니다."),
     REPOSITORY_URL_NOT_FOUND(HttpStatus.NOT_FOUND, 404, "레포지토리 주소 조회에 실패하였습니다."),
+    NOT_AVAILABLE_COMMIT_MESSAGE(HttpStatus.BAD_REQUEST, 404, "유효하지 않은 커밋 메시지입니다."),
 
     // Validation Error Code
     INVALID_PARAMS(HttpStatus.BAD_REQUEST, 400, "유효성 검사에 실패하였습니다"),
