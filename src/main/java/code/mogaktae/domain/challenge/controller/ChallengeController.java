@@ -56,7 +56,7 @@ public class ChallengeController {
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(challengeService.getChallengeResult(user, challengeId), "챌린지 결과 조회 성공"));
     }
 
-    @PostMapping("/commit")
+    @PostMapping("/push")
     public ResponseEntity<ResponseDto<?>> pushCodingTestCommit(@RequestBody Map<String, Object> request){
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(challengeService.pushCodingTestCommit(request), "레포지토리 푸쉬 웹훅 처리 완료"));
     }
