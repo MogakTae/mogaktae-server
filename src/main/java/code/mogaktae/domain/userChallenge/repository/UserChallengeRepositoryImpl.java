@@ -118,4 +118,12 @@ public class UserChallengeRepositoryImpl implements UserChallengeRepositoryCusto
                 )
                 .fetchOne());
     }
+
+    @Override
+    public List<UserChallenge> findAllByIsCompleted(){
+        return jpaQueryFactory
+                .select(userChallenge)
+                .where(userChallenge.isCompleted.eq(false))
+                .fetch();
+    }
 }

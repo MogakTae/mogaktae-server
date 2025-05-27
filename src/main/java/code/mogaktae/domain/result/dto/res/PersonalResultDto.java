@@ -1,6 +1,5 @@
 package code.mogaktae.domain.result.dto.res;
 
-import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
@@ -61,12 +60,6 @@ public class PersonalResultDto {
         this.endTier = endTier;
         this.totalPenalty = totalPenalty;
         this.totalProblemSolved = totalProblemSolved;
-    }
-
-    @QueryProjection
-    public PersonalResultDto(String solvedAcId, String profileImageUrl, String nickname,
-                          Long startTier, Long totalPenalty, Long totalProblemSolved) {
-        this(solvedAcId, profileImageUrl, nickname, startTier, null, totalPenalty, totalProblemSolved);
     }
 
     public PersonalResultDto withEndTier(Long endTier) {

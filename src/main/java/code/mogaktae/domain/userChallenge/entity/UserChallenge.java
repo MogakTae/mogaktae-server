@@ -61,4 +61,8 @@ public class UserChallenge {
         this.totalSolvedProblem += 1;
         this.todaySolved = true;
     }
+
+    public void resetSolveStatus(){
+        this.todaySolved = false;
+    }
 }

@@ -21,4 +21,6 @@ public interface UserChallengeRepositoryCustom {
     List<UserChallengeSummaryDto> findUserChallengeSummariesByChallengeId(Long challengeId);
 
     Optional<UserChallenge> findByUserNicknameAndRepositoryUrl(String nickname, String repositoryUrl);
+
+    List<UserChallenge> findAllByIsCompleted();
 }

@@ -196,4 +196,13 @@ public class ChallengeService {
             return true;
        }
     }
+
+    @Transactional
+    public void resetUserChallengeSolvedStatus(){
+        List<UserChallenge> userChallenges = userChallengeRepository.findAllByIsCompleted();
+
+        if(userChallenges.isEmpty()) return ;
+
+        userChallenges.forEach(UserChallenge::resetSolveStatus);
+    }
 }
