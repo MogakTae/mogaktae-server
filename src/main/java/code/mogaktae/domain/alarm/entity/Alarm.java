@@ -25,7 +25,7 @@ public class Alarm {
     private Long userId;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, name = "alarm_type" )
     private AlarmType alarmType;
 
     @Column(nullable = false, name = "challenge_name")
@@ -35,7 +35,7 @@ public class Alarm {
     private String senderNickname;
 
     @CreatedDate
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false, name = "created_at")
     private LocalDateTime createdAt;
 
     @Builder

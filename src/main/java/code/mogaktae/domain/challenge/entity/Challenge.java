@@ -2,11 +2,15 @@ package code.mogaktae.domain.challenge.entity;
 
 import code.mogaktae.domain.challenge.dto.req.ChallengeCreateRequestDto;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 
 @Table(name = "challenge")
 @Entity
@@ -22,27 +26,27 @@ public class Challenge {
     @Column(nullable = false, length = 60)
     private String name;
 
-    @Column(nullable = false, name = "challenge_image_url")
+    @Column(name = "challenge_image_url", nullable = false)
     private String challengeImageUrl;
 
     @CreatedDate
-    @Column(nullable = false, name = "start_date")
+    @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
 
-    @Column(nullable = false, name = "end_date")
+    @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
 
-    @Column(nullable = false, name = "daily_problem")
+    @Column(name = "daily_problem", nullable = false)
     private Long dailyProblem;
 
-    @Column(nullable = false, name = "penalty_per_once")
+    @Column(name = "penalty_per_once", nullable = false)
     private Long penaltyPerOnce;
 
     @Builder
     protected Challenge(ChallengeCreateRequestDto request){
         this.name = request.getName();
         this.challengeImageUrl = request.getImageUrl();
-        this.startDate = LocalDate.now();
+        this.startDate = LocalDate.now(ZoneId.of("Asia/Seoul"));
         this.endDate = request.getEndDate();
         this.dailyProblem = request.getDailyProblem();
         this.penaltyPerOnce = request.getPenaltyPerOnce();

@@ -36,6 +36,18 @@ public class ChallengeDetailsResponseDto {
     private final Long totalPenalty;
 
     @Schema(
+            description = "총 유저수",
+            example = "9"
+    )
+    private final int totalUsers;
+
+    @Schema(
+            description = "당일 문제를 푼 유저수",
+            example = "3"
+    )
+    private final Long todaySolvedUsers;
+
+    @Schema(
             description = "각 유저에 대한 챌린지 참여 정보",
             example = ""
     )
@@ -43,11 +55,13 @@ public class ChallengeDetailsResponseDto {
 
 
     @Builder
-    protected ChallengeDetailsResponseDto(String challengeName, String startDate, String endDate, Long totalPenalty, List<UserChallengeSummaryDto> userChallengeSummaries) {
+    private ChallengeDetailsResponseDto(String challengeName, String startDate, String endDate, int totalUsers, Long todaySolvedUsers, Long totalPenalty, List<UserChallengeSummaryDto> userChallengeSummaries) {
         this.challengeName = challengeName;
         this.startDate = startDate;
         this.endDate = endDate;
         this.totalPenalty = totalPenalty;
+        this.totalUsers = totalUsers;
+        this.todaySolvedUsers = todaySolvedUsers;
         this.userChallengeSummaries = userChallengeSummaries;
     }
 }

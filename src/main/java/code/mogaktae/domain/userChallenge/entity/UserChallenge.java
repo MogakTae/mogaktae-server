@@ -40,7 +40,7 @@ public class UserChallenge {
     @Column(name = "total_penalty", nullable = false)
     private Long totalPenalty;
 
-    @Column(nullable = false, name = "is_completed")
+    @Column(name = "is_completed", nullable = false)
     private Boolean isCompleted = false;
 
     @Builder

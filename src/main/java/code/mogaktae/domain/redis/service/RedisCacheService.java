@@ -1,9 +1,6 @@
 package code.mogaktae.domain.redis.service;
 
-
 import code.mogaktae.domain.alarm.service.AlarmService;
-import code.mogaktae.domain.challenge.dto.res.ChallengeDetailsResponseDto;
-import code.mogaktae.domain.challenge.dto.res.UserChallengeSummaryDto;
 import code.mogaktae.domain.challenge.entity.Challenge;
 import code.mogaktae.domain.challenge.repository.ChallengeRepository;
 import code.mogaktae.domain.common.util.SolvedAcUtils;
@@ -58,29 +55,6 @@ public class RedisCacheService {
         return ChallengeResultResponseDto.builder()
                 .challengeName(challenge.getName())
                 .personalResultDtos(personalResults)
-                .build();
-    }
-
-    @Cacheable(value = "challenge_details", key = "#challengeId")
-    public ChallengeDetailsResponseDto getChallengeDetails(Long challengeId){
-
-        Challenge challenge = challengeRepository.findById(challengeId)
-                .orElseThrow(() -> new RestApiException(CustomErrorCode.CHALLENGE_NOT_FOUND));
-
-        List<UserChallengeSummaryDto> userChallengeSummaries = userChallengeRepository.findUserChallengeSummariesByChallengeId(challengeId);
-
-        Long totalPenalty = userChallengeSummaries.stream()
-                .mapToLong(UserChallengeSummaryDto::getPenalty)
-                .sum();
-
-        log.info("getChallengeDetails() - 챌린지 상세정보 조회 완료");
-
-        return ChallengeDetailsResponseDto.builder()
-                .challengeName(challenge.getName())
-                .startDate(challenge.getStartDate().toString())
-                .endDate(challenge.getEndDate().toString())
-                .totalPenalty(totalPenalty)
-                .userChallengeSummaries(userChallengeSummaries)
                 .build();
     }
 }

@@ -17,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -52,5 +54,10 @@ public class ChallengeController {
     public ResponseEntity<ResponseDto<ChallengeResultResponseDto>> getChallengeResult(@AuthenticationPrincipal OAuth2UserDetailsImpl user,
                                                                                       @PathVariable Long challengeId){
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(challengeService.getChallengeResult(user, challengeId), "챌린지 결과 조회 성공"));
+    }
+
+    @PostMapping("/push")
+    public ResponseEntity<ResponseDto<?>> pushCodingTestCommit(@RequestBody Map<String, Object> request){
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(challengeService.pushCodingTestCommit(request), "레포지토리 푸쉬 웹훅 처리 완료"));
     }
 }

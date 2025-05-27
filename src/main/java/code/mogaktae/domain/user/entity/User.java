@@ -24,10 +24,10 @@ public class User {
     @Column(nullable = false, unique = true)
     private String nickname;
 
-    @Column(nullable = false, unique = true, name = "solved_ac_Id")
+    @Column(name = "solved_ac_id", nullable = false, unique = true)
     private String solvedAcId;
 
-    @Column(nullable = false, name = "profile_image_url")
+    @Column(name = "profile_image_url", nullable = false)
     private String profileImageUrl;
 
     @Enumerated(EnumType.STRING)
@@ -35,7 +35,7 @@ public class User {
     private Role role;
 
     @CreatedDate
-    @Column(nullable = false, name = "created_at", updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @Builder
