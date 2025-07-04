@@ -27,6 +27,7 @@ spring:
         enabled: true
 
 
+
     redis:
       host: mogaktae-redis
       port: 6384
