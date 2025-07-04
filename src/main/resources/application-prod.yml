@@ -25,10 +25,10 @@ spring:
     elasticsearch:
       repositories:
         enabled: true
-      uris: http://localhost:9200
+      uris: http://es:9200
 
     redis:
-      host: ${REDIS_HOST}
+      host: redis
       port: 6379
       password: ${REDIS_PASSWORD}
 
@@ -37,8 +37,8 @@ spring:
       client:
         registration:
           github:
-            client-id: ${GITHUB_CLIENT_ID}
-            client-secret: ${GITHUB_CLIENT_SECRET}
+            client-id: ${GIT_CLIENT_ID}
+            client-secret: ${GIT_CLIENT_SECRET}
 
     jwt:
       access-token:
