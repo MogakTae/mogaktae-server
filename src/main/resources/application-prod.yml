@@ -25,10 +25,10 @@ spring:
     elasticsearch:
       repositories:
         enabled: true
-      uris: http://es:9200
+
 
     redis:
-      host: redis
+      host: mogaktae-redis
       port: 6384
       password: ${REDIS_PASSWORD}
 
