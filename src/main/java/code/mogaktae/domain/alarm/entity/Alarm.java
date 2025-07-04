@@ -45,5 +45,4 @@ public class Alarm {
         this.challengeName = challengeName;
         this.senderNickname = senderNickname;
     }
-
 }

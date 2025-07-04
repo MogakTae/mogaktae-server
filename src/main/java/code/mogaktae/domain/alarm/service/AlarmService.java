@@ -57,4 +57,8 @@ public class AlarmService {
 
         alarmRepository.save(endAlarm);
     }
+
+    public Integer generateNumber(){
+        return 10;
+    }
 }

@@ -1,0 +1,53 @@
+spring:
+  datasource:
+    url: ${MYSQL_URL}
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+    open-in-view: false
+
+  jackson:
+    time-zone: Asia/Seoul
+    serialization:
+      fail-on-empty-beans: false
+
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true
+      uris: http://localhost:9200
+
+    redis:
+      host: ${REDIS_HOST}
+      port: 6379
+      password: ${REDIS_PASSWORD}
+
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: ${GITHUB_CLIENT_ID}
+            client-secret: ${GITHUB_CLIENT_SECRET}
+
+    jwt:
+      access-token:
+        expired-time: 10800000
+      refresh-token:
+        expired-time: 432000000
+      secret: ${JWT_SECRET}
+
+logging:
+  level:
+    root: INFO
+    org.springframework.security: DEBUG

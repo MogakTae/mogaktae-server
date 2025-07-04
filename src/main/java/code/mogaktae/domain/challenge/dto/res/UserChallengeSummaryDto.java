@@ -44,7 +44,7 @@ public class UserChallengeSummaryDto {
     private final Boolean todaySolved;
 
     @QueryProjection
-    public UserChallengeSummaryDto(String profileImageUrl, String repositoryUrl, String nickname, Long penalty, Long todaySolvedProblem, Boolean todaySolved) {
+    public UserChallengeSummaryDto(String profileImageUrl, String repositoryUrl, String nickname, Long penalty, Long todaySolvedProblem, Boolean todaySolved)  {
         this.profileImageUrl = profileImageUrl;
         this.repositoryUrl = repositoryUrl;
         this.nickname = nickname;
