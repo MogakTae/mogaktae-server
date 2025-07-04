@@ -5,16 +5,19 @@ services:
     ports:
       - "8070:8080"
     depends_on:
-      - redis
-      - es
+      es:
+        condition: service_healthy
+      redis:
+        condition: service_started
     environment:
       - TZ=Asia/Seoul
     networks:
       - es-bridge
+    restart: unless-stopped
 
   es:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.5.3
-    container_name: es
+    container_name: mogaktae-elastic-search
     environment:
       - node.name=mogaktae-node
       - cluster.name=mogaktae-cluster
