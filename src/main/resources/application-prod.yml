@@ -29,7 +29,7 @@ spring:
 
     redis:
       host: redis
-      port: 6380
+      port: 6384
       password: ${REDIS_PASSWORD}
 
   security:
