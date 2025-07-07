@@ -33,14 +33,10 @@ public class AlarmService {
         }
 
         participantsIds.forEach(userId -> {
-            Alarm joinAlarm = Alarm.builder()
-                    .userId(userId)
-                    .alarmType(AlarmType.JOIN)
-                    .challengeName(challengeName)
-                    .senderNickname(senderNickname)
-                    .build();
 
-            alarmRepository.save(joinAlarm);
+            Alarm alarm = Alarm.create(userId, AlarmType.JOIN, challengeName, senderNickname);
+
+            alarmRepository.save(alarm);
         });
     }
 
@@ -48,17 +44,8 @@ public class AlarmService {
     @Transactional
     public void sendChallengeEndAlarm(User user, String challengeName){
 
-        Alarm endAlarm = Alarm.builder()
-                .userId(user.getId())
-                .alarmType(AlarmType.END)
-                .challengeName(challengeName)
-                .senderNickname("")
-                .build();
+        Alarm alarm = Alarm.create(user.getId(), AlarmType.END, challengeName, "");
 
-        alarmRepository.save(endAlarm);
-    }
-
-    public Integer generateNumber(){
-        return 10;
+        alarmRepository.save(alarm);
     }
 }

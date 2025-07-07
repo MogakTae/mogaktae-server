@@ -27,6 +27,6 @@ public class SolvedAcUtils {
 
     public static Tier getTierFromResponse(Map<String, Object> response){
         Long rating = ((Number) response.get("tier")).longValue();
-        return Tier.fromRating(rating);
+        return Tier.from(rating);
     }
 }

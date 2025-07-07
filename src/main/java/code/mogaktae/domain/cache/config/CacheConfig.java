@@ -1,4 +1,4 @@
-package code.mogaktae.global.config;
+package code.mogaktae.domain.cache.config;
 
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
@@ -11,7 +11,7 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
-public class RedisCacheConfig {
+public class CacheConfig {
 
     @Bean
     public CacheManager cacheManager(RedisConnectionFactory rcf){

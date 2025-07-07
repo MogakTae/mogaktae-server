@@ -5,10 +5,10 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Table(name = "alarm")
 @Entity
@@ -21,21 +21,20 @@ public class Alarm {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, name = "user_id")
+    @Column(nullable = false, columnDefinition = "bigint", name = "user_id")
     private Long userId;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, name = "alarm_type" )
+    @Column(nullable = false, columnDefinition = "varchar(100)", name = "alarm_type")
     private AlarmType alarmType;
 
-    @Column(nullable = false, name = "challenge_name")
+    @Column(nullable = false, columnDefinition = "varchar(255)", name = "challenge_name")
     private String challengeName;
 
-    @Column(nullable = false, name = "sender_nickname")
+    @Column(nullable = false, columnDefinition = "varchar(255)", name = "sender_nickname")
     private String senderNickname;
 
-    @CreatedDate
-    @Column(nullable = false, updatable = false, name = "created_at")
+    @Column(nullable = false, columnDefinition = "date", name = "created_at")
     private LocalDateTime createdAt;
 
     @Builder
@@ -44,5 +43,15 @@ public class Alarm {
         this.alarmType = alarmType;
         this.challengeName = challengeName;
         this.senderNickname = senderNickname;
+        this.createdAt = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+    }
+
+    public static Alarm create(Long userId, AlarmType alarmType, String challengeName, String senderNickname) {
+        return Alarm.builder()
+                .userId(userId)
+                .alarmType(alarmType)
+                .challengeName(challengeName)
+                .senderNickname(senderNickname)
+                .build();
     }
 }

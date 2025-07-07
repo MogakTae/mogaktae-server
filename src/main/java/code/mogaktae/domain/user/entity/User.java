@@ -6,10 +6,10 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Table(name = "user")
 @Entity
@@ -17,33 +17,34 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, columnDefinition = "varchar(255)", unique = true)
     private String nickname;
 
-    @Column(name = "solved_ac_id", nullable = false, unique = true)
+    @Column(name = "solved_ac_id", columnDefinition = "varchar(150)", nullable = false, unique = true)
     private String solvedAcId;
 
-    @Column(name = "profile_image_url", nullable = false)
+    @Column(name = "profile_image_url", columnDefinition = "varchar(255)", nullable = false)
     private String profileImageUrl;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(columnDefinition = "varchar(100)", nullable = false)
     private Role role;
 
-    @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @Builder
-    public User(String nickname, String solvedAcId, String profileImageUrl) {
+    private User(String nickname, String solvedAcId, String profileImageUrl) {
         this.nickname = nickname;
         this.solvedAcId = solvedAcId;
         this.profileImageUrl = profileImageUrl;
         this.role = Role.USER;
+        this.createdAt = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
     }
 
     public static User create(SignUpRequestDto signUpRequestDto){

@@ -1,4 +1,4 @@
-package code.mogaktae.domain.redis.service;
+package code.mogaktae.domain.cache.service;
 
 import code.mogaktae.domain.alarm.service.AlarmService;
 import code.mogaktae.domain.challenge.entity.Challenge;
@@ -21,7 +21,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class RedisCacheService {
+public class CacheService {
 
     private final SolvedAcClient solvedAcClient;
 
@@ -58,4 +58,12 @@ public class RedisCacheService {
                 .personalResultDtos(personalResults)
                 .build();
     }
+
+    /**
+     * 다시 생각해봐야하 하는 점
+     *
+     * 1. 언제 프로젝트를 종료 상태로 만드는가? -> 스캐줄러로 다음날 00:01분에 종료 예정일에 다다른 챌린지를 조회한 후 end 상태로 만듬
+     * 2. 종료된거 기준으로 결과 생성
+     * 3. 조회시 캐싱 적용
+     */
 }

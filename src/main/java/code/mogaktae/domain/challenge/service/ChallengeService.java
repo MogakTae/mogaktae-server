@@ -10,7 +10,7 @@ import code.mogaktae.domain.common.client.SolvedAcClient;
 import code.mogaktae.domain.common.util.CursorBasedPaginationCollection;
 import code.mogaktae.domain.common.util.GitHubUtils;
 import code.mogaktae.domain.common.util.SolvedAcUtils;
-import code.mogaktae.domain.redis.service.RedisCacheService;
+import code.mogaktae.domain.cache.service.CacheService;
 import code.mogaktae.domain.result.dto.res.ChallengeResultResponseDto;
 import code.mogaktae.domain.user.entity.Tier;
 import code.mogaktae.domain.user.entity.User;
@@ -38,7 +38,7 @@ public class ChallengeService {
     private final SolvedAcClient solvedAcClient;
 
     private final AlarmService alarmService;
-    private final RedisCacheService redisCacheService;
+    private final CacheService cacheService;
 
     private final UserRepository userRepository;
     private final UserChallengeRepository userChallengeRepository;
@@ -113,9 +113,7 @@ public class ChallengeService {
         if (userChallengeRepository.countUserChallenge(headUser.getId()) > 3)
             throw new RestApiException(CustomErrorCode.CHALLENGE_MAX_PARTICIPATION_REACHED);
 
-        Challenge challenge = Challenge.builder()
-                .request(request)
-                .build();
+        Challenge challenge = Challenge.create(request);
 
         challengeRepository.save(challenge);
 
@@ -172,7 +170,7 @@ public class ChallengeService {
             throw new RestApiException(CustomErrorCode.USER_NO_PERMISSION_TO_CHALLENGE);
 
 
-        return redisCacheService.getChallengeResult(challengeId);
+        return cacheService.getChallengeResult(challengeId);
     }
 
     @Transactional

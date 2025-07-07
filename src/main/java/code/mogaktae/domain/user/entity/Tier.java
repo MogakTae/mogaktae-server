@@ -49,7 +49,7 @@ public enum Tier {
     private final int minRating;
     private final int maxRating;
 
-    public static Tier fromRating(Long rating) {
+    public static Tier from(Long rating) {
         for (Tier tier : values()) {
             if (rating >= tier.minRating && rating <= tier.maxRating) {
                 return tier;
