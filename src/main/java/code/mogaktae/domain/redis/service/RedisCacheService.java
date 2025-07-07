@@ -3,9 +3,10 @@ package code.mogaktae.domain.redis.service;
 import code.mogaktae.domain.alarm.service.AlarmService;
 import code.mogaktae.domain.challenge.entity.Challenge;
 import code.mogaktae.domain.challenge.repository.ChallengeRepository;
-import code.mogaktae.domain.common.util.SolvedAcUtils;
+import code.mogaktae.domain.common.client.SolvedAcClient;
 import code.mogaktae.domain.result.dto.res.ChallengeResultResponseDto;
 import code.mogaktae.domain.result.dto.res.PersonalResultDto;
+import code.mogaktae.domain.user.entity.Tier;
 import code.mogaktae.domain.user.repository.UserRepository;
 import code.mogaktae.domain.userChallenge.repository.UserChallengeRepository;
 import code.mogaktae.global.exception.entity.RestApiException;
@@ -22,7 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RedisCacheService {
 
-    private final SolvedAcUtils solvedAcUtils;
+    private final SolvedAcClient solvedAcClient;
 
     private final AlarmService alarmService;
 
@@ -45,7 +46,7 @@ public class RedisCacheService {
                             challenge.getName()
                     );
 
-                    Long tier = solvedAcUtils.getUserBaekJoonTier(personalResult.getSolvedAcId());
+                    Tier tier = solvedAcClient.getBaekJoonTier(personalResult.getSolvedAcId());
 
                     return personalResult.withEndTier(tier);
                 }).toList();

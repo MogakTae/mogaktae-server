@@ -15,4 +15,12 @@ public class PushInfoDto {
         this.pusher = pusher;
         this.commitMessage = commitMessage;
     }
+
+    public static PushInfoDto from(String url, String pusher, String commitMessage) {
+        return PushInfoDto.builder()
+                .url(url)
+                .pusher(pusher)
+                .commitMessage(commitMessage)
+                .build();
+    }
 }

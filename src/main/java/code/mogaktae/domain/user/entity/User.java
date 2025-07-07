@@ -39,10 +39,18 @@ public class User {
     private LocalDateTime createdAt;
 
     @Builder
-    public User(SignUpRequestDto request) {
-        this.nickname = request.getNickname();
-        this.solvedAcId = request.getSolvedAcId();
-        this.profileImageUrl = request.getProfileImageUrl();
+    public User(String nickname, String solvedAcId, String profileImageUrl) {
+        this.nickname = nickname;
+        this.solvedAcId = solvedAcId;
+        this.profileImageUrl = profileImageUrl;
         this.role = Role.USER;
+    }
+
+    public static User create(SignUpRequestDto signUpRequestDto){
+        return User.builder()
+                .nickname(signUpRequestDto.getNickname())
+                .solvedAcId(signUpRequestDto.getSolvedAcId())
+                .profileImageUrl(signUpRequestDto.getProfileImageUrl())
+                .build();
     }
 }

@@ -1,5 +1,6 @@
 package code.mogaktae.domain.userChallenge.entity;
 
+import code.mogaktae.domain.user.entity.Tier;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -25,11 +26,13 @@ public class UserChallenge {
     @Column(name = "repository_url", nullable = false)
     private String repositoryUrl;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "start_tier", nullable = false)
-    private Long startTier;
+    private Tier startTier;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "end_tier", nullable = false)
-    private Long endTier;
+    private Tier endTier;
 
     @Column(name = "total_solved_problem", nullable = false)
     private Long totalSolvedProblem;
@@ -44,7 +47,7 @@ public class UserChallenge {
     private Boolean isCompleted = false;
 
     @Builder
-    private UserChallenge(Long userId, Long challengeId, String repositoryUrl, Long tier) {
+    private UserChallenge(Long userId, Long challengeId, String repositoryUrl, Tier tier) {
         this.userId = userId;
         this.challengeId = challengeId;
         this.repositoryUrl = repositoryUrl;

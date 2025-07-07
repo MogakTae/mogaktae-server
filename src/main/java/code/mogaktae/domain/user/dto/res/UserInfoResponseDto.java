@@ -1,6 +1,7 @@
 package code.mogaktae.domain.user.dto.res;
 
 import code.mogaktae.domain.challenge.dto.res.ChallengeSummaryResponseDto;
+import code.mogaktae.domain.user.entity.Tier;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,9 +32,9 @@ public class UserInfoResponseDto {
 
     @Schema(
             description = "백준 티어",
-            example = "10"
+            example = "DIAMOND_V"
     )
-    private final Long tier;
+    private final Tier tier;
 
     @Schema(
             description = "진행중인 챌린지",
@@ -48,7 +49,7 @@ public class UserInfoResponseDto {
     private final List<ChallengeSummaryResponseDto> completedChallenges;
 
     @Builder
-    private UserInfoResponseDto(String profileImageUrl, String nickname, String repositoryUrl, Long tier,
+    private UserInfoResponseDto(String profileImageUrl, String nickname, String repositoryUrl, Tier tier,
                                 List<ChallengeSummaryResponseDto> inProgressChallenges, List<ChallengeSummaryResponseDto> completedChallenges) {
         this.profileImageUrl = profileImageUrl;
         this.nickname = nickname;

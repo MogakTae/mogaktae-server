@@ -10,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 public class RestTemplateConfig {
 
     @Bean
-    @Qualifier("gitHubRestTemplate")
+    @Qualifier("github")
     public RestTemplate gitHubRestTemplate(RestTemplateBuilder restTemplateBuilder){
         return restTemplateBuilder
                 .rootUri("https://api.github.com")
@@ -18,7 +18,7 @@ public class RestTemplateConfig {
     }
 
     @Bean
-    @Qualifier("solvedAcRestTemplate")
+    @Qualifier("solvedAc")
     public RestTemplate solbedAcRestTemplate(RestTemplateBuilder restTemplateBuilder){
         return restTemplateBuilder
                 .rootUri("https://solved.ac/api/v3")

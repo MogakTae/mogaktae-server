@@ -1,5 +1,6 @@
 package code.mogaktae.domain.result.dto.res;
 
+import code.mogaktae.domain.user.entity.Tier;
 import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -31,13 +32,13 @@ public class PersonalResultDto {
             description = "챌린지 시작 티어",
             example = "10"
     )
-    private final Long startTier;
+    private final Tier startTier;
 
     @Schema(
             description = "챌린지 종료 티어",
             example = "11"
     )
-    private final Long endTier;
+    private final Tier endTier;
 
     @Schema(
             description = "총 벌금",
@@ -53,7 +54,7 @@ public class PersonalResultDto {
 
     @Builder
     private PersonalResultDto(String solvedAcId, String profileImageUrl, String nickname,
-                           Long startTier, Long endTier, Long totalPenalty, Long totalProblemSolved) {
+                              Tier startTier, Tier endTier, Long totalPenalty, Long totalProblemSolved) {
         this.solvedAcId = solvedAcId;
         this.profileImageUrl = profileImageUrl;
         this.nickname = nickname;
@@ -65,11 +66,11 @@ public class PersonalResultDto {
 
     @QueryProjection
     public PersonalResultDto(String solvedAcId, String profileImageUrl, String nickname,
-                          Long startTier, Long totalPenalty, Long totalProblemSolved) {
+                             Tier startTier, Long totalPenalty, Long totalProblemSolved) {
         this(solvedAcId, profileImageUrl, nickname, startTier, null, totalPenalty, totalProblemSolved);
     }
 
-    public PersonalResultDto withEndTier(Long endTier) {
+    public PersonalResultDto withEndTier(Tier endTier) {
         return PersonalResultDto.builder()
                 .solvedAcId(this.solvedAcId)
                 .profileImageUrl(this.profileImageUrl)

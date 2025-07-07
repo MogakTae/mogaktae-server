@@ -2,8 +2,9 @@ package code.mogaktae.domain.user.service;
 
 import code.mogaktae.domain.challenge.dto.res.ChallengeSummaryResponseDto;
 import code.mogaktae.domain.challenge.service.ChallengeService;
-import code.mogaktae.domain.common.util.SolvedAcUtils;
+import code.mogaktae.domain.common.client.SolvedAcClient;
 import code.mogaktae.domain.user.dto.res.UserInfoResponseDto;
+import code.mogaktae.domain.user.entity.Tier;
 import code.mogaktae.domain.user.entity.User;
 import code.mogaktae.domain.user.entity.UserDocument;
 import code.mogaktae.domain.user.repository.UserDocumentRepository;
@@ -23,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final SolvedAcUtils solvedAcUtils;
+    private final SolvedAcClient solvedAcClient;
 
     private final ChallengeService challengeService;
 
@@ -40,7 +41,7 @@ public class UserService {
 
         log.info("getMyPageInfo() - 사용자 정보 조회 완료({})", user.getNickname());
 
-        Long tier = solvedAcUtils.getUserBaekJoonTier(user.getSolvedAcId());
+        Tier tier = solvedAcClient.getBaekJoonTier(user.getSolvedAcId());
 
         return UserInfoResponseDto.builder()
                 .nickname(user.getNickname())

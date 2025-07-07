@@ -6,11 +6,13 @@ import code.mogaktae.domain.challenge.dto.req.ChallengeJoinRequestDto;
 import code.mogaktae.domain.challenge.dto.res.*;
 import code.mogaktae.domain.challenge.entity.Challenge;
 import code.mogaktae.domain.challenge.repository.ChallengeRepository;
+import code.mogaktae.domain.common.client.SolvedAcClient;
 import code.mogaktae.domain.common.util.CursorBasedPaginationCollection;
 import code.mogaktae.domain.common.util.GitHubUtils;
 import code.mogaktae.domain.common.util.SolvedAcUtils;
 import code.mogaktae.domain.redis.service.RedisCacheService;
 import code.mogaktae.domain.result.dto.res.ChallengeResultResponseDto;
+import code.mogaktae.domain.user.entity.Tier;
 import code.mogaktae.domain.user.entity.User;
 import code.mogaktae.domain.user.repository.UserRepository;
 import code.mogaktae.domain.userChallenge.entity.UserChallenge;
@@ -33,8 +35,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ChallengeService {
 
-    private final SolvedAcUtils solvedAcUtils;
-    private final GitHubUtils gitHubUtils;
+    private final SolvedAcClient solvedAcClient;
 
     private final AlarmService alarmService;
     private final RedisCacheService redisCacheService;
@@ -118,7 +119,7 @@ public class ChallengeService {
 
         challengeRepository.save(challenge);
 
-        Long tier = solvedAcUtils.getUserBaekJoonTier(headUser.getSolvedAcId());
+        Tier tier = solvedAcClient.getBaekJoonTier(headUser.getSolvedAcId());
 
         UserChallenge userChallenge = UserChallenge.builder()
                 .userId(headUser.getId())
@@ -146,7 +147,7 @@ public class ChallengeService {
         Challenge challenge = challengeRepository.findById(request.getChallengeId())
                 .orElseThrow(() -> new RestApiException(CustomErrorCode.CHALLENGE_NOT_FOUND));
 
-        Long tier = solvedAcUtils.getUserBaekJoonTier(user.getSolvedAcId());
+        Tier tier = solvedAcClient.getBaekJoonTier(user.getSolvedAcId());
 
         UserChallenge userChallenge = UserChallenge.builder()
                 .userId(user.getId())
@@ -162,13 +163,12 @@ public class ChallengeService {
         return challenge.getId();
     }
 
-
     public ChallengeResultResponseDto getChallengeResult(OAuth2UserDetailsImpl authUser, Long challengeId) {
 
         User user = userRepository.findByNickname(authUser.getName())
                 .orElseThrow(() -> new RestApiException(CustomErrorCode.USER_NOT_FOUND));
 
-        if (userChallengeRepository.existsByUserIdAndChallengeId(user.getId(), challengeId))
+        if (Boolean.TRUE.equals(userChallengeRepository.existsByUserIdAndChallengeId(user.getId(), challengeId)))
             throw new RestApiException(CustomErrorCode.USER_NO_PERMISSION_TO_CHALLENGE);
 
 
@@ -177,7 +177,7 @@ public class ChallengeService {
 
     @Transactional
     public Boolean pushCodingTestCommit(Map<String, Object> request){
-       PushInfoDto pushInfo = gitHubUtils.getPushInfoFromRequest(request);
+       PushInfoDto pushInfo = GitHubUtils.getPushInfoFromRequest(request);
 
        UserChallenge userChallenge = userChallengeRepository.findByUserNicknameAndRepositoryUrl(pushInfo.getPusher(), pushInfo.getUrl())
                .orElseThrow(() -> new RestApiException(CustomErrorCode.USERCHALLENGE_NOT_FOUND));
@@ -185,15 +185,13 @@ public class ChallengeService {
        String solvedAcId = userRepository.findSolvedAcIdByNickname(pushInfo.getPusher())
                .orElseThrow(() -> new RestApiException(CustomErrorCode.USER_NOT_FOUND));
 
-       Long targetProblemId = gitHubUtils.getProblemIdFromCommitMessage(pushInfo.getCommitMessage());
+       Long targetProblemId = GitHubUtils.getProblemIdFromCommitMessage(pushInfo.getCommitMessage());
 
-       if(solvedAcUtils.checkUserSolvedProblem(solvedAcId, targetProblemId)){
-            throw new RestApiException(CustomErrorCode.USER_NOT_SOLVE_TARGET_PROBLEM);
+       if(SolvedAcUtils.checkUserSolvedTargetProblem(solvedAcClient.getUserSolvedProblem(solvedAcId), targetProblemId)){
+           userChallenge.updateSolveStatus();
+           return true;
        }else{
-            userChallenge.updateSolveStatus();
-            log.info("pushCodingTestCommit() - 커밋사항 반영 완료 {} {}", pushInfo.getPusher(), pushInfo.getCommitMessage());
-
-            return true;
+           throw new RestApiException(CustomErrorCode.USER_NOT_SOLVE_TARGET_PROBLEM);
        }
     }
 
