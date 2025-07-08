@@ -1,8 +1,8 @@
 package code.mogaktae.domain.challenge.service;
 
 import code.mogaktae.domain.alarm.service.AlarmService;
-import code.mogaktae.domain.challenge.dto.req.ChallengeCreateRequestDto;
-import code.mogaktae.domain.challenge.dto.req.ChallengeJoinRequestDto;
+import code.mogaktae.domain.challenge.dto.req.ChallengeCreateRequest;
+import code.mogaktae.domain.challenge.dto.req.ChallengeJoinRequest;
 import code.mogaktae.domain.challenge.dto.res.*;
 import code.mogaktae.domain.challenge.entity.Challenge;
 import code.mogaktae.domain.challenge.repository.ChallengeRepository;
@@ -45,30 +45,30 @@ public class ChallengeService {
     private final ChallengeRepository challengeRepository;
 
     @Transactional(readOnly = true)
-    public ChallengeResponseDto getChallengesSummary(int size, Long lastCursorId) {
+    public ChallengeInfoSummariesResponse getChallengesSummary(int size, Long lastCursorId) {
         PageRequest pageRequest = PageRequest.of(0, size + 1);
 
-        Page<ChallengeSummaryResponseDto> challenges = challengeRepository.findByIdLessThanOrderByIdDesc(lastCursorId, pageRequest);
+        Page<ChallengeInfoSummaryResponse> challenges = challengeRepository.findByIdLessThanOrderByIdDesc(lastCursorId, pageRequest);
 
-        CursorBasedPaginationCollection<ChallengeSummaryResponseDto> collection = CursorBasedPaginationCollection.of(challenges.getContent(), size);
+        CursorBasedPaginationCollection<ChallengeInfoSummaryResponse> collection = CursorBasedPaginationCollection.of(challenges.getContent(), size);
 
         log.info("getChallenges() - {} 개의 챌린지 조회 완료", size);
 
-        return ChallengeResponseDto.of(collection, challengeRepository.count());
+        return ChallengeInfoSummariesResponse.of(collection, challengeRepository.count());
     }
 
-    public List<ChallengeSummaryResponseDto> getMyCompletedChallenges(Long userId) {
+    public List<ChallengeInfoSummaryResponse> getMyCompletedChallenges(Long userId) {
 
-        List<ChallengeSummaryResponseDto> completedChallenges = userChallengeRepository.findChallengesByUserIdAndIsCompleted(userId, true);
+        List<ChallengeInfoSummaryResponse> completedChallenges = userChallengeRepository.findChallengesByUserIdAndIsCompleted(userId, true);
 
         log.info("getInProgressChallenges() - userId = {}의 완료된 챌린지 조회 완료", userId);
 
         return completedChallenges;
     }
 
-    public List<ChallengeSummaryResponseDto> getMyInProgressChallenges(Long userId) {
+    public List<ChallengeInfoSummaryResponse> getMyInProgressChallenges(Long userId) {
 
-        List<ChallengeSummaryResponseDto> inProgressChallenges = userChallengeRepository.findChallengesByUserIdAndIsCompleted(userId, false);
+        List<ChallengeInfoSummaryResponse> inProgressChallenges = userChallengeRepository.findChallengesByUserIdAndIsCompleted(userId, false);
 
         log.info("getInProgressChallenges() - userId = {}의 진행중인 챌린지 조회 완료", userId);
 
@@ -76,7 +76,7 @@ public class ChallengeService {
     }
 
     @Transactional(readOnly = true)
-    public ChallengeDetailsResponseDto getChallengeDetails(OAuth2UserDetailsImpl authUser, Long challengeId) {
+    public ChallengeInfoResponse getChallengeDetails(OAuth2UserDetailsImpl authUser, Long challengeId) {
 
         Challenge challenge = challengeRepository.findById(challengeId)
                 .orElseThrow(() -> new RestApiException(CustomErrorCode.CHALLENGE_NOT_FOUND));
@@ -84,16 +84,16 @@ public class ChallengeService {
         List<UserChallengeSummaryDto> userChallengeSummaries = userChallengeRepository.findUserChallengeSummariesByChallengeId(challengeId, challenge.getDailyProblem());
 
         Long totalPenalty = userChallengeSummaries.stream()
-                .mapToLong(UserChallengeSummaryDto::getPenalty)
+                .mapToLong(UserChallengeSummaryDto::penalty)
                 .sum();
 
         Long todaySolvedUsers = userChallengeSummaries.stream()
-                .filter(summary -> summary.getTodaySolvedProblem() >= challenge.getDailyProblem())
+                .filter(summary -> summary.todaySolvedProblem() >= challenge.getDailyProblem())
                 .count();
 
         log.info("getChallengeDetails() - 챌린지 상세정보 조회 완료");
 
-        return ChallengeDetailsResponseDto.builder()
+        return ChallengeInfoResponse.builder()
                 .challengeName(challenge.getName())
                 .startDate(challenge.getStartDate().toString())
                 .endDate(challenge.getEndDate().toString())
@@ -105,7 +105,7 @@ public class ChallengeService {
     }
 
     @Transactional
-    public Long createChallenge(OAuth2UserDetailsImpl authUser, ChallengeCreateRequestDto request) {
+    public Long createChallenge(OAuth2UserDetailsImpl authUser, ChallengeCreateRequest request) {
 
         User headUser = userRepository.findByNickname(authUser.getUsername())
                 .orElseThrow(() -> new RestApiException(CustomErrorCode.USER_NOT_FOUND));
@@ -119,16 +119,11 @@ public class ChallengeService {
 
         Tier tier = solvedAcClient.getBaekJoonTier(headUser.getSolvedAcId());
 
-        UserChallenge userChallenge = UserChallenge.builder()
-                .userId(headUser.getId())
-                .challengeId(challenge.getId())
-                .repositoryUrl(request.getRepositoryUrl())
-                .tier(tier)
-                .build();
+        UserChallenge userChallenge = UserChallenge.create(headUser.getId(), challenge.getId(), request.repositoryUrl(), tier);
 
         userChallengeRepository.save(userChallenge);
 
-        alarmService.sendChallengeJoinAlarm(headUser.getNickname(), challenge.getName(), request.getParticipants());
+        alarmService.sendChallengeJoinAlarm(headUser.getNickname(), challenge.getName(), request.participants());
 
         log.info("createChallenge() - 챌린지 참여 알림 저장 완료");
 
@@ -138,21 +133,16 @@ public class ChallengeService {
     }
 
     @Transactional
-    public Long joinChallenge(OAuth2UserDetailsImpl authUser, ChallengeJoinRequestDto request) {
+    public Long joinChallenge(OAuth2UserDetailsImpl authUser, ChallengeJoinRequest request) {
         User user = userRepository.findByNickname(authUser.getUsername())
                 .orElseThrow(() -> new RestApiException(CustomErrorCode.USER_NOT_FOUND));
 
-        Challenge challenge = challengeRepository.findById(request.getChallengeId())
+        Challenge challenge = challengeRepository.findById(request.challengeId())
                 .orElseThrow(() -> new RestApiException(CustomErrorCode.CHALLENGE_NOT_FOUND));
 
         Tier tier = solvedAcClient.getBaekJoonTier(user.getSolvedAcId());
 
-        UserChallenge userChallenge = UserChallenge.builder()
-                .userId(user.getId())
-                .challengeId(challenge.getId())
-                .repositoryUrl(request.getRepositoryUrl())
-                .tier(tier)
-                .build();
+        UserChallenge userChallenge = UserChallenge.create(user.getId(), challenge.getId(), request.repositoryUrl(), tier);
 
         userChallengeRepository.save(userChallenge);
 
@@ -177,13 +167,13 @@ public class ChallengeService {
     public Boolean pushCodingTestCommit(Map<String, Object> request){
        PushInfoDto pushInfo = GitHubUtils.getPushInfoFromRequest(request);
 
-       UserChallenge userChallenge = userChallengeRepository.findByUserNicknameAndRepositoryUrl(pushInfo.getPusher(), pushInfo.getUrl())
+       UserChallenge userChallenge = userChallengeRepository.findByUserNicknameAndRepositoryUrl(pushInfo.pusher(), pushInfo.url())
                .orElseThrow(() -> new RestApiException(CustomErrorCode.USERCHALLENGE_NOT_FOUND));
 
-       String solvedAcId = userRepository.findSolvedAcIdByNickname(pushInfo.getPusher())
+       String solvedAcId = userRepository.findSolvedAcIdByNickname(pushInfo.pusher())
                .orElseThrow(() -> new RestApiException(CustomErrorCode.USER_NOT_FOUND));
 
-       Long targetProblemId = GitHubUtils.getProblemIdFromCommitMessage(pushInfo.getCommitMessage());
+       Long targetProblemId = GitHubUtils.getProblemIdFromCommitMessage(pushInfo.commitMessage());
 
        if(SolvedAcUtils.checkUserSolvedTargetProblem(solvedAcClient.getUserSolvedProblem(solvedAcId), targetProblemId)){
            userChallenge.updateSolveStatus();

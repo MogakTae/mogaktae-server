@@ -1,6 +1,6 @@
 package code.mogaktae.domain.challenge.entity;
 
-import code.mogaktae.domain.challenge.dto.req.ChallengeCreateRequestDto;
+import code.mogaktae.domain.challenge.dto.req.ChallengeCreateRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -50,13 +50,13 @@ public class Challenge {
         this.penaltyPerOnce = penaltyPerOnce;
     }
 
-    public static Challenge create(ChallengeCreateRequestDto request){
+    public static Challenge create(ChallengeCreateRequest request){
         return Challenge.builder()
-                .name(request.getName())
-                .challengeImageUrl(request.getRepositoryUrl())
-                .endDate(request.getEndDate())
-                .dailyProblem(request.getDailyProblem())
-                .penaltyPerOnce(request.getPenaltyPerOnce())
+                .name(request.name())
+                .challengeImageUrl(request.repositoryUrl())
+                .endDate(request.endDate())
+                .dailyProblem(request.dailyProblem())
+                .penaltyPerOnce(request.penaltyPerOnce())
                 .build();
     }
 }

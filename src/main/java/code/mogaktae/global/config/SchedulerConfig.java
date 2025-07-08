@@ -15,4 +15,9 @@ public class SchedulerConfig {
     public void resetUserChallengeCompletedStatus(){
         challengeService.resetUserChallengeSolvedStatus();
     }
+
+    @Scheduled(cron = "0 1 0 * * *")
+    public void completeChallenge(){
+//        challengeService.completeChallenge();
+    }
 }

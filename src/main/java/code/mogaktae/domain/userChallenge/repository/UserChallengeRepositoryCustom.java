@@ -1,6 +1,6 @@
 package code.mogaktae.domain.userChallenge.repository;
 
-import code.mogaktae.domain.challenge.dto.res.ChallengeSummaryResponseDto;
+import code.mogaktae.domain.challenge.dto.res.ChallengeInfoSummaryResponse;
 import code.mogaktae.domain.challenge.dto.res.UserChallengeSummaryDto;
 import code.mogaktae.domain.result.dto.res.PersonalResultDto;
 import code.mogaktae.domain.userChallenge.entity.UserChallenge;
@@ -16,7 +16,7 @@ public interface UserChallengeRepositoryCustom {
 
     Long countUserChallenge(Long userId);
 
-    List<ChallengeSummaryResponseDto> findChallengesByUserIdAndIsCompleted(Long userId, Boolean isCompleted);
+    List<ChallengeInfoSummaryResponse> findChallengesByUserIdAndIsCompleted(Long userId, Boolean isCompleted);
 
     List<UserChallengeSummaryDto> findUserChallengeSummariesByChallengeId(Long challengeId, Long dailyProblem);
 

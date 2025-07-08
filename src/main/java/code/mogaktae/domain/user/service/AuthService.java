@@ -21,6 +21,7 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final UserChallengeRepository userChallengeRepository;
+
     private final GithubClient githubClient;
 
     @Transactional

@@ -60,6 +60,15 @@ public class UserChallenge {
         this.isCompleted = false;
     }
 
+    public static UserChallenge create(Long userId, Long challengeId, String repositoryUrl, Tier tier) {
+        return UserChallenge.builder()
+                .userId(userId)
+                .challengeId(challengeId)
+                .repositoryUrl(repositoryUrl)
+                .tier(tier)
+                .build();
+    }
+
     public void updateSolveStatus(){
         this.totalSolvedProblem += 1;
         this.todaySolvedProblem += 1;

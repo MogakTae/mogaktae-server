@@ -1,6 +1,6 @@
 package code.mogaktae.domain.user.service;
 
-import code.mogaktae.domain.challenge.dto.res.ChallengeSummaryResponseDto;
+import code.mogaktae.domain.challenge.dto.res.ChallengeInfoSummaryResponse;
 import code.mogaktae.domain.challenge.service.ChallengeService;
 import code.mogaktae.domain.common.client.SolvedAcClient;
 import code.mogaktae.domain.user.dto.res.UserInfoResponseDto;
@@ -36,20 +36,12 @@ public class UserService {
         User user = userRepository.findByNickname(authUser.getUsername())
                 .orElseThrow(() -> new RestApiException(CustomErrorCode.USER_NOT_FOUND));
 
-        List<ChallengeSummaryResponseDto> completedChallenges = challengeService.getMyCompletedChallenges(user.getId());
-        List<ChallengeSummaryResponseDto> inProgressChallenges = challengeService.getMyInProgressChallenges(user.getId());
-
-        log.info("getMyPageInfo() - 사용자 정보 조회 완료({})", user.getNickname());
+        List<ChallengeInfoSummaryResponse> completedChallenges = challengeService.getMyCompletedChallenges(user.getId());
+        List<ChallengeInfoSummaryResponse> inProgressChallenges = challengeService.getMyInProgressChallenges(user.getId());
 
         Tier tier = solvedAcClient.getBaekJoonTier(user.getSolvedAcId());
 
-        return UserInfoResponseDto.builder()
-                .nickname(user.getNickname())
-                .profileImageUrl(user.getProfileImageUrl())
-                .tier(tier)
-                .inProgressChallenges(inProgressChallenges)
-                .completedChallenges(completedChallenges)
-                .build();
+        return UserInfoResponseDto.of(user.getProfileImageUrl(), user.getNickname(),tier,inProgressChallenges,completedChallenges);
     }
 
     public List<UserDocument> searchUsers(String nickname){

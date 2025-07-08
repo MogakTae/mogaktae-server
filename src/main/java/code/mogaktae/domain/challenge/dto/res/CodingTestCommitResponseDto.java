@@ -1,17 +1,18 @@
 package code.mogaktae.domain.challenge.dto.res;
 
 import lombok.Builder;
-import lombok.Getter;
 
-@Getter
-public class CodingTestCommitResponseDto {
+@Builder
+public record CodingTestCommitResponseDto (
 
-    private final String nickname;
-    private final String commitMessage;
+    String nickname,
+    String commitMessage
 
-    @Builder
-    private CodingTestCommitResponseDto(String nickname, String commitMessage) {
-        this.nickname = nickname;
-        this.commitMessage = commitMessage;
+){
+    public static CodingTestCommitResponseDto create(String nickname, String commitMessage){
+        return CodingTestCommitResponseDto.builder()
+                .nickname(nickname)
+                .commitMessage(commitMessage)
+                .build();
     }
 }

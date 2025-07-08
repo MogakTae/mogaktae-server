@@ -1,7 +1,7 @@
 package code.mogaktae.domain.userChallenge.repository;
 
-import code.mogaktae.domain.challenge.dto.res.ChallengeSummaryResponseDto;
-import code.mogaktae.domain.challenge.dto.res.QChallengeSummaryResponseDto;
+import code.mogaktae.domain.challenge.dto.res.ChallengeInfoSummaryResponse;
+import code.mogaktae.domain.challenge.dto.res.QChallengeInfoSummaryResponse;
 import code.mogaktae.domain.challenge.dto.res.QUserChallengeSummaryDto;
 import code.mogaktae.domain.challenge.dto.res.UserChallengeSummaryDto;
 import code.mogaktae.domain.result.dto.res.PersonalResultDto;
@@ -68,9 +68,9 @@ public class UserChallengeRepositoryImpl implements UserChallengeRepositoryCusto
     }
 
     @Override
-    public List<ChallengeSummaryResponseDto> findChallengesByUserIdAndIsCompleted(Long userId, Boolean isCompleted){
+    public List<ChallengeInfoSummaryResponse> findChallengesByUserIdAndIsCompleted(Long userId, Boolean isCompleted){
         return jpaQueryFactory
-                .select(new QChallengeSummaryResponseDto(
+                .select(new QChallengeInfoSummaryResponse(
                         challenge.id,
                         challenge.challengeImageUrl,
                         challenge.name,
