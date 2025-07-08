@@ -1,7 +1,7 @@
 package code.mogaktae.domain.user.controller;
 
 import code.mogaktae.domain.common.dto.ResponseDto;
-import code.mogaktae.domain.user.dto.req.SignUpRequestDto;
+import code.mogaktae.domain.user.dto.req.SignUpRequest;
 import code.mogaktae.domain.user.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/sign-up")
-    public ResponseEntity<ResponseDto<String>> signUp(@Valid @RequestBody SignUpRequestDto request){
+    public ResponseEntity<ResponseDto<String>> signUp(@Valid @RequestBody SignUpRequest request){
         return ResponseEntity.status(HttpStatus.CREATED).body(ResponseDto.of(authService.signUp(request), "회원가입 성공"));
     }
 }

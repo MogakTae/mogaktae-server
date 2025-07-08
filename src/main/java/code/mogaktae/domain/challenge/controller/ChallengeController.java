@@ -7,7 +7,7 @@ import code.mogaktae.domain.challenge.dto.res.ChallengeInfoResponse;
 import code.mogaktae.domain.challenge.dto.res.ChallengeInfoSummariesResponse;
 import code.mogaktae.domain.challenge.service.ChallengeService;
 import code.mogaktae.domain.common.dto.ResponseDto;
-import code.mogaktae.domain.result.dto.res.ChallengeResultResponseDto;
+import code.mogaktae.domain.result.dto.res.ChallengeResultResponse;
 import code.mogaktae.global.security.oauth.domain.common.OAuth2UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -51,8 +51,8 @@ public class ChallengeController {
     }
 
     @GetMapping("/results/{challengeId}")
-    public ResponseEntity<ResponseDto<ChallengeResultResponseDto>> getChallengeResult(@AuthenticationPrincipal OAuth2UserDetailsImpl user,
-                                                                                      @PathVariable Long challengeId){
+    public ResponseEntity<ResponseDto<ChallengeResultResponse>> getChallengeResult(@AuthenticationPrincipal OAuth2UserDetailsImpl user,
+                                                                                   @PathVariable Long challengeId){
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(challengeService.getChallengeResult(user, challengeId), "챌린지 결과 조회 성공"));
     }
 

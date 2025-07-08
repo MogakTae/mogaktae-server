@@ -1,6 +1,6 @@
 package code.mogaktae.global.security.oauth.handler;
 
-import code.mogaktae.domain.user.dto.res.TokenResponseDto;
+import code.mogaktae.domain.user.dto.res.TokenResponse;
 import code.mogaktae.global.security.oauth.domain.common.OAuth2UserDetailsImpl;
 import code.mogaktae.global.security.oauth.util.CookieUtils;
 import code.mogaktae.global.security.oauth.util.CustomOAuth2UserService;
@@ -74,12 +74,12 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                         .build()
                         .toUriString();
             }else{
-                TokenResponseDto tokenResponseDto = oAuth2UserService.oAuth2Login(authentication);
+                TokenResponse tokenResponse = oAuth2UserService.oAuth2Login(authentication);
                 log.info("[OAuth2AuthenticationSuccessHandler - setTargetUrl()] - Authenticate Succeed ({}). Redirecting to the main with token", userDetails.getName());
                 return UriComponentsBuilder.fromUriString(targetUrl)
                         .path("/main")
-                        .queryParam("accessToken", tokenResponseDto.getAccessToken())
-                        .queryParam("refreshToken", tokenResponseDto.getRefreshToken())
+                        .queryParam("accessToken", tokenResponse.accessToken())
+                        .queryParam("refreshToken", tokenResponse.refreshToken())
                         .build()
                         .toUriString();
             }

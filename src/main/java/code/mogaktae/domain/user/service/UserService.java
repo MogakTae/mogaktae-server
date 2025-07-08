@@ -3,7 +3,7 @@ package code.mogaktae.domain.user.service;
 import code.mogaktae.domain.challenge.dto.res.ChallengeInfoSummaryResponse;
 import code.mogaktae.domain.challenge.service.ChallengeService;
 import code.mogaktae.domain.common.client.SolvedAcClient;
-import code.mogaktae.domain.user.dto.res.UserInfoResponseDto;
+import code.mogaktae.domain.user.dto.res.UserInfoResponse;
 import code.mogaktae.domain.user.entity.Tier;
 import code.mogaktae.domain.user.entity.User;
 import code.mogaktae.domain.user.entity.UserDocument;
@@ -32,7 +32,7 @@ public class UserService {
     private final UserDocumentRepository userDocumentRepository;
 
     @Transactional(readOnly = true)
-    public UserInfoResponseDto getMyPageInfo(OAuth2UserDetailsImpl authUser){
+    public UserInfoResponse getMyPageInfo(OAuth2UserDetailsImpl authUser){
         User user = userRepository.findByNickname(authUser.getUsername())
                 .orElseThrow(() -> new RestApiException(CustomErrorCode.USER_NOT_FOUND));
 
@@ -41,7 +41,7 @@ public class UserService {
 
         Tier tier = solvedAcClient.getBaekJoonTier(user.getSolvedAcId());
 
-        return UserInfoResponseDto.of(user.getProfileImageUrl(), user.getNickname(),tier,inProgressChallenges,completedChallenges);
+        return UserInfoResponse.of(user.getProfileImageUrl(), user.getNickname(),tier,inProgressChallenges,completedChallenges);
     }
 
     public List<UserDocument> searchUsers(String nickname){

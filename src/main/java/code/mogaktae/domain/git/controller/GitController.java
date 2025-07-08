@@ -1,7 +1,7 @@
 package code.mogaktae.domain.git.controller;
 
 import code.mogaktae.domain.common.dto.ResponseDto;
-import code.mogaktae.domain.user.dto.req.CheckRepositoryUrlRequestDto;
+import code.mogaktae.domain.user.dto.req.RepositoryUrlVerifyRequest;
 import code.mogaktae.domain.user.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class GitController {
     private final AuthService authService;
 
     @PostMapping("/repository-url/check")
-    public ResponseEntity<ResponseDto<Boolean>> checkRepositoryUrlAvailable(@Valid @RequestBody CheckRepositoryUrlRequestDto request){
-        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(authService.checkRepositoryUrlAvailable(request.getNickname(), request.getRepositoryUrl()), "레포지토리 URL 검사 완료"));
+    public ResponseEntity<ResponseDto<Boolean>> checkRepositoryUrlAvailable(@Valid @RequestBody RepositoryUrlVerifyRequest request){
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(authService.checkRepositoryUrlAvailable(request.nickname(), request.repositoryUrl()), "레포지토리 URL 검사 완료"));
     }
 }

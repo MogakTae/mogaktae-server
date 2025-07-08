@@ -1,19 +1,12 @@
 package code.mogaktae.domain.common.dto;
 
 import lombok.Builder;
-import lombok.Getter;
 
-@Getter
-public class ResponseDto<T> {
-    private final T data;
-    private final String message;
-
-    @Builder
-    private ResponseDto(T data, String message){
-        this.data = data;
-        this.message = message;
-    }
-
+@Builder
+public record ResponseDto<T> (
+    T data,
+    String message
+){
     public static <T> ResponseDto<T> of(T data, String message){
         return ResponseDto.<T>builder()
                 .data(data)

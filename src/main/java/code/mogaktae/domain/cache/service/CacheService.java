@@ -4,8 +4,8 @@ import code.mogaktae.domain.alarm.service.AlarmService;
 import code.mogaktae.domain.challenge.entity.Challenge;
 import code.mogaktae.domain.challenge.repository.ChallengeRepository;
 import code.mogaktae.domain.common.client.SolvedAcClient;
-import code.mogaktae.domain.result.dto.res.ChallengeResultResponseDto;
-import code.mogaktae.domain.result.dto.res.PersonalResultDto;
+import code.mogaktae.domain.result.dto.res.ChallengeResultResponse;
+import code.mogaktae.domain.result.dto.res.PersonalResult;
 import code.mogaktae.domain.user.entity.Tier;
 import code.mogaktae.domain.user.repository.UserRepository;
 import code.mogaktae.domain.userChallenge.repository.UserChallengeRepository;
@@ -32,30 +32,30 @@ public class CacheService {
     private final UserRepository userRepository;
 
     @Cacheable(value = "challenge_result", key = "#challengeId")
-    public ChallengeResultResponseDto getChallengeResult(Long challengeId) {
+    public ChallengeResultResponse getChallengeResult(Long challengeId) {
         Challenge challenge = challengeRepository.findById(challengeId)
                 .orElseThrow(() -> new RestApiException(CustomErrorCode.CHALLENGE_NOT_FOUND));
 
-        List<PersonalResultDto> initialResults = userChallengeRepository.findPersonalResultByChallengeId(challengeId);
+        List<PersonalResult> initialResults = userChallengeRepository.findPersonalResultByChallengeId(challengeId);
 
-        List<PersonalResultDto> personalResults = initialResults.stream()
+        List<PersonalResult> personalResults = initialResults.stream()
                 .map(personalResult -> {
                     alarmService.sendChallengeEndAlarm(
-                            userRepository.findByNickname(personalResult.getNickname())
+                            userRepository.findByNickname(personalResult.nickname())
                                     .orElseThrow(() -> new RestApiException(CustomErrorCode.USER_NOT_FOUND)),
                             challenge.getName()
                     );
 
-                    Tier tier = solvedAcClient.getBaekJoonTier(personalResult.getSolvedAcId());
+                    Tier tier = solvedAcClient.getBaekJoonTier(personalResult.solvedAcId());
 
                     return personalResult.withEndTier(tier);
                 }).toList();
 
         log.info("getChallengeResult() - 챌린지 결과 조회 완료");
 
-        return ChallengeResultResponseDto.builder()
+        return ChallengeResultResponse.builder()
                 .challengeName(challenge.getName())
-                .personalResultDtos(personalResults)
+                .personalResults(personalResults)
                 .build();
     }
 }

@@ -1,7 +1,7 @@
 package code.mogaktae.domain.user.service;
 
 import code.mogaktae.domain.common.client.GithubClient;
-import code.mogaktae.domain.user.dto.req.SignUpRequestDto;
+import code.mogaktae.domain.user.dto.req.SignUpRequest;
 import code.mogaktae.domain.user.entity.User;
 import code.mogaktae.domain.user.repository.UserRepository;
 import code.mogaktae.domain.userChallenge.repository.UserChallengeRepository;
@@ -25,7 +25,7 @@ public class AuthService {
     private final GithubClient githubClient;
 
     @Transactional
-    public String signUp(SignUpRequestDto request){
+    public String signUp(SignUpRequest request){
 
         User user = User.create(request);
 

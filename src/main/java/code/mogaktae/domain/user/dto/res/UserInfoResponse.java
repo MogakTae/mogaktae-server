@@ -9,7 +9,7 @@ import java.util.List;
 
 @Builder
 @Schema(description = "유저 정보 조회 Response")
-public record UserInfoResponseDto (
+public record UserInfoResponse(
 
         @Schema(description = "프로필 이미지 URL", example = "https://avatars.githubusercontent.com/u/146558936?s=400&u=beebee044bba79edde84d0a688f3c105441c658f&v=4")
         String profileImageUrl,
@@ -27,9 +27,9 @@ public record UserInfoResponseDto (
         List<ChallengeInfoSummaryResponse> completedChallenges
 
 ){
-    public static UserInfoResponseDto of(String profileImageUrl, String nickname, Tier tier,
-                                         List<ChallengeInfoSummaryResponse> inProgressChallenges, List<ChallengeInfoSummaryResponse> completedChallenges) {
-        return UserInfoResponseDto.builder()
+    public static UserInfoResponse of(String profileImageUrl, String nickname, Tier tier,
+                                      List<ChallengeInfoSummaryResponse> inProgressChallenges, List<ChallengeInfoSummaryResponse> completedChallenges) {
+        return UserInfoResponse.builder()
                 .profileImageUrl(profileImageUrl)
                 .nickname(nickname)
                 .tier(tier)

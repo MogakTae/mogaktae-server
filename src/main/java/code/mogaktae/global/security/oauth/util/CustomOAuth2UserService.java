@@ -1,6 +1,6 @@
 package code.mogaktae.global.security.oauth.util;
 
-import code.mogaktae.domain.user.dto.res.TokenResponseDto;
+import code.mogaktae.domain.user.dto.res.TokenResponse;
 import code.mogaktae.domain.user.repository.UserRepository;
 import code.mogaktae.global.security.jwt.JwtTokenProvider;
 import code.mogaktae.global.security.oauth.domain.common.OAuth2UserDetailsImpl;
@@ -60,7 +60,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     @Transactional
-    public TokenResponseDto oAuth2Login(Authentication authentication){
+    public TokenResponse oAuth2Login(Authentication authentication){
 
         return jwtTokenProvider.generateToken(authentication);
     }

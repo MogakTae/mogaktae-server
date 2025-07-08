@@ -4,8 +4,8 @@ import code.mogaktae.domain.challenge.dto.res.ChallengeInfoSummaryResponse;
 import code.mogaktae.domain.challenge.dto.res.QChallengeInfoSummaryResponse;
 import code.mogaktae.domain.challenge.dto.res.QUserChallengeSummaryDto;
 import code.mogaktae.domain.challenge.dto.res.UserChallengeSummaryDto;
-import code.mogaktae.domain.result.dto.res.PersonalResultDto;
-import code.mogaktae.domain.result.dto.res.QPersonalResultDto;
+import code.mogaktae.domain.result.dto.res.PersonalResult;
+import code.mogaktae.domain.result.dto.res.QPersonalResult;
 import code.mogaktae.domain.userChallenge.entity.UserChallenge;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -25,9 +25,9 @@ public class UserChallengeRepositoryImpl implements UserChallengeRepositoryCusto
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<PersonalResultDto> findPersonalResultByChallengeId(Long challengeId){
+    public List<PersonalResult> findPersonalResultByChallengeId(Long challengeId){
         return jpaQueryFactory
-                .select(new QPersonalResultDto(
+                .select(new QPersonalResult(
                         user.solvedAcId,
                         user.profileImageUrl,
                         user.nickname,

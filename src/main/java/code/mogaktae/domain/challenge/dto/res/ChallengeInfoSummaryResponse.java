@@ -28,5 +28,12 @@ public record ChallengeInfoSummaryResponse(
 ) {
 
     @QueryProjection
-    public ChallengeInfoSummaryResponse {}
+    public ChallengeInfoSummaryResponse(Long challengeId, String challengeImageUrl, String challengeName, Long dailyProblem, LocalDate startDate, LocalDate endDate) {
+        this.challengeId = challengeId;
+        this.challengeImageUrl = challengeImageUrl;
+        this.challengeName = challengeName;
+        this.dailyProblem = dailyProblem;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 }

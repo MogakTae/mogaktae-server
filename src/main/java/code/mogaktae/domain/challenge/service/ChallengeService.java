@@ -11,7 +11,7 @@ import code.mogaktae.domain.common.util.CursorBasedPaginationCollection;
 import code.mogaktae.domain.common.util.GitHubUtils;
 import code.mogaktae.domain.common.util.SolvedAcUtils;
 import code.mogaktae.domain.cache.service.CacheService;
-import code.mogaktae.domain.result.dto.res.ChallengeResultResponseDto;
+import code.mogaktae.domain.result.dto.res.ChallengeResultResponse;
 import code.mogaktae.domain.user.entity.Tier;
 import code.mogaktae.domain.user.entity.User;
 import code.mogaktae.domain.user.repository.UserRepository;
@@ -151,7 +151,7 @@ public class ChallengeService {
         return challenge.getId();
     }
 
-    public ChallengeResultResponseDto getChallengeResult(OAuth2UserDetailsImpl authUser, Long challengeId) {
+    public ChallengeResultResponse getChallengeResult(OAuth2UserDetailsImpl authUser, Long challengeId) {
 
         User user = userRepository.findByNickname(authUser.getName())
                 .orElseThrow(() -> new RestApiException(CustomErrorCode.USER_NOT_FOUND));
