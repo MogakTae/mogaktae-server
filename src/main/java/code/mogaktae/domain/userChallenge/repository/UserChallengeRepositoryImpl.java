@@ -3,8 +3,8 @@ package code.mogaktae.domain.userChallenge.repository;
 import code.mogaktae.domain.challenge.dto.res.ChallengeInfoSummaryResponse;
 import code.mogaktae.domain.challenge.dto.res.QChallengeInfoSummaryResponse;
 import code.mogaktae.domain.challenge.dto.res.QUserChallengeSummaryDto;
-import code.mogaktae.domain.challenge.dto.res.UserChallengeSummaryDto;
-import code.mogaktae.domain.result.dto.res.PersonalResult;
+import code.mogaktae.domain.challenge.dto.common.UserChallengeSummary;
+import code.mogaktae.domain.result.dto.common.PersonalResult;
 import code.mogaktae.domain.result.dto.res.QPersonalResult;
 import code.mogaktae.domain.userChallenge.entity.UserChallenge;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -88,7 +88,7 @@ public class UserChallengeRepositoryImpl implements UserChallengeRepositoryCusto
     }
 
     @Override
-    public List<UserChallengeSummaryDto> findUserChallengeSummariesByChallengeId(Long challengeId, Long dailyProblem){
+    public List<UserChallengeSummary> findUserChallengeSummariesByChallengeId(Long challengeId, Long dailyProblem){
         return jpaQueryFactory
                 .select(new QUserChallengeSummaryDto(
                         user.profileImageUrl,
@@ -96,7 +96,7 @@ public class UserChallengeRepositoryImpl implements UserChallengeRepositoryCusto
                         user.nickname,
                         userChallenge.totalPenalty,
                         userChallenge.todaySolvedProblem,
-                        userChallenge.todaySolvedProblem.goe(dailyProblem)
+                        userChallenge.isCompleted
                 ))
                 .from(userChallenge)
                 .join(user).on(userChallenge.userId.eq(user.id))

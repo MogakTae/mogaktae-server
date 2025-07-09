@@ -1,4 +1,4 @@
-package code.mogaktae.domain.result.dto.res;
+package code.mogaktae.domain.result.dto.common;
 
 import code.mogaktae.domain.user.entity.Tier;
 import com.querydsl.core.annotations.QueryProjection;

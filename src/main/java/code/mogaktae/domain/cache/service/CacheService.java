@@ -5,7 +5,7 @@ import code.mogaktae.domain.challenge.entity.Challenge;
 import code.mogaktae.domain.challenge.repository.ChallengeRepository;
 import code.mogaktae.domain.common.client.SolvedAcClient;
 import code.mogaktae.domain.result.dto.res.ChallengeResultResponse;
-import code.mogaktae.domain.result.dto.res.PersonalResult;
+import code.mogaktae.domain.result.dto.common.PersonalResult;
 import code.mogaktae.domain.user.entity.Tier;
 import code.mogaktae.domain.user.repository.UserRepository;
 import code.mogaktae.domain.userChallenge.repository.UserChallengeRepository;

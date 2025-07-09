@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserChallengeRepository extends JpaRepository<UserChallenge, Long>, UserChallengeRepositoryCustom {
 
-
     Boolean existsByUserIdAndChallengeId(Long userId, Long challengeId);
 
     boolean existsByRepositoryUrl(String repositoryUrl);

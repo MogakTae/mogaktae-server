@@ -1,6 +1,6 @@
 package code.mogaktae.domain.common.util;
 
-import code.mogaktae.domain.challenge.dto.res.PushInfoDto;
+import code.mogaktae.domain.challenge.dto.common.PushInfoDto;
 import code.mogaktae.global.exception.entity.RestApiException;
 import code.mogaktae.global.exception.error.CustomErrorCode;
 import com.fasterxml.jackson.core.JsonProcessingException;

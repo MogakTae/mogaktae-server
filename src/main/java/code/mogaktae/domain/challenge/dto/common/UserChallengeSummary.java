@@ -1,9 +1,9 @@
-package code.mogaktae.domain.challenge.dto.res;
+package code.mogaktae.domain.challenge.dto.common;
 
 import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-public record UserChallengeSummaryDto(
+public record UserChallengeSummary(
 
         @Schema(description = "사용자 아이콘 URL", example = "https://avatars.githubusercontent.com/u/146558936?s=400&u=beebee044bba79edde84d0a688f3c105441c658f&v=4")
         String profileImageUrl,
@@ -25,7 +25,7 @@ public record UserChallengeSummaryDto(
 ) {
 
     @QueryProjection
-    public UserChallengeSummaryDto(String profileImageUrl, String repositoryUrl, String nickname, Long penalty, Long todaySolvedProblem, Boolean todaySolved) {
+    public UserChallengeSummary(String profileImageUrl, String repositoryUrl, String nickname, Long penalty, Long todaySolvedProblem, Boolean todaySolved) {
         this.profileImageUrl = profileImageUrl;
         this.repositoryUrl = repositoryUrl;
         this.nickname = nickname;

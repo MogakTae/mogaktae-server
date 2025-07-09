@@ -1,5 +1,6 @@
 package code.mogaktae.domain.result.dto.res;
 
+import code.mogaktae.domain.result.dto.common.PersonalResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 

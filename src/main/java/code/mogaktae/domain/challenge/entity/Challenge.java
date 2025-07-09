@@ -59,4 +59,8 @@ public class Challenge {
                 .penaltyPerOnce(request.penaltyPerOnce())
                 .build();
     }
+
+    public Boolean isEndDateYesterday(){
+        return this.endDate.equals(LocalDate.now(ZoneId.of("Asia/Seoul")).minusDays(1));
+    }
 }

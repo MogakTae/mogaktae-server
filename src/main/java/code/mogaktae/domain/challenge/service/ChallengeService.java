@@ -1,6 +1,8 @@
 package code.mogaktae.domain.challenge.service;
 
 import code.mogaktae.domain.alarm.service.AlarmService;
+import code.mogaktae.domain.challenge.dto.common.PushInfoDto;
+import code.mogaktae.domain.challenge.dto.common.UserChallengeSummary;
 import code.mogaktae.domain.challenge.dto.req.ChallengeCreateRequest;
 import code.mogaktae.domain.challenge.dto.req.ChallengeJoinRequest;
 import code.mogaktae.domain.challenge.dto.res.*;
@@ -81,10 +83,10 @@ public class ChallengeService {
         Challenge challenge = challengeRepository.findById(challengeId)
                 .orElseThrow(() -> new RestApiException(CustomErrorCode.CHALLENGE_NOT_FOUND));
 
-        List<UserChallengeSummaryDto> userChallengeSummaries = userChallengeRepository.findUserChallengeSummariesByChallengeId(challengeId, challenge.getDailyProblem());
+        List<UserChallengeSummary> userChallengeSummaries = userChallengeRepository.findUserChallengeSummariesByChallengeId(challengeId, challenge.getDailyProblem());
 
         Long totalPenalty = userChallengeSummaries.stream()
-                .mapToLong(UserChallengeSummaryDto::penalty)
+                .mapToLong(UserChallengeSummary::penalty)
                 .sum();
 
         Long todaySolvedUsers = userChallengeSummaries.stream()
@@ -183,5 +185,16 @@ public class ChallengeService {
         if(userChallenges.isEmpty()) return ;
 
         userChallenges.forEach(UserChallenge::resetSolveStatus);
+    }
+
+    @Transactional
+    public void createChallengeResult(){
+        // 1. 종료 대상 챌린지 조회(enddate = 바로 전날의 날짜와 동일한지 확인)
+
+        // 2. 각 챌린지에 대한 결과 생성
+
+        // 3. 캐싱 적용
+
+
     }
 }

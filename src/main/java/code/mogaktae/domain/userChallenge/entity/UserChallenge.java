@@ -72,9 +72,11 @@ public class UserChallenge {
     public void updateSolveStatus(){
         this.totalSolvedProblem += 1;
         this.todaySolvedProblem += 1;
+        this.isCompleted = true;
     }
 
     public void resetSolveStatus(){
         this.todaySolvedProblem = 0L;
+        this.isCompleted = false;
     }
 }

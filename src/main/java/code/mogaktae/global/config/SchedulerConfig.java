@@ -18,6 +18,6 @@ public class SchedulerConfig {
 
     @Scheduled(cron = "0 1 0 * * *")
     public void completeChallenge(){
-//        challengeService.completeChallenge();
+        challengeService.createChallengeResult();
     }
 }

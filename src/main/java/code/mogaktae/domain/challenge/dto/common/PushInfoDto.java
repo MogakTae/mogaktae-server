@@ -1,4 +1,4 @@
-package code.mogaktae.domain.challenge.dto.res;
+package code.mogaktae.domain.challenge.dto.common;
 
 import lombok.Builder;
 
