@@ -34,7 +34,7 @@ public class Alarm {
     @Column(nullable = false, columnDefinition = "varchar(255)", name = "sender_nickname")
     private String senderNickname;
 
-    @Column(nullable = false, columnDefinition = "date", name = "created_at")
+    @Column(nullable = false, columnDefinition = "datetime", name = "created_at")
     private LocalDateTime createdAt;
 
     @Builder

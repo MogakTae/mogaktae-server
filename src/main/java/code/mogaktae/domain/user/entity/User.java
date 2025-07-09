@@ -35,7 +35,7 @@ public class User {
     @Column(columnDefinition = "varchar(100)", nullable = false)
     private Role role;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "created_at", columnDefinition = "datetime", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @Builder
