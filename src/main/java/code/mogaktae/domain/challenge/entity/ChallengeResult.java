@@ -1,9 +1,9 @@
 package code.mogaktae.domain.challenge.entity;
 
 import code.mogaktae.domain.result.dto.common.PersonalResult;
-import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
 import java.util.List;
