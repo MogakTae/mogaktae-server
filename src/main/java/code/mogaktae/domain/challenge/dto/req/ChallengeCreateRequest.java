@@ -18,8 +18,7 @@ public record ChallengeCreateRequest(
         @NotBlank(message = "챌린지 배경이미지 URL이 비어있습니다.")
         String imageUrl,
 
-        @Schema(description = "챌린지 생성자의 깃허브 레포지토리 URL",
-                example = "https://github.com/9oormthon-univ/2024_DANPOONG_TEAM_19_BE")
+        @Schema(description = "챌린지 생성자의 깃허브 레포지토리 URL", example = "https://github.com/9oormthon-univ/2024_DANPOONG_TEAM_19_BE")
         @NotBlank(message = "깃허브 레포지토리 URL이 비어있습니다.")
         String repositoryUrl,
 

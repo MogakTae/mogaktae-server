@@ -93,15 +93,8 @@ public class ChallengeService {
 
         log.info("getChallengeDetails() - 챌린지 상세정보 조회 완료");
 
-        return ChallengeInfoResponse.builder()
-                .challengeName(challenge.getName())
-                .startDate(challenge.getStartDate().toString())
-                .endDate(challenge.getEndDate().toString())
-                .todaySolvedUsers(todaySolvedUsers)
-                .totalUsers(userChallengeSummaries.size())
-                .totalPenalty(totalPenalty)
-                .userChallengeSummaries(userChallengeSummaries)
-                .build();
+        return ChallengeInfoResponse.create(challenge.getName(),challenge.getStartDate().toString(), challenge.getEndDate().toString(),
+                todaySolvedUsers, userChallengeSummaries.size(), totalPenalty, userChallengeSummaries);
     }
 
     @Transactional

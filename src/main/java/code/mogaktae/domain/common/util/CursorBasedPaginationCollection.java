@@ -20,7 +20,7 @@ public class CursorBasedPaginationCollection<T> {
     }
 
     public List<T> getContents(){
-        if(isLastCursor())
+        if(Boolean.TRUE.equals(isLastCursor()))
             return this.contents;
         return this.contents.subList(0, size);
     }

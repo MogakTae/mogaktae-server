@@ -25,5 +25,12 @@ public record UserChallengeSummaryDto(
 ) {
 
     @QueryProjection
-    public UserChallengeSummaryDto {}
+    public UserChallengeSummaryDto(String profileImageUrl, String repositoryUrl, String nickname, Long penalty, Long todaySolvedProblem, Boolean todaySolved) {
+        this.profileImageUrl = profileImageUrl;
+        this.repositoryUrl = repositoryUrl;
+        this.nickname = nickname;
+        this.penalty = penalty;
+        this.todaySolvedProblem = todaySolvedProblem;
+        this.todaySolved = todaySolved;
+    }
 }

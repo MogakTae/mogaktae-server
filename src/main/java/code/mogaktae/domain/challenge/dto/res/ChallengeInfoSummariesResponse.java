@@ -31,7 +31,7 @@ public record ChallengeInfoSummariesResponse(
     private static final long LAST_CURSOR_ID = -1;
 
     public static ChallengeInfoSummariesResponse of(CursorBasedPaginationCollection<ChallengeInfoSummaryResponse> challengeSummaries, long totalSize) {
-        if (challengeSummaries.isLastCursor())
+        if (Boolean.TRUE.equals(challengeSummaries.isLastCursor()))
             return noNextCursorResponse(challengeSummaries.getContents(), totalSize);
 
         return hasNextCursorResponse(challengeSummaries.getContents(), totalSize, challengeSummaries.getNextCursor().challengeId());
