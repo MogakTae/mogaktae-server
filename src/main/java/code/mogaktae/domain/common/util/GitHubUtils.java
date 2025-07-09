@@ -1,6 +1,6 @@
 package code.mogaktae.domain.common.util;
 
-import code.mogaktae.domain.challenge.dto.common.PushInfoDto;
+import code.mogaktae.domain.challenge.dto.common.PushInfo;
 import code.mogaktae.global.exception.entity.RestApiException;
 import code.mogaktae.global.exception.error.CustomErrorCode;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -16,7 +16,7 @@ import java.util.Map;
 @Component
 public class GitHubUtils {
 
-    public static PushInfoDto getPushInfoFromRequest(Map<String, Object> requestBody){
+    public static PushInfo getPushInfoFromRequest(Map<String, Object> requestBody){
         String url = null;
         String pusher = null;
         String message = null;
@@ -39,7 +39,7 @@ public class GitHubUtils {
 
         if(url != null && pusher != null && message != null){
             log.info("getPushInfoFromRequest() - {}의 {} 이벤트 수신 완료", pusher, message);
-            return PushInfoDto.from(url,pusher,message);
+            return PushInfo.from(url,pusher,message);
         }else{
             log.warn("getPushInfoFromRequest() - Github Webhook 이벤트 처리 실패");
             throw new RestApiException(CustomErrorCode.HTTP_REQUEST_FAILED);

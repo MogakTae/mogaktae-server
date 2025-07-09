@@ -2,10 +2,10 @@ package code.mogaktae.domain.userChallenge.repository;
 
 import code.mogaktae.domain.challenge.dto.res.ChallengeInfoSummaryResponse;
 import code.mogaktae.domain.challenge.dto.res.QChallengeInfoSummaryResponse;
-import code.mogaktae.domain.challenge.dto.res.QUserChallengeSummaryDto;
+import code.mogaktae.domain.challenge.dto.common.QUserChallengeSummary;
 import code.mogaktae.domain.challenge.dto.common.UserChallengeSummary;
 import code.mogaktae.domain.result.dto.common.PersonalResult;
-import code.mogaktae.domain.result.dto.res.QPersonalResult;
+import code.mogaktae.domain.result.dto.common.QPersonalResult;
 import code.mogaktae.domain.userChallenge.entity.UserChallenge;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +29,7 @@ public class UserChallengeRepositoryImpl implements UserChallengeRepositoryCusto
         return jpaQueryFactory
                 .select(new QPersonalResult(
                         user.solvedAcId,
+                        user.id,
                         user.profileImageUrl,
                         user.nickname,
                         userChallenge.startTier,
@@ -38,19 +39,6 @@ public class UserChallengeRepositoryImpl implements UserChallengeRepositoryCusto
                 .join(user).on(userChallenge.userId.eq(user.id))
                 .where(userChallenge.challengeId.eq(challengeId))
                 .fetch();
-    }
-
-    @Override
-    public Boolean existsByNicknameAndChallengeId(String nickname, Long challengeId){
-        return jpaQueryFactory
-                .selectOne()
-                .from(userChallenge)
-                .join(user).on(userChallenge.userId.eq(user.id))
-                .where(
-                        userChallenge.challengeId.eq(challengeId),
-                        user.nickname.eq(nickname)
-                )
-                .fetchFirst() != null;
     }
 
     @Override
@@ -90,7 +78,7 @@ public class UserChallengeRepositoryImpl implements UserChallengeRepositoryCusto
     @Override
     public List<UserChallengeSummary> findUserChallengeSummariesByChallengeId(Long challengeId, Long dailyProblem){
         return jpaQueryFactory
-                .select(new QUserChallengeSummaryDto(
+                .select(new QUserChallengeSummary(
                         user.profileImageUrl,
                         userChallenge.repositoryUrl,
                         user.nickname,

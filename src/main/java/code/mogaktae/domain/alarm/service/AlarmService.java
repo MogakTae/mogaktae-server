@@ -3,7 +3,6 @@ package code.mogaktae.domain.alarm.service;
 import code.mogaktae.domain.alarm.entity.Alarm;
 import code.mogaktae.domain.alarm.entity.AlarmType;
 import code.mogaktae.domain.alarm.repository.AlarmRepository;
-import code.mogaktae.domain.user.entity.User;
 import code.mogaktae.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,9 +41,9 @@ public class AlarmService {
 
     @Async
     @Transactional
-    public void sendChallengeEndAlarm(User user, String challengeName){
+    public void sendChallengeEndAlarm(Long userId, String challengeName){
 
-        Alarm alarm = Alarm.create(user.getId(), AlarmType.END, challengeName, "");
+        Alarm alarm = Alarm.create(userId, AlarmType.END, challengeName, "");
 
         alarmRepository.save(alarm);
     }

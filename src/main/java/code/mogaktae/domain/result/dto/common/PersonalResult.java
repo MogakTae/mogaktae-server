@@ -10,6 +10,9 @@ public record PersonalResult(
         @Schema(description = "solved.ac 아이디", example = "ahh052")
         String solvedAcId,
 
+        @Schema(description = "유저 아이디", example = "10")
+        Long userId,
+
         @Schema(description = "프로필 이미지 URL", example = "https://avatars.githubusercontent.com/u/146558936?v=4")
         String profileImageUrl,
 
@@ -30,13 +33,13 @@ public record PersonalResult(
 ) {
 
     @QueryProjection
-    public PersonalResult(String solvedAcId, String profileImageUrl, String nickname,
+    public PersonalResult(String solvedAcId, Long userId, String profileImageUrl, String nickname,
                           Tier startTier, Long totalPenalty, Long totalProblemSolved) {
-        this(solvedAcId, profileImageUrl, nickname, startTier, null, totalPenalty, totalProblemSolved);
+        this(solvedAcId, userId, profileImageUrl, nickname, startTier, null, totalPenalty, totalProblemSolved);
     }
 
     public PersonalResult withEndTier(Tier endTier) {
-        return new PersonalResult(this.solvedAcId, this.profileImageUrl, this.nickname,
+        return new PersonalResult(this.solvedAcId, this.userId, this.profileImageUrl, this.nickname,
                 this.startTier, endTier, this.totalPenalty, this.totalProblemSolved);
     }
 }

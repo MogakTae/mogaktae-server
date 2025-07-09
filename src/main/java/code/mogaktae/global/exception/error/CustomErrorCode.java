@@ -17,6 +17,7 @@ public enum CustomErrorCode implements ErrorCode {
     CHALLENGE_MAX_PARTICIPATION_REACHED(HttpStatus.BAD_REQUEST, 400, "사용자가 이미 3개의 챌린지에 창여중입니다"),
     USERCHALLENGE_NOT_FOUND(HttpStatus.NOT_FOUND, 404, "유효하지 않은 닉네임과 레포지토리 주소입니다."),
     USER_NOT_SOLVE_TARGET_PROBLEM(HttpStatus.BAD_REQUEST, 400, "풀지 않은 문제입니다."),
+    CHALLENGE_RESULT_NOT_FOUND(HttpStatus.NOT_FOUND, 404, "챌린지 결과 조회에 실패하였습니다"),
 
     // RestTemplate res/req Error Code
     HTTP_REQUEST_FAILED(HttpStatus.SERVICE_UNAVAILABLE, 503, "외부 API 요청에 실패하였습니다."),

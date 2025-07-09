@@ -12,8 +12,6 @@ public interface UserChallengeRepositoryCustom {
 
     List<PersonalResult> findPersonalResultByChallengeId(Long challengeId);
 
-    Boolean existsByNicknameAndChallengeId(String nickname, Long challengeId);
-
     Long countUserChallenge(Long userId);
 
     List<ChallengeInfoSummaryResponse> findChallengesByUserIdAndIsCompleted(Long userId, Boolean isCompleted);

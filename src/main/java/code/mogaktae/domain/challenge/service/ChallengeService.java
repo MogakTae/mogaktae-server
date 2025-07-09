@@ -1,19 +1,23 @@
 package code.mogaktae.domain.challenge.service;
 
 import code.mogaktae.domain.alarm.service.AlarmService;
-import code.mogaktae.domain.challenge.dto.common.PushInfoDto;
+import code.mogaktae.domain.challenge.dto.common.ChallengeIdName;
+import code.mogaktae.domain.challenge.dto.common.PushInfo;
 import code.mogaktae.domain.challenge.dto.common.UserChallengeSummary;
 import code.mogaktae.domain.challenge.dto.req.ChallengeCreateRequest;
 import code.mogaktae.domain.challenge.dto.req.ChallengeJoinRequest;
-import code.mogaktae.domain.challenge.dto.res.*;
+import code.mogaktae.domain.challenge.dto.res.ChallengeInfoResponse;
+import code.mogaktae.domain.challenge.dto.res.ChallengeInfoSummariesResponse;
+import code.mogaktae.domain.challenge.dto.res.ChallengeInfoSummaryResponse;
 import code.mogaktae.domain.challenge.entity.Challenge;
+import code.mogaktae.domain.challenge.entity.ChallengeResult;
 import code.mogaktae.domain.challenge.repository.ChallengeRepository;
+import code.mogaktae.domain.challenge.repository.ChallengeResultRepository;
 import code.mogaktae.domain.common.client.SolvedAcClient;
 import code.mogaktae.domain.common.util.CursorBasedPaginationCollection;
 import code.mogaktae.domain.common.util.GitHubUtils;
 import code.mogaktae.domain.common.util.SolvedAcUtils;
-import code.mogaktae.domain.cache.service.CacheService;
-import code.mogaktae.domain.result.dto.res.ChallengeResultResponse;
+import code.mogaktae.domain.result.dto.common.PersonalResult;
 import code.mogaktae.domain.user.entity.Tier;
 import code.mogaktae.domain.user.entity.User;
 import code.mogaktae.domain.user.repository.UserRepository;
@@ -29,6 +33,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 
@@ -40,11 +46,11 @@ public class ChallengeService {
     private final SolvedAcClient solvedAcClient;
 
     private final AlarmService alarmService;
-    private final CacheService cacheService;
 
     private final UserRepository userRepository;
     private final UserChallengeRepository userChallengeRepository;
     private final ChallengeRepository challengeRepository;
+    private final ChallengeResultRepository challengeResultRepository;
 
     @Transactional(readOnly = true)
     public ChallengeInfoSummariesResponse getChallengesSummary(int size, Long lastCursorId) {
@@ -146,7 +152,7 @@ public class ChallengeService {
         return challenge.getId();
     }
 
-    public ChallengeResultResponse getChallengeResult(OAuth2UserDetailsImpl authUser, Long challengeId) {
+    public ChallengeResult getChallengeResult(OAuth2UserDetailsImpl authUser, Long challengeId) {
 
         User user = userRepository.findByNickname(authUser.getName())
                 .orElseThrow(() -> new RestApiException(CustomErrorCode.USER_NOT_FOUND));
@@ -154,13 +160,13 @@ public class ChallengeService {
         if (Boolean.TRUE.equals(userChallengeRepository.existsByUserIdAndChallengeId(user.getId(), challengeId)))
             throw new RestApiException(CustomErrorCode.USER_NO_PERMISSION_TO_CHALLENGE);
 
-
-        return cacheService.getChallengeResult(challengeId);
+        return challengeResultRepository.findById(challengeId)
+                .orElseThrow(() -> new RestApiException(CustomErrorCode.CHALLENGE_RESULT_NOT_FOUND));
     }
 
     @Transactional
     public Boolean pushCodingTestCommit(Map<String, Object> request){
-       PushInfoDto pushInfo = GitHubUtils.getPushInfoFromRequest(request);
+       PushInfo pushInfo = GitHubUtils.getPushInfoFromRequest(request);
 
        UserChallenge userChallenge = userChallengeRepository.findByUserNicknameAndRepositoryUrl(pushInfo.pusher(), pushInfo.url())
                .orElseThrow(() -> new RestApiException(CustomErrorCode.USERCHALLENGE_NOT_FOUND));
@@ -189,12 +195,21 @@ public class ChallengeService {
 
     @Transactional
     public void createChallengeResult(){
-        // 1. 종료 대상 챌린지 조회(enddate = 바로 전날의 날짜와 동일한지 확인)
+        List<ChallengeIdName> targetChallenges = challengeRepository.findEndChallengeIdName(LocalDate.now(ZoneId.of("Asia/Seoul")).minusDays(1));
 
-        // 2. 각 챌린지에 대한 결과 생성
+        targetChallenges.forEach(targetChallenge -> {
+            List<PersonalResult> personalResults = userChallengeRepository.findPersonalResultByChallengeId(targetChallenge.challengeId());
 
-        // 3. 캐싱 적용
+            List<PersonalResult> personalResultsWithTier = personalResults.stream()
+                    .map( personalResult ->{
+                        Tier tier = solvedAcClient.getBaekJoonTier(personalResult.solvedAcId());
 
+                        return personalResult.withEndTier(tier);
+                    }).toList();
 
+            challengeResultRepository.save(ChallengeResult.create(targetChallenge.challengeId(), targetChallenge.challengeName(), personalResultsWithTier));
+
+            personalResultsWithTier.forEach(personalResult -> alarmService.sendChallengeEndAlarm(personalResult.userId(), targetChallenge.challengeName()));
+        });
     }
 }

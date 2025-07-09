@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ChallengeRepository extends JpaRepository<Challenge, Long> {
+public interface ChallengeRepository extends JpaRepository<Challenge, Long>, ChallengeRepositoryCustom{
 
     @Query("""
         SELECT new code.mogaktae.domain.challenge.dto.res.ChallengeInfoSummaryResponse(
