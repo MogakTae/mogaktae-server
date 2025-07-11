@@ -2,6 +2,9 @@ package code.mogaktae.global.config;
 
 import code.mogaktae.global.exception.handler.CustomAccessDeniedHandler;
 import code.mogaktae.global.exception.handler.CustomAuthenticationEntryPoint;
+import code.mogaktae.global.security.jwt.JwtAuthenticationFilter;
+import code.mogaktae.global.security.jwt.JwtExceptionFilter;
+import code.mogaktae.global.security.jwt.JwtProvider;
 import code.mogaktae.global.security.oauth.handler.OAuth2AuthenticationFailureHandler;
 import code.mogaktae.global.security.oauth.handler.OAuth2AuthenticationSuccessHandler;
 import code.mogaktae.global.security.oauth.util.CustomOAuth2UserService;
@@ -18,6 +21,7 @@ import org.springframework.security.oauth2.client.web.DefaultOAuth2Authorization
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -28,6 +32,8 @@ import java.util.List;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final JwtProvider jwtProvider;
 
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
@@ -42,13 +48,11 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/swagger-ui/**",
-                                "/v3/api-docs/**",
+                                "/swagger-ui/**", "/v3/api-docs/**",
                                 "/api/v1/auth/**",
-                                "/login",
-                                "/api/v1/user/**",
-                                "/api/v1/challenges/**",
-                                "/api/v1/git/**"
+                                "/api/v1/users/suggest",
+                                "/api/v1/git/**",
+                                "/api/v1/challenges/info/summaries"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
@@ -65,6 +69,8 @@ public class SecurityConfig {
                         .accessDeniedHandler(new CustomAccessDeniedHandler())
                         .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                 )
+                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtExceptionFilter(), JwtAuthenticationFilter.class)
                 .build();
     }
 

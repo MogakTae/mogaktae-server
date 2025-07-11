@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-public class JwtTokenProvider {
+public class JwtProvider {
 
     @Value("${spring.security.jwt.access-token.expired-time}")
     private Long accessTokenExpiredTime;
@@ -35,7 +35,7 @@ public class JwtTokenProvider {
 
     private final UserDetailsServiceImpl userDetailsService;
 
-    public JwtTokenProvider(@Value("${spring.security.jwt.secret}") String secret, UserDetailsServiceImpl userDetailsService){
+    public JwtProvider(@Value("${spring.security.jwt.secret}") String secret, UserDetailsServiceImpl userDetailsService){
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
         this.userDetailsService = userDetailsService;
     }

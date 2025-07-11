@@ -33,7 +33,7 @@ public class ChallengeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(ResponseDto.of(challengeService.createChallenge(user, request), "챌린지 생성 성공"));
     }
 
-    @GetMapping("/info")
+    @GetMapping("/info/summaries")
     public ResponseEntity<ResponseDto<ChallengeInfoSummariesResponse>> getChallengesSummary(@Valid @RequestBody ChallengeInfoRequest request){
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(challengeService.getChallengesSummary(request.size(), request.lastCursorId()), "요약 챌린지 조회 성공"));
     }

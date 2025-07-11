@@ -2,7 +2,7 @@ package code.mogaktae.global.security.oauth.util;
 
 import code.mogaktae.domain.user.dto.res.TokenResponse;
 import code.mogaktae.domain.user.repository.UserRepository;
-import code.mogaktae.global.security.jwt.JwtTokenProvider;
+import code.mogaktae.global.security.jwt.JwtProvider;
 import code.mogaktae.global.security.oauth.domain.common.OAuth2UserDetailsImpl;
 import code.mogaktae.global.security.oauth.domain.common.OAuth2UserInfo;
 import code.mogaktae.global.security.oauth.exception.OAuth2AuthenticationProcessingException;
@@ -23,7 +23,7 @@ import org.springframework.util.StringUtils;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtProvider jwtProvider;
 
     @Transactional
     @Override
@@ -60,6 +60,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     @Transactional
     public TokenResponse oAuth2Login(Authentication authentication){
 
-        return jwtTokenProvider.generateToken(authentication);
+        return jwtProvider.generateToken(authentication);
     }
 }
