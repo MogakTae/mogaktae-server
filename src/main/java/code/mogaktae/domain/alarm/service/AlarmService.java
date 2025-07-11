@@ -5,14 +5,14 @@ import code.mogaktae.domain.alarm.entity.AlarmType;
 import code.mogaktae.domain.alarm.repository.AlarmRepository;
 import code.mogaktae.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Slf4j
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class AlarmService {
@@ -27,7 +27,6 @@ public class AlarmService {
         List<Long> participantsIds = userRepository.findUserIdByNicknameIn(nicknames);
 
         if(participantsIds.isEmpty()){
-            log.warn("sendChallengeJoinAlarm() - 조회된 참여자가 없습니다.");
             return;
         }
 
@@ -37,6 +36,8 @@ public class AlarmService {
 
             alarmRepository.save(alarm);
         });
+
+        log.info("{}개의 챌린지 참여 요청 알람 전송 성공", participantsIds.size());
     }
 
     @Async

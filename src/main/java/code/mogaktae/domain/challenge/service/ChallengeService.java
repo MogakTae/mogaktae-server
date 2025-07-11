@@ -27,7 +27,7 @@ import code.mogaktae.global.exception.entity.RestApiException;
 import code.mogaktae.global.exception.error.CustomErrorCode;
 import code.mogaktae.global.security.oauth.domain.common.OAuth2UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -38,7 +38,7 @@ import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 
-@Slf4j
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class ChallengeService {
@@ -60,27 +60,19 @@ public class ChallengeService {
 
         CursorBasedPaginationCollection<ChallengeInfoSummaryResponse> collection = CursorBasedPaginationCollection.of(challenges.getContent(), size);
 
-        log.info("getChallenges() - {} 개의 챌린지 조회 완료", size);
+        log.info("{} 개의 챌린지 조회 완료", size);
 
         return ChallengeInfoSummariesResponse.of(collection, challengeRepository.count());
     }
 
     public List<ChallengeInfoSummaryResponse> getMyCompletedChallenges(Long userId) {
 
-        List<ChallengeInfoSummaryResponse> completedChallenges = userChallengeRepository.findChallengesByUserIdAndIsCompleted(userId, true);
-
-        log.info("getInProgressChallenges() - userId = {}의 완료된 챌린지 조회 완료", userId);
-
-        return completedChallenges;
+        return userChallengeRepository.findChallengesByUserIdAndIsCompleted(userId, true);
     }
 
     public List<ChallengeInfoSummaryResponse> getMyInProgressChallenges(Long userId) {
 
-        List<ChallengeInfoSummaryResponse> inProgressChallenges = userChallengeRepository.findChallengesByUserIdAndIsCompleted(userId, false);
-
-        log.info("getInProgressChallenges() - userId = {}의 진행중인 챌린지 조회 완료", userId);
-
-        return inProgressChallenges;
+        return userChallengeRepository.findChallengesByUserIdAndIsCompleted(userId, false);
     }
 
     @Transactional(readOnly = true)
@@ -99,7 +91,7 @@ public class ChallengeService {
                 .filter(summary -> summary.todaySolvedProblem() >= challenge.getDailyProblem())
                 .count();
 
-        log.info("getChallengeDetails() - 챌린지 상세정보 조회 완료");
+        log.info("챌린지 상세 정보 조회 완료, challengeId = {}", challengeId);
 
         return ChallengeInfoResponse.create(challenge.getName(),challenge.getStartDate().toString(), challenge.getEndDate().toString(),
                 todaySolvedUsers, userChallengeSummaries.size(), totalPenalty, userChallengeSummaries);
@@ -126,9 +118,7 @@ public class ChallengeService {
 
         alarmService.sendChallengeJoinAlarm(headUser.getNickname(), challenge.getName(), request.participants());
 
-        log.info("createChallenge() - 챌린지 참여 알림 저장 완료");
-
-        log.info("createChallenge() - 챌린지 생성 완료");
+        log.info("챌린지 생성 완료, challengeId = {}", challenge.getId());
 
         return challenge.getId();
     }
@@ -147,7 +137,7 @@ public class ChallengeService {
 
         userChallengeRepository.save(userChallenge);
 
-        log.info("joinChallenge() - 챌린지 참여 성공");
+        log.info("챌린지 참여 성공, challengeId = {}", challenge.getId());
 
         return challenge.getId();
     }
@@ -160,8 +150,12 @@ public class ChallengeService {
         if (Boolean.TRUE.equals(userChallengeRepository.existsByUserIdAndChallengeId(user.getId(), challengeId)))
             throw new RestApiException(CustomErrorCode.USER_NO_PERMISSION_TO_CHALLENGE);
 
-        return challengeResultRepository.findById(challengeId)
+        ChallengeResult challengeResult = challengeResultRepository.findById(challengeId)
                 .orElseThrow(() -> new RestApiException(CustomErrorCode.CHALLENGE_RESULT_NOT_FOUND));
+
+        log.info("챌린지 결과 조회 성공. challengeId = {}", challengeId);
+
+        return challengeResult;
     }
 
     @Transactional
@@ -178,6 +172,7 @@ public class ChallengeService {
 
        if(SolvedAcUtils.checkUserSolvedTargetProblem(solvedAcClient.getUserSolvedProblem(solvedAcId), targetProblemId)){
            userChallenge.updateSolveStatus();
+           log.info("챌린지 처리 완료 userId = {}, challengeId = {}", userChallenge.getUserId(), userChallenge.getChallengeId());
            return true;
        }else{
            throw new RestApiException(CustomErrorCode.USER_NOT_SOLVE_TARGET_PROBLEM);
@@ -191,6 +186,8 @@ public class ChallengeService {
         if(userChallenges.isEmpty()) return ;
 
         userChallenges.forEach(UserChallenge::resetSolveStatus);
+
+        log.info("당일 챌린지 완료 여부 초기화 완료");
     }
 
     @Transactional
@@ -211,5 +208,7 @@ public class ChallengeService {
 
             personalResultsWithTier.forEach(personalResult -> alarmService.sendChallengeEndAlarm(personalResult.userId(), targetChallenge.challengeName()));
         });
+
+        log.info("종료된 챌린지 결과 생성 완료");
     }
 }
