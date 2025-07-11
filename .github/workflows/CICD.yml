@@ -39,6 +39,8 @@ jobs:
           spring.security.oauth2.client.registration.github.client-id: ${{secrets.GIT_CLIENT_ID}}
           spring.security.oauth2.client.registration.github.client-secret: ${{secrets.GIT_CLIENT_SECRET}}
 
+          sentry.dsn: ${{SENTRY_DSN}}
+
       - name: build with gradle
         run: |
           chmod +x ./gradlew
