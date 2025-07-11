@@ -9,7 +9,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -18,7 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.IOException;
 import java.util.Optional;
 
-@Slf4j
+@Log4j2
 @Component
 @RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -31,19 +31,13 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException {
 
-        log.info("[OAuth2AuthenticationSuccessHandler - onAuthenticationSuccess()] - In");
-
         String targetUrl = setTargetUrl(request, response, authentication);
 
         clearAuthenticationAttributes(request, response);
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
-
-        log.info("[OAuth2AuthenticationSuccessHandler - onAuthenticationSuccess()] - Out");
     }
 
     protected String setTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-
-        log.info("[OAuth2AuthenticationSuccessHandler - setTargetUrl()] - In");
 
         Optional<String> redirectUrl = CookieUtils.getCookie(request, HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM)
                 .map(Cookie::getValue);
@@ -62,11 +56,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                     .build()
                     .toUriString();
 
-        log.info("[OAuth2AuthenticationSuccessHandler - setTargetUrl()] - Succeed to authenticate User({})", userDetails.getName());
-
         if ("login".equalsIgnoreCase(mode)){
-            if (!oAuth2UserService.checkUserPresent(userDetails.getUsername())){
-                log.info("[OAuth2AuthenticationSuccessHandler - setTargetUrl()] - Not a member of the service ({}). Redirecting to the signUp", userDetails.getName());
+            log.info("Github oAuth2.0 인증 성공 user = {}", userDetails.getUsername());
+            if (Boolean.FALSE.equals(oAuth2UserService.checkUserPresent(userDetails.getUsername()))){
+                log.info("서비스 회원 아님. 회원가입 페이지로 리다이랙트");
                 return UriComponentsBuilder.fromUriString(targetUrl)
                         .path("/signup")
                         .queryParam("nickname", userDetails.getName())
@@ -74,8 +67,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                         .build()
                         .toUriString();
             }else{
+                log.info("서비스 회원 인증 완료. 페인 페이지로 리다이랙트");
                 TokenResponse tokenResponse = oAuth2UserService.oAuth2Login(authentication);
-                log.info("[OAuth2AuthenticationSuccessHandler - setTargetUrl()] - Authenticate Succeed ({}). Redirecting to the main with token", userDetails.getName());
                 return UriComponentsBuilder.fromUriString(targetUrl)
                         .path("/main")
                         .queryParam("accessToken", tokenResponse.accessToken())

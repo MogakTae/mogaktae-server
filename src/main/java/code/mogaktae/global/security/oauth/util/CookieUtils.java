@@ -3,14 +3,12 @@ package code.mogaktae.global.security.oauth.util;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.SerializationUtils;
 
 import java.io.Serializable;
 import java.util.Base64;
 import java.util.Optional;
 
-@Slf4j
 public class CookieUtils {
 
     public static Optional<Cookie> getCookie(HttpServletRequest request, String name){

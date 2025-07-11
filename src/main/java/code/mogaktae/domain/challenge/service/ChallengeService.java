@@ -153,7 +153,7 @@ public class ChallengeService {
         ChallengeResult challengeResult = challengeResultRepository.findById(challengeId)
                 .orElseThrow(() -> new RestApiException(CustomErrorCode.CHALLENGE_RESULT_NOT_FOUND));
 
-        log.info("챌린지 결과 조회 성공. challengeId = {}", challengeId);
+        log.info("챌린지 결과 조회 성공, challengeId = {}", challengeId);
 
         return challengeResult;
     }
@@ -163,7 +163,7 @@ public class ChallengeService {
        PushInfo pushInfo = GitHubUtils.getPushInfoFromRequest(request);
 
        UserChallenge userChallenge = userChallengeRepository.findByUserNicknameAndRepositoryUrl(pushInfo.pusher(), pushInfo.url())
-               .orElseThrow(() -> new RestApiException(CustomErrorCode.USERCHALLENGE_NOT_FOUND));
+               .orElseThrow(() -> new RestApiException(CustomErrorCode.USER_CHALLENGE_NOT_FOUND));
 
        String solvedAcId = userRepository.findSolvedAcIdByNickname(pushInfo.pusher())
                .orElseThrow(() -> new RestApiException(CustomErrorCode.USER_NOT_FOUND));
@@ -172,7 +172,7 @@ public class ChallengeService {
 
        if(SolvedAcUtils.checkUserSolvedTargetProblem(solvedAcClient.getUserSolvedProblem(solvedAcId), targetProblemId)){
            userChallenge.updateSolveStatus();
-           log.info("챌린지 처리 완료 userId = {}, challengeId = {}", userChallenge.getUserId(), userChallenge.getChallengeId());
+           log.info("챌린지 처리 완료, userId = {}, challengeId = {}", userChallenge.getUserId(), userChallenge.getChallengeId());
            return true;
        }else{
            throw new RestApiException(CustomErrorCode.USER_NOT_SOLVE_TARGET_PROBLEM);

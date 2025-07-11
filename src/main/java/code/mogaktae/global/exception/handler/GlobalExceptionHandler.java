@@ -4,7 +4,7 @@ import code.mogaktae.global.exception.entity.RestApiException;
 import code.mogaktae.global.exception.error.CustomErrorCode;
 import code.mogaktae.global.exception.error.ErrorCode;
 import code.mogaktae.global.exception.error.ErrorResponse;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.ArrayList;
 import java.util.List;
 
-@Slf4j
+@Log4j2
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -41,7 +41,7 @@ public class GlobalExceptionHandler {
             errorMessages.add(errorMessage);
         }
 
-        return handleExceptionInternal(CustomErrorCode.INVALID_PARAMS, errorMessages);
+        return handleExceptionInternal(errorMessages);
     }
 
     @ExceptionHandler(Exception.class)
@@ -59,9 +59,9 @@ public class GlobalExceptionHandler {
                 .body(makeErrorResponse(errorCode));
     }
 
-    private ResponseEntity<ErrorResponse<List<String>>> handleExceptionInternal(ErrorCode errorCode, List<String> message) {
-        return ResponseEntity.status(errorCode.getHttpStatus())
-                .body(makeErrorResponse(errorCode, message));
+    private ResponseEntity<ErrorResponse<List<String>>> handleExceptionInternal(List<String> message) {
+        return ResponseEntity.status(CustomErrorCode.INVALID_PARAMS.getHttpStatus())
+                .body(makeErrorResponse(message));
     }
 
     private ErrorResponse<String> makeErrorResponse(ErrorCode errorCode){
@@ -71,9 +71,9 @@ public class GlobalExceptionHandler {
                 .build();
     }
 
-    private ErrorResponse<List<String>> makeErrorResponse(ErrorCode errorCode, List<String> message){
+    private ErrorResponse<List<String>> makeErrorResponse(List<String> message){
         return ErrorResponse.<List<String>>builder()
-                .error(errorCode.getCode())
+                .error(CustomErrorCode.INVALID_PARAMS.getCode())
                 .message(message)
                 .build();
     }

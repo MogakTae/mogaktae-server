@@ -7,7 +7,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
@@ -17,7 +17,7 @@ import java.io.IOException;
 
 import static code.mogaktae.global.security.oauth.util.HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM;
 
-@Slf4j
+@Log4j2
 @Component
 @RequiredArgsConstructor
 public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
@@ -27,8 +27,6 @@ public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationF
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException exception) throws IOException, ServletException {
-
-        log.info("[Oauth2AuthenticationFailureHandler - onAuthenticationFailure()] - In");
 
         String targetUrl = CookieUtils.getCookie(request, REDIRECT_URI_PARAM)
                 .map(Cookie::getValue)
@@ -42,6 +40,6 @@ public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationF
 
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
 
-        log.info("[Oauth2AuthenticationFailureHandler - onAuthenticationFailure()] - Out");
+        log.error("Github oAuth2.0 인증 실패, 인증 실패 페이지로 리다이렉트");
     }
 }
