@@ -78,6 +78,10 @@ public class ChallengeService {
     @Transactional(readOnly = true)
     public ChallengeInfoResponse getChallengeDetails(OAuth2UserDetailsImpl authUser, Long challengeId) {
 
+        if(Boolean.FALSE.equals(userChallengeRepository.existsByUserIdAndChallengeId(authUser.getUserInfo().getId(), challengeId))) {
+            throw new RestApiException(CustomErrorCode.USER_NO_PERMISSION_TO_CHALLENGE);
+        }
+
         Challenge challenge = challengeRepository.findById(challengeId)
                 .orElseThrow(() -> new RestApiException(CustomErrorCode.CHALLENGE_NOT_FOUND));
 
@@ -124,11 +128,11 @@ public class ChallengeService {
     }
 
     @Transactional
-    public Long joinChallenge(OAuth2UserDetailsImpl authUser, ChallengeJoinRequest request) {
+    public Long joinChallenge(OAuth2UserDetailsImpl authUser, ChallengeJoinRequest request, Long challengeId) {
         User user = userRepository.findByNickname(authUser.getUsername())
                 .orElseThrow(() -> new RestApiException(CustomErrorCode.USER_NOT_FOUND));
 
-        Challenge challenge = challengeRepository.findById(request.challengeId())
+        Challenge challenge = challengeRepository.findById(challengeId)
                 .orElseThrow(() -> new RestApiException(CustomErrorCode.CHALLENGE_NOT_FOUND));
 
         Tier tier = solvedAcClient.getBaekJoonTier(user.getSolvedAcId());

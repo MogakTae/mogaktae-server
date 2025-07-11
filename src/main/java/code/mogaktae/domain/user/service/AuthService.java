@@ -27,6 +27,10 @@ public class AuthService {
     @Transactional
     public String signUp(SignUpRequest request){
 
+        if (Boolean.TRUE.equals(userRepository.existsByNickname(request.nickname()))){
+            throw new RestApiException(CustomErrorCode.USER_NICKNAME_DUPLICATED);
+        }
+
         User user = User.create(request);
 
         userRepository.save(user);

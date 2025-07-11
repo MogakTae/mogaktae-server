@@ -10,12 +10,13 @@ public enum CustomErrorCode implements ErrorCode {
 
     // User Error Code
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_4041", "유저 조회 실패"),
+    USER_NICKNAME_DUPLICATED(HttpStatus.BAD_REQUEST, "USER_4001", "중복되는 닉네임"),
     USER_NO_PERMISSION_TO_CHALLENGE(HttpStatus.UNAUTHORIZED, "USER_4011", "챌린지 접근 권한 없음"),
 
     // Challenge Error Code
     CHALLENGE_NOT_FOUND(HttpStatus.NOT_FOUND, "CHALLENGE_4041", "챌린지 조회 실패"),
     CHALLENGE_MAX_PARTICIPATION_REACHED(HttpStatus.BAD_REQUEST, "CHALLENGE_4001", "챌린지 참여 한도 초과"),
-    USER_CHALLENGE_NOT_FOUND(HttpStatus.NOT_FOUND, "CHALLENGE_4042", "닉네임 또는 레포지토리 주소 조회 실패"),
+    USER_CHALLENGE_NOT_FOUND(HttpStatus.NOT_FOUND, "CHALLENGE_4042", "챌린지에 참여하지 않은 유저"),
     USER_NOT_SOLVE_TARGET_PROBLEM(HttpStatus.BAD_REQUEST, "CHALLENGE_4002", "문제 미해결"),
     CHALLENGE_RESULT_NOT_FOUND(HttpStatus.NOT_FOUND, "CHALLENGE_4043", "챌린지 결과 조회 실패"),
 

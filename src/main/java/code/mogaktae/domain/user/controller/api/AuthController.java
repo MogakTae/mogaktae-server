@@ -1,7 +1,8 @@
-package code.mogaktae.domain.git.controller;
+package code.mogaktae.domain.user.controller.api;
 
 import code.mogaktae.domain.common.dto.ResponseDto;
-import code.mogaktae.domain.user.dto.req.RepositoryUrlVerifyRequest;
+import code.mogaktae.domain.user.controller.docs.AuthControllerSpecification;
+import code.mogaktae.domain.user.dto.req.SignUpRequest;
 import code.mogaktae.domain.user.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,13 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/git")
-public class GitController {
+@RequestMapping("/api/v1/auth")
+public class AuthController implements AuthControllerSpecification {
 
     private final AuthService authService;
 
-    @PostMapping("/repository-url/check")
-    public ResponseEntity<ResponseDto<Boolean>> checkRepositoryUrlAvailable(@Valid @RequestBody RepositoryUrlVerifyRequest request){
-        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(authService.checkRepositoryUrlAvailable(request.nickname(), request.repositoryUrl()), "레포지토리 URL 검사 완료"));
+    @PostMapping("/sign-up")
+    public ResponseEntity<ResponseDto<String>> signUp(@Valid @RequestBody SignUpRequest request){
+        return ResponseEntity.status(HttpStatus.CREATED).body(ResponseDto.of(authService.signUp(request), "회원가입 성공"));
     }
 }

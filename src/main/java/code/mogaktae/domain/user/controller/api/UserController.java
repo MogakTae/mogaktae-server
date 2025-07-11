@@ -1,6 +1,7 @@
-package code.mogaktae.domain.user.controller;
+package code.mogaktae.domain.user.controller.api;
 
 import code.mogaktae.domain.common.dto.ResponseDto;
+import code.mogaktae.domain.user.controller.docs.UserControllerSpecification;
 import code.mogaktae.domain.user.dto.res.UserInfoResponse;
 import code.mogaktae.domain.user.entity.UserDocument;
 import code.mogaktae.domain.user.service.UserService;
@@ -19,7 +20,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
-public class UserController {
+public class UserController implements UserControllerSpecification {
 
     private final UserService userService;
 
@@ -28,7 +29,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(userService.getMyPageInfo(user), "유저 정보 조회 성공"));
     }
 
-    @GetMapping("/suggest")
+    @GetMapping("/search")
     public ResponseEntity<ResponseDto<List<UserDocument>>> searchUsers(@RequestParam("keyword") String nickname){
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(userService.searchUsers(nickname),"키워드와 일치하는 유저 조회 성공"));
     }

@@ -1,5 +1,6 @@
-package code.mogaktae.domain.challenge.controller;
+package code.mogaktae.domain.challenge.controller.api;
 
+import code.mogaktae.domain.challenge.controller.docs.ChallengeControllerSpecification;
 import code.mogaktae.domain.challenge.dto.req.ChallengeCreateRequest;
 import code.mogaktae.domain.challenge.dto.req.ChallengeInfoRequest;
 import code.mogaktae.domain.challenge.dto.req.ChallengeJoinRequest;
@@ -23,7 +24,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/challenges")
-public class ChallengeController {
+public class ChallengeController implements ChallengeControllerSpecification {
 
     private final ChallengeService challengeService;
 
@@ -33,21 +34,22 @@ public class ChallengeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(ResponseDto.of(challengeService.createChallenge(user, request), "챌린지 생성 성공"));
     }
 
-    @GetMapping("/info/summaries")
+    @GetMapping
     public ResponseEntity<ResponseDto<ChallengeInfoSummariesResponse>> getChallengesSummary(@Valid @RequestBody ChallengeInfoRequest request){
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(challengeService.getChallengesSummary(request.size(), request.lastCursorId()), "요약 챌린지 조회 성공"));
     }
 
-    @GetMapping("/info/details/{challengeId}")
+    @GetMapping("/{challengeId}")
     public ResponseEntity<ResponseDto<ChallengeInfoResponse>> getChallengesDetail(@AuthenticationPrincipal OAuth2UserDetailsImpl user,
                                                                                   @PathVariable Long challengeId){
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(challengeService.getChallengeDetails(user, challengeId), "챌린지 상세 조회 완료"));
     }
 
-    @PostMapping("/join")
+    @PostMapping("/{challengeId}/participants")
     public ResponseEntity<ResponseDto<Long>> joinChallenges(@AuthenticationPrincipal OAuth2UserDetailsImpl user,
-                                                            @Valid @RequestBody ChallengeJoinRequest request){
-        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(challengeService.joinChallenge(user, request), "챌린지 참여 성공"));
+                                                     @Valid @RequestBody ChallengeJoinRequest request,
+                                                     @PathVariable Long challengeId){
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(challengeService.joinChallenge(user, request, challengeId), "챌린지 참여 성공"));
     }
 
     @GetMapping("/results/{challengeId}")
