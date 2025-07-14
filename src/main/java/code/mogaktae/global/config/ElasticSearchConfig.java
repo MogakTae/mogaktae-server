@@ -12,7 +12,7 @@ public class ElasticSearchConfig extends ElasticsearchConfiguration {
     @Override
     public ClientConfiguration clientConfiguration(){
         return ClientConfiguration.builder()
-                .connectedTo("es:9200")
+                .connectedTo("joonseo-elastic-search:9200")
                 .build();
     }
 }
