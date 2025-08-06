@@ -90,9 +90,9 @@ jobs:
             echo "DOCKER_HUB_USERNAME=${{ secrets.DOCKER_HUB_USERNAME }}" > .env
             echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" >> .env
 
-            docker-compose down
-
-            docker-compose pull
-            docker-compose up -d
+            docker-compose stop spring
+            docker-compose rm -f spring
+            docker-compose pull spring
+            docker-compose up -d spring
 
             docker image prune -f
