@@ -20,7 +20,7 @@ public class AuthController implements AuthControllerSpecification {
 
     private final AuthService authService;
 
-    @PostMapping("/sign-up")
+    @PostMapping("/api/v1/auth/sign-up")
     public ResponseEntity<ResponseDto<String>> signUp(@Valid @RequestBody SignUpRequest request){
         return ResponseEntity.status(HttpStatus.CREATED).body(ResponseDto.of(authService.signUp(request), "회원가입 성공"));
     }

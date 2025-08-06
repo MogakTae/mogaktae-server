@@ -30,7 +30,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             "/api/v1/auth/**",
             "/api/v1/users/suggest",
             "/api/v1/git/**",
-            "/api/v1/challenges/info/summaries"
+            "/api/v1/challenges/info/summaries",
+            "/oauth2/authorization/**",
+            "/login/oauth2/code/**"
     );
 
     @Override
@@ -49,6 +51,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if(jwtProvider.validateAccessToken(token)){
                 Authentication authentication = jwtProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+
             }
 
             filterChain.doFilter(request, response);

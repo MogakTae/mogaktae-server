@@ -52,7 +52,9 @@ public class SecurityConfig {
                                 "/api/v1/auth/**",
                                 "/api/v1/users/suggest",
                                 "/api/v1/git/**",
-                                "/api/v1/challenges/info/summaries"
+                                "/api/v1/challenges/info/summaries",
+                                "/oauth2/authorization/**",
+                                "/login/oauth2/code/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
