@@ -42,7 +42,7 @@ public class AuthService {
 
     public Boolean checkRepositoryUrlAvailable(String nickname, String repositoryUrl){
 
-        List<String> userRepositoryUrls = githubClient.getUserRepositoryUrls(nickname);
+        List<String> userRepositoryUrls = githubClient.getRepositoryUrls(nickname);
 
         if(userChallengeRepository.existsByRepositoryUrl(repositoryUrl))
             throw new RestApiException(CustomErrorCode.REPOSITORY_URL_DUPLICATE);

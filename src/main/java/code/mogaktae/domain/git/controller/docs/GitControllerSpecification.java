@@ -1,7 +1,7 @@
 package code.mogaktae.domain.git.controller.docs;
 
 import code.mogaktae.domain.common.dto.ResponseDto;
-import code.mogaktae.domain.user.dto.req.RepositoryUrlVerifyRequest;
+import code.mogaktae.domain.git.dto.req.RepositoryUrlVerifyRequest;
 import code.mogaktae.global.exception.error.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

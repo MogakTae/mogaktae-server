@@ -1,6 +1,6 @@
 package code.mogaktae.domain.challenge.entity;
 
-import code.mogaktae.domain.result.dto.common.PersonalResult;
+import code.mogaktae.domain.challenge.dto.common.ChallengePersonalResult;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
@@ -17,16 +17,16 @@ public class ChallengeResult {
 
     private String challengeName;
 
-    List<PersonalResult> personalResults;
+    List<ChallengePersonalResult> personalResults;
 
     @Builder
-    private ChallengeResult(Long challengeId, String challengeName, List<PersonalResult> personalResults) {
+    private ChallengeResult(Long challengeId, String challengeName, List<ChallengePersonalResult> personalResults) {
         this.challengeId = challengeId;
         this.challengeName = challengeName;
         this.personalResults = personalResults;
     }
 
-    public static ChallengeResult create(Long challengeId, String challengeName, List<PersonalResult> personalResults) {
+    public static ChallengeResult create(Long challengeId, String challengeName, List<ChallengePersonalResult> personalResults) {
         return ChallengeResult.builder()
                 .challengeId(challengeId)
                 .challengeName(challengeName)

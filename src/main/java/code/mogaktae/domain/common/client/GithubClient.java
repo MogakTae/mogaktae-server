@@ -19,7 +19,7 @@ public class GithubClient {
         this.restTemplate = restTemplate;
     }
 
-    public List<String> getUserRepositoryUrls(String nickname){
+    public List<String> getRepositoryUrls(String nickname){
         String response;
 
         try{
@@ -33,6 +33,6 @@ public class GithubClient {
             throw new RestApiException(CustomErrorCode.HTTP_REQUEST_FAILED);
         }
 
-        return GitHubUtils.getRepositoryUrlsFromResponse(response);
+        return GitHubUtils.getRepositoryUrls(response);
     }
 }

@@ -1,4 +1,4 @@
-package code.mogaktae.domain.challenge.dto.res;
+package code.mogaktae.domain.challenge.dto.common;
 
 import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 
 @Schema(description = "챌린지 요약 정보 Response")
-public record ChallengeInfoSummaryResponse(
+public record ChallengeSummary(
 
         @Schema(description = "챌린지 id", example = "10")
         Long challengeId,
@@ -28,7 +28,7 @@ public record ChallengeInfoSummaryResponse(
 ) {
 
     @QueryProjection
-    public ChallengeInfoSummaryResponse(Long challengeId, String challengeImageUrl, String challengeName, Long dailyProblem, LocalDate startDate, LocalDate endDate) {
+    public ChallengeSummary(Long challengeId, String challengeImageUrl, String challengeName, Long dailyProblem, LocalDate startDate, LocalDate endDate) {
         this.challengeId = challengeId;
         this.challengeImageUrl = challengeImageUrl;
         this.challengeName = challengeName;

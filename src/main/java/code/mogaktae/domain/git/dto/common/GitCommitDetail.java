@@ -1,19 +1,18 @@
-package code.mogaktae.domain.challenge.dto.common;
+package code.mogaktae.domain.git.dto.common;
 
 import lombok.Builder;
 
 @Builder
-public record PushInfo(
+public record GitCommitDetail(
     String url,
     String pusher,
     String commitMessage
 ){
-    public static PushInfo from(String url, String pusher, String commitMessage) {
-        return PushInfo.builder()
+    public static GitCommitDetail from(String url, String pusher, String commitMessage) {
+        return GitCommitDetail.builder()
                 .url(url)
                 .pusher(pusher)
                 .commitMessage(commitMessage)
                 .build();
     }
 }
-

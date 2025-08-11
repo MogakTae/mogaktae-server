@@ -5,7 +5,7 @@ import lombok.Builder;
 
 @Builder
 @Schema(description = "로그인 Response")
-public record TokenResponse(
+public record JwtResponse(
 
         @Schema(description = "토큰 타입", example = "Bearer")
         String type,
@@ -17,15 +17,15 @@ public record TokenResponse(
         String refreshToken
 ) {
 
-    public static TokenResponse create(String accessToken, String refreshToken) {
-        return TokenResponse.builder()
+    public static JwtResponse create(String accessToken, String refreshToken) {
+        return JwtResponse.builder()
                 .type("Bearer")
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
     }
 
-    public static TokenResponse of(String accessToken, String refreshToken) {
-        return new TokenResponse("Bearer", accessToken, refreshToken);
+    public static JwtResponse of(String accessToken, String refreshToken) {
+        return new JwtResponse("Bearer", accessToken, refreshToken);
     }
 }

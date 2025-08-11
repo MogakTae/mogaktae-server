@@ -1,11 +1,11 @@
 package code.mogaktae.domain.userChallenge.repository;
 
-import code.mogaktae.domain.challenge.dto.res.ChallengeInfoSummaryResponse;
-import code.mogaktae.domain.challenge.dto.res.QChallengeInfoSummaryResponse;
-import code.mogaktae.domain.challenge.dto.common.QUserChallengeSummary;
-import code.mogaktae.domain.challenge.dto.common.UserChallengeSummary;
-import code.mogaktae.domain.result.dto.common.PersonalResult;
-import code.mogaktae.domain.result.dto.common.QPersonalResult;
+import code.mogaktae.domain.challenge.dto.common.ChallengePersonalResult;
+import code.mogaktae.domain.challenge.dto.common.ChallengeSummary;
+import code.mogaktae.domain.challenge.dto.common.QChallengePersonalResult;
+import code.mogaktae.domain.challenge.dto.common.QChallengeSummary;
+import code.mogaktae.domain.userChallenge.dto.common.QUserChallengeSummary;
+import code.mogaktae.domain.userChallenge.dto.common.UserChallengeSummary;
 import code.mogaktae.domain.userChallenge.entity.UserChallenge;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -25,9 +25,9 @@ public class UserChallengeRepositoryImpl implements UserChallengeRepositoryCusto
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<PersonalResult> findPersonalResultByChallengeId(Long challengeId){
+    public List<ChallengePersonalResult> findPersonalResultByChallengeId(Long challengeId){
         return jpaQueryFactory
-                .select(new QPersonalResult(
+                .select(new QChallengePersonalResult(
                         user.solvedAcId,
                         user.id,
                         user.profileImageUrl,
@@ -56,9 +56,9 @@ public class UserChallengeRepositoryImpl implements UserChallengeRepositoryCusto
     }
 
     @Override
-    public List<ChallengeInfoSummaryResponse> findChallengesByUserIdAndIsCompleted(Long userId, Boolean isCompleted){
+    public List<ChallengeSummary> findChallengesByUserIdAndIsCompleted(Long userId, Boolean isCompleted){
         return jpaQueryFactory
-                .select(new QChallengeInfoSummaryResponse(
+                .select(new QChallengeSummary(
                         challenge.id,
                         challenge.challengeImageUrl,
                         challenge.name,

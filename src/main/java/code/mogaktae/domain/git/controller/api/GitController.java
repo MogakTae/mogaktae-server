@@ -2,7 +2,7 @@ package code.mogaktae.domain.git.controller.api;
 
 import code.mogaktae.domain.common.dto.ResponseDto;
 import code.mogaktae.domain.git.controller.docs.GitControllerSpecification;
-import code.mogaktae.domain.user.dto.req.RepositoryUrlVerifyRequest;
+import code.mogaktae.domain.git.dto.req.RepositoryUrlVerifyRequest;
 import code.mogaktae.domain.user.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

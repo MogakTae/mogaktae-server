@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 @Table(name = "user_challenge")
 @Entity
 @Getter
@@ -69,10 +71,12 @@ public class UserChallenge {
                 .build();
     }
 
-    public void updateSolveStatus(){
+    public void updateSolveStatus(Long dailyProblem){
         this.totalSolvedProblem += 1;
         this.todaySolvedProblem += 1;
-        this.isCompleted = true;
+
+        if(Objects.equals(dailyProblem, todaySolvedProblem))
+            this.isCompleted = true;
     }
 
     public void resetSolveStatus(){
