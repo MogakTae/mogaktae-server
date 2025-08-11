@@ -1,6 +1,6 @@
 package code.mogaktae.global.security.oauth.handler;
 
-import code.mogaktae.domain.user.dto.res.TokenResponse;
+import code.mogaktae.domain.user.dto.res.JwtResponse;
 import code.mogaktae.global.security.oauth.domain.common.OAuth2UserDetailsImpl;
 import code.mogaktae.global.security.oauth.util.CookieUtils;
 import code.mogaktae.global.security.oauth.util.CustomOAuth2UserService;
@@ -68,7 +68,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                         .toUriString();
             }else{
                 log.info("서비스 회원 인증 완료. 페인 페이지로 리다이랙트");
-                TokenResponse tokenResponse = oAuth2UserService.oAuth2Login(authentication);
+                JwtResponse tokenResponse = oAuth2UserService.oAuth2Login(authentication);
                 return UriComponentsBuilder.fromUriString(targetUrl)
                         .path("/main")
                         .queryParam("accessToken", tokenResponse.accessToken())

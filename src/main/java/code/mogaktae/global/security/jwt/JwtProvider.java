@@ -1,6 +1,6 @@
 package code.mogaktae.global.security.jwt;
 
-import code.mogaktae.domain.user.dto.res.TokenResponse;
+import code.mogaktae.domain.user.dto.res.JwtResponse;
 import code.mogaktae.domain.user.entity.UserDetailsImpl;
 import code.mogaktae.domain.user.service.UserDetailsServiceImpl;
 import io.jsonwebtoken.*;
@@ -40,7 +40,7 @@ public class JwtProvider {
         this.userDetailsService = userDetailsService;
     }
 
-    public TokenResponse generateToken(Authentication authentication){
+    public JwtResponse generateToken(Authentication authentication){
 
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -64,7 +64,7 @@ public class JwtProvider {
 
         log.info("generateToken() : 토큰 생성 완료");
 
-        return TokenResponse.builder()
+        return JwtResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();

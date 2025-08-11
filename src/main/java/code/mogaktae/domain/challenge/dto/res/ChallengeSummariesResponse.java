@@ -1,5 +1,6 @@
 package code.mogaktae.domain.challenge.dto.res;
 
+import code.mogaktae.domain.challenge.dto.common.ChallengeSummary;
 import code.mogaktae.domain.common.util.CursorBasedPaginationCollection;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -8,10 +9,10 @@ import java.util.List;
 
 @Builder
 @Schema(description = "챌린지 정보 Response")
-public record ChallengeInfoSummariesResponse(
+public record ChallengeSummariesResponse(
 
         @Schema(description = "챌린지 요약 정보")
-        List<ChallengeInfoSummaryResponse> challengeSummaries,
+        List<ChallengeSummary> challengeSummaries,
 
         @Schema(description = "조회한 챌린지 사이즈", example = "4")
         long totalSize,
@@ -20,8 +21,8 @@ public record ChallengeInfoSummariesResponse(
         long nextCursorId
 ) {
 
-    public static ChallengeInfoSummariesResponse create(List<ChallengeInfoSummaryResponse> challengeSummaries, long totalSize, long nextCursorId) {
-        return ChallengeInfoSummariesResponse.builder()
+    public static ChallengeSummariesResponse create(List<ChallengeSummary> challengeSummaries, long totalSize, long nextCursorId) {
+        return ChallengeSummariesResponse.builder()
                 .challengeSummaries(challengeSummaries)
                 .totalSize(totalSize)
                 .nextCursorId(nextCursorId)
@@ -30,18 +31,18 @@ public record ChallengeInfoSummariesResponse(
 
     private static final long LAST_CURSOR_ID = -1;
 
-    public static ChallengeInfoSummariesResponse of(CursorBasedPaginationCollection<ChallengeInfoSummaryResponse> challengeSummaries, long totalSize) {
+    public static ChallengeSummariesResponse of(CursorBasedPaginationCollection<ChallengeSummary> challengeSummaries, long totalSize) {
         if (Boolean.TRUE.equals(challengeSummaries.isLastCursor()))
             return noNextCursorResponse(challengeSummaries.getContents(), totalSize);
 
         return hasNextCursorResponse(challengeSummaries.getContents(), totalSize, challengeSummaries.getNextCursor().challengeId());
     }
 
-    private static ChallengeInfoSummariesResponse noNextCursorResponse(List<ChallengeInfoSummaryResponse> challengeSummaries, long totalSize) {
+    private static ChallengeSummariesResponse noNextCursorResponse(List<ChallengeSummary> challengeSummaries, long totalSize) {
         return hasNextCursorResponse(challengeSummaries, totalSize, LAST_CURSOR_ID);
     }
 
-    private static ChallengeInfoSummariesResponse hasNextCursorResponse(List<ChallengeInfoSummaryResponse> challengeSummaries, long totalSize, long nextCursorId) {
-        return new ChallengeInfoSummariesResponse(challengeSummaries, totalSize, nextCursorId);
+    private static ChallengeSummariesResponse hasNextCursorResponse(List<ChallengeSummary> challengeSummaries, long totalSize, long nextCursorId) {
+        return new ChallengeSummariesResponse(challengeSummaries, totalSize, nextCursorId);
     }
 }

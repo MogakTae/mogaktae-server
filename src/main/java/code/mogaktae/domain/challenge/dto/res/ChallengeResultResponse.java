@@ -1,6 +1,6 @@
-package code.mogaktae.domain.result.dto.res;
+package code.mogaktae.domain.challenge.dto.res;
 
-import code.mogaktae.domain.result.dto.common.PersonalResult;
+import code.mogaktae.domain.challenge.dto.common.ChallengePersonalResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
@@ -14,10 +14,10 @@ public record ChallengeResultResponse(
     String challengeName,
 
     @Schema(description = "개인별 챌린지 결과")
-    List<PersonalResult> personalResults
+    List<ChallengePersonalResult> personalResults
 
 ){
-    public static ChallengeResultResponse create(String challengeName, List<PersonalResult> personalResults) {
+    public static ChallengeResultResponse create(String challengeName, List<ChallengePersonalResult> personalResults) {
         return ChallengeResultResponse.builder()
                 .challengeName(challengeName)
                 .personalResults(personalResults)

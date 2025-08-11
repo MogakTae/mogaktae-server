@@ -1,7 +1,7 @@
 package code.mogaktae.domain.user.controller.docs;
 
 import code.mogaktae.domain.common.dto.ResponseDto;
-import code.mogaktae.domain.user.dto.res.UserInfoResponse;
+import code.mogaktae.domain.user.dto.res.MyPageResponse;
 import code.mogaktae.domain.user.entity.UserDocument;
 import code.mogaktae.global.exception.error.ErrorResponse;
 import code.mogaktae.global.security.oauth.domain.common.OAuth2UserDetailsImpl;
@@ -46,7 +46,7 @@ public interface UserControllerSpecification {
                             schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping("/me")
-    ResponseEntity<ResponseDto<UserInfoResponse>> getMyPageInfo(@AuthenticationPrincipal OAuth2UserDetailsImpl user);
+    ResponseEntity<ResponseDto<MyPageResponse>> getMyPage(@AuthenticationPrincipal OAuth2UserDetailsImpl user);
 
     @Operation(summary = "사용자 검색", description = "키워드로 사용자를 검색합니다<br>" +
             "🔐 <strong>Jwt 불필요</strong><br>")

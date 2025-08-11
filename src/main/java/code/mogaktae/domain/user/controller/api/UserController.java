@@ -2,7 +2,7 @@ package code.mogaktae.domain.user.controller.api;
 
 import code.mogaktae.domain.common.dto.ResponseDto;
 import code.mogaktae.domain.user.controller.docs.UserControllerSpecification;
-import code.mogaktae.domain.user.dto.res.UserInfoResponse;
+import code.mogaktae.domain.user.dto.res.MyPageResponse;
 import code.mogaktae.domain.user.entity.UserDocument;
 import code.mogaktae.domain.user.service.UserService;
 import code.mogaktae.global.security.oauth.domain.common.OAuth2UserDetailsImpl;
@@ -25,8 +25,8 @@ public class UserController implements UserControllerSpecification {
     private final UserService userService;
 
     @GetMapping("/me")
-    public ResponseEntity<ResponseDto<UserInfoResponse>> getMyPageInfo(@AuthenticationPrincipal OAuth2UserDetailsImpl user){
-        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(userService.getMyPageInfo(user), "유저 정보 조회 성공"));
+    public ResponseEntity<ResponseDto<MyPageResponse>> getMyPage(@AuthenticationPrincipal OAuth2UserDetailsImpl user){
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(userService.getMyPage(user), "유저 정보 조회 성공"));
     }
 
     @GetMapping("/search")

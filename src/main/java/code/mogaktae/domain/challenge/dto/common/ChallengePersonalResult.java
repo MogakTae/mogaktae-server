@@ -1,11 +1,11 @@
-package code.mogaktae.domain.result.dto.common;
+package code.mogaktae.domain.challenge.dto.common;
 
 import code.mogaktae.domain.user.entity.Tier;
 import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "개인별 챌린지 결과 Response")
-public record PersonalResult(
+public record ChallengePersonalResult(
 
         @Schema(description = "solved.ac 아이디", example = "ahh052")
         String solvedAcId,
@@ -33,13 +33,13 @@ public record PersonalResult(
 ) {
 
     @QueryProjection
-    public PersonalResult(String solvedAcId, Long userId, String profileImageUrl, String nickname,
-                          Tier startTier, Long totalPenalty, Long totalProblemSolved) {
+    public ChallengePersonalResult(String solvedAcId, Long userId, String profileImageUrl, String nickname,
+                                   Tier startTier, Long totalPenalty, Long totalProblemSolved) {
         this(solvedAcId, userId, profileImageUrl, nickname, startTier, null, totalPenalty, totalProblemSolved);
     }
 
-    public PersonalResult withEndTier(Tier endTier) {
-        return new PersonalResult(this.solvedAcId, this.userId, this.profileImageUrl, this.nickname,
+    public ChallengePersonalResult withEndTier(Tier endTier) {
+        return new ChallengePersonalResult(this.solvedAcId, this.userId, this.profileImageUrl, this.nickname,
                 this.startTier, endTier, this.totalPenalty, this.totalProblemSolved);
     }
 }

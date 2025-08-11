@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -13,7 +12,6 @@ import java.time.ZoneId;
 @Table(name = "alarm")
 @Entity
 @Getter
-@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Alarm {
 
@@ -23,6 +21,9 @@ public class Alarm {
 
     @Column(nullable = false, columnDefinition = "bigint", name = "user_id")
     private Long userId;
+
+    @Column(nullable = false, columnDefinition = "bigint", name = "challenge_id")
+    private Long challengeId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, columnDefinition = "varchar(100)", name = "alarm_type")
@@ -38,17 +39,19 @@ public class Alarm {
     private LocalDateTime createdAt;
 
     @Builder
-    private Alarm(Long userId, AlarmType alarmType, String challengeName, String senderNickname) {
+    private Alarm(Long userId, Long challengeId, AlarmType alarmType, String challengeName, String senderNickname) {
         this.userId = userId;
+        this.challengeId = challengeId;
         this.alarmType = alarmType;
         this.challengeName = challengeName;
         this.senderNickname = senderNickname;
         this.createdAt = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
     }
 
-    public static Alarm create(Long userId, AlarmType alarmType, String challengeName, String senderNickname) {
+    public static Alarm create(Long userId, Long challengeId, AlarmType alarmType, String challengeName, String senderNickname) {
         return Alarm.builder()
                 .userId(userId)
+                .challengeId(challengeId)
                 .alarmType(alarmType)
                 .challengeName(challengeName)
                 .senderNickname(senderNickname)
