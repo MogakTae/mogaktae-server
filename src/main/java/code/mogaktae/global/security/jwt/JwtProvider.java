@@ -71,12 +71,12 @@ public class JwtProvider {
                 .build();
     }
 
-    public String getAccessTokenFromRequest(HttpServletRequest req){
-        return CookieUtils.getValueFromCookie(req, "access-token");
+    public String getAccessTokenFromRequest(HttpServletRequest request){
+        return CookieUtils.getValueFromCookie(request, "access-token");
     }
 
-    public String getRefreshTokenFromRequest(HttpServletRequest req){
-        return CookieUtils.getValueFromCookie(req, "refresh-token");
+    public String getRefreshTokenFromRequest(HttpServletRequest request){
+        return CookieUtils.getValueFromCookie(request, "refresh-token");
     }
 
     public boolean validateAccessToken(String accessToken){
