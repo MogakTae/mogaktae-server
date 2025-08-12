@@ -27,26 +27,6 @@ public class OAuth2UserDetailsImpl implements OAuth2User, UserDetails {
     }
 
     @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
-    @Override
     public Map<String, Object> getAttributes() {
         return oAuth2UserInfo.getAttributes();
     }

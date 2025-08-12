@@ -116,8 +116,6 @@ public class ChallengeService {
 
         alarmService.sendChallengeJoinAlarm(challenge.getId(), challenge.getName(), headUser.getNickname(), request.participants());
 
-        log.info("챌린지 생성 완료, challengeId = {}", challenge.getId());
-
         return challenge.getId();
     }
 
@@ -134,8 +132,6 @@ public class ChallengeService {
         UserChallenge userChallenge = UserChallenge.create(user.getId(), challenge.getId(), request.repositoryUrl(), tier);
 
         userChallengeRepository.save(userChallenge);
-
-        log.info("챌린지 참여 성공, challengeId = {}", challenge.getId());
 
         return challenge.getId();
     }
@@ -182,8 +178,6 @@ public class ChallengeService {
         if(userChallenges.isEmpty()) return ;
 
         userChallenges.forEach(UserChallenge::resetSolveStatus);
-
-        log.info("일일 챌린지 완료 여부 초기화 완료");
     }
 
     @Transactional
@@ -204,7 +198,5 @@ public class ChallengeService {
 
             personalResultsWithTier.forEach(personalResult -> alarmService.sendChallengeEndAlarm(personalResult.userId(), endChallenge.challengeId(), endChallenge.challengeName()));
         });
-
-        log.info("종료된 챌린지 결과 생성 완료");
     }
 }

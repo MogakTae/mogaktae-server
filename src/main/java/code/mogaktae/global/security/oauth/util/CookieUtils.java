@@ -37,6 +37,7 @@ public class CookieUtils {
 
     public static Optional<Cookie> getCookie(HttpServletRequest request, String key){
         Cookie[] cookies = request.getCookies();
+
         if(cookies != null){
             for(Cookie cookie : cookies){
                 if(cookie.getName().equals(key)){
@@ -44,11 +45,13 @@ public class CookieUtils {
                 }
             }
         }
+
         return Optional.empty();
     }
 
     public static void setCookie(HttpServletResponse response, String key, String value, int maxAge){
         Cookie cookie = new Cookie(key, value);
+
         cookie.setPath("/");
         cookie.setHttpOnly(true);
         cookie.setMaxAge(maxAge);
@@ -58,6 +61,7 @@ public class CookieUtils {
 
     public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String key){
         Cookie[] cookies = request.getCookies();
+
         if(cookies != null){
             for(Cookie cookie : cookies){
                 if(cookie.getName().equals(key)){

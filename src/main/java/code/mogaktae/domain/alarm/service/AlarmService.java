@@ -6,14 +6,12 @@ import code.mogaktae.domain.alarm.entity.AlarmType;
 import code.mogaktae.domain.alarm.repository.AlarmRepository;
 import code.mogaktae.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Log4j2
 @Service
 @RequiredArgsConstructor
 public class AlarmService {

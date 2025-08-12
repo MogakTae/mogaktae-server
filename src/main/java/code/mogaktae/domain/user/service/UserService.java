@@ -13,13 +13,11 @@ import code.mogaktae.global.exception.entity.RestApiException;
 import code.mogaktae.global.exception.error.CustomErrorCode;
 import code.mogaktae.global.security.oauth.domain.common.OAuth2UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Log4j2
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -40,8 +38,6 @@ public class UserService {
         List<ChallengeSummary> inProgressChallenges = challengeService.getMyInProgressChallenges(user.getId());
 
         Tier tier = solvedAcClient.getTier(user.getSolvedAcId());
-
-        log.info("사용자 정보 조회 완료, userId = {}", user.getId());
 
         return MyPageResponse.of(user.getProfileImageUrl(), user.getNickname(),tier,inProgressChallenges,completedChallenges);
     }
