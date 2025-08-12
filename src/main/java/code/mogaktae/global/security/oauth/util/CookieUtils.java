@@ -4,6 +4,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.SerializationUtils;
+import org.springframework.http.ResponseCookie;
 
 import java.io.Serializable;
 import java.util.Base64;
@@ -11,11 +12,34 @@ import java.util.Optional;
 
 public class CookieUtils {
 
-    public static Optional<Cookie> getCookie(HttpServletRequest request, String name){
+    public static ResponseCookie createCookie(String key, String value, long maxAge){
+        return ResponseCookie.from(key, value)
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("None")
+                .maxAge(maxAge)
+                .build();
+    }
+
+    public static String getValueFromCookie(HttpServletRequest request, String key){
+        Cookie[] cookies = request.getCookies();
+
+        if(cookies != null){
+            for(Cookie cookie : cookies){
+                if(cookie.getName().equals(key)){
+                    return cookie.getValue();
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public static Optional<Cookie> getCookie(HttpServletRequest request, String key){
         Cookie[] cookies = request.getCookies();
         if(cookies != null){
             for(Cookie cookie : cookies){
-                if(cookie.getName().equals(name)){
+                if(cookie.getName().equals(key)){
                     return Optional.of(cookie);
                 }
             }
@@ -23,8 +47,8 @@ public class CookieUtils {
         return Optional.empty();
     }
 
-    public static void setCookie(HttpServletResponse response, String name, String value, int maxAge){
-        Cookie cookie = new Cookie(name, value);
+    public static void setCookie(HttpServletResponse response, String key, String value, int maxAge){
+        Cookie cookie = new Cookie(key, value);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
         cookie.setMaxAge(maxAge);
@@ -32,11 +56,11 @@ public class CookieUtils {
         response.addCookie(cookie);
     }
 
-    public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name){
+    public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String key){
         Cookie[] cookies = request.getCookies();
         if(cookies != null){
             for(Cookie cookie : cookies){
-                if(cookie.getName().equals(name)){
+                if(cookie.getName().equals(key)){
                     cookie.setPath("/");
                     cookie.setValue("");
                     cookie.setMaxAge(0);

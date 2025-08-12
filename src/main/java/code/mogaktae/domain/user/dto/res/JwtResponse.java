@@ -14,7 +14,10 @@ public record JwtResponse(
         String accessToken,
 
         @Schema(description = "리프레시 토큰", example = "eyJhbGckpXVCJ9.eyJzdWIiOiJ1c2VyQGMDc2NDAwLCJleHAiOjE3MDcyODYwMDB9.ab8ijkl9012mnop3456")
-        String refreshToken
+        String refreshToken,
+
+        @Schema(description = "만료기간(밀리초)", example = "16000000")
+        long maxAge
 ) {
 
     public static JwtResponse create(String accessToken, String refreshToken) {
@@ -22,10 +25,11 @@ public record JwtResponse(
                 .type("Bearer")
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .maxAge(10800000L)
                 .build();
     }
 
     public static JwtResponse of(String accessToken, String refreshToken) {
-        return new JwtResponse("Bearer", accessToken, refreshToken);
+        return new JwtResponse("Bearer", accessToken, refreshToken, 10800000L);
     }
 }

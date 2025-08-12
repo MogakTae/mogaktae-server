@@ -3,6 +3,7 @@ package code.mogaktae.global.security.jwt;
 import code.mogaktae.domain.user.dto.res.JwtResponse;
 import code.mogaktae.domain.user.entity.UserDetailsImpl;
 import code.mogaktae.domain.user.service.UserDetailsServiceImpl;
+import code.mogaktae.global.security.oauth.util.CookieUtils;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
@@ -70,10 +71,12 @@ public class JwtProvider {
                 .build();
     }
 
-    public String getTokenFromRequest(HttpServletRequest req){
-        return req
-                .getHeader("Authorization")
-                .substring(7);
+    public String getAccessTokenFromRequest(HttpServletRequest req){
+        return CookieUtils.getValueFromCookie(req, "access-token");
+    }
+
+    public String getRefreshTokenFromRequest(HttpServletRequest req){
+        return CookieUtils.getValueFromCookie(req, "refresh-token");
     }
 
     public boolean validateAccessToken(String accessToken){
