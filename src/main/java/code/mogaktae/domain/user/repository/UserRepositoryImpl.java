@@ -25,6 +25,15 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     }
 
     @Override
+    public Long findUserIdByNickname(String nickname){
+        return jpaQueryFactory
+                .select(user.id)
+                .from(user)
+                .where(user.nickname.eq(nickname))
+                .fetchOne();
+    }
+
+    @Override
     public Optional<String> findSolvedAcIdByNickname(String nickname){
         return Optional.ofNullable(jpaQueryFactory
                 .select(user.solvedAcId)

@@ -1,5 +1,6 @@
 package code.mogaktae.domain.alarm.service;
 
+import code.mogaktae.domain.alarm.dto.res.AlarmResponseDto;
 import code.mogaktae.domain.alarm.entity.Alarm;
 import code.mogaktae.domain.alarm.entity.AlarmType;
 import code.mogaktae.domain.alarm.repository.AlarmRepository;
@@ -19,6 +20,14 @@ public class AlarmService {
 
     private final UserRepository userRepository;
     private final AlarmRepository alarmRepository;
+
+    @Transactional(readOnly = true)
+    public AlarmResponseDto getAlarms(String nickname){
+
+        Long userId = userRepository.findUserIdByNickname(nickname);
+
+        return AlarmResponseDto.create(alarmRepository.findAllAlarmByUserId(userId));
+    }
 
     @Async
     @Transactional
