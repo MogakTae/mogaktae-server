@@ -1,8 +1,9 @@
 package code.mogaktae.global.security.jwt;
 
-import code.mogaktae.domain.user.dto.res.TokenResponse;
+import code.mogaktae.domain.user.dto.res.JwtResponse;
 import code.mogaktae.domain.user.entity.UserDetailsImpl;
 import code.mogaktae.domain.user.service.UserDetailsServiceImpl;
+import code.mogaktae.global.security.oauth.util.CookieUtils;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
@@ -40,7 +41,7 @@ public class JwtProvider {
         this.userDetailsService = userDetailsService;
     }
 
-    public TokenResponse generateToken(Authentication authentication){
+    public JwtResponse generateToken(Authentication authentication){
 
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -64,16 +65,18 @@ public class JwtProvider {
 
         log.info("generateToken() : 토큰 생성 완료");
 
-        return TokenResponse.builder()
+        return JwtResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
     }
 
-    public String getTokenFromRequest(HttpServletRequest req){
-        return req
-                .getHeader("Authorization")
-                .substring(7);
+    public String getAccessTokenFromRequest(HttpServletRequest request){
+        return CookieUtils.getValueFromCookie(request, "access-token");
+    }
+
+    public String getRefreshTokenFromRequest(HttpServletRequest request){
+        return CookieUtils.getValueFromCookie(request, "refresh-token");
     }
 
     public boolean validateAccessToken(String accessToken){

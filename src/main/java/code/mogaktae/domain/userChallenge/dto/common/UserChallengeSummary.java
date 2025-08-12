@@ -1,4 +1,4 @@
-package code.mogaktae.domain.challenge.dto.common;
+package code.mogaktae.domain.userChallenge.dto.common;
 
 import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;

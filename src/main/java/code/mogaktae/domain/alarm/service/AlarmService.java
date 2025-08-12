@@ -22,29 +22,24 @@ public class AlarmService {
 
     @Async
     @Transactional
-    public void sendChallengeJoinAlarm(String challengeName, String senderNickname, List<String> nicknames){
+    public void sendChallengeJoinAlarm(Long challengeId, String challengeName, String senderNickname, List<String> nicknames){
 
         List<Long> participantsIds = userRepository.findUserIdByNicknameIn(nicknames);
 
-        if(participantsIds.isEmpty()){
+        if(participantsIds.isEmpty())
             return;
-        }
 
-        participantsIds.forEach(userId -> {
-
-            Alarm alarm = Alarm.create(userId, AlarmType.JOIN, challengeName, senderNickname);
-
+        for(Long participantsId : participantsIds){
+            Alarm alarm = Alarm.create(participantsId, challengeId, AlarmType.JOIN, challengeName, senderNickname);
             alarmRepository.save(alarm);
-        });
-
-        log.info("{}개의 챌린지 참여 요청 알람 전송 성공", participantsIds.size());
+        }
     }
 
     @Async
     @Transactional
-    public void sendChallengeEndAlarm(Long userId, String challengeName){
+    public void sendChallengeEndAlarm(Long userId, Long challengeId, String challengeName){
 
-        Alarm alarm = Alarm.create(userId, AlarmType.END, challengeName, "");
+        Alarm alarm = Alarm.create(userId, challengeId, AlarmType.END, challengeName, "");
 
         alarmRepository.save(alarm);
     }

@@ -1,9 +1,9 @@
 package code.mogaktae.domain.user.service;
 
-import code.mogaktae.domain.challenge.dto.res.ChallengeInfoSummaryResponse;
+import code.mogaktae.domain.challenge.dto.common.ChallengeSummary;
 import code.mogaktae.domain.challenge.service.ChallengeService;
 import code.mogaktae.domain.common.client.SolvedAcClient;
-import code.mogaktae.domain.user.dto.res.UserInfoResponse;
+import code.mogaktae.domain.user.dto.res.MyPageResponse;
 import code.mogaktae.domain.user.entity.Tier;
 import code.mogaktae.domain.user.entity.User;
 import code.mogaktae.domain.user.entity.UserDocument;
@@ -14,7 +14,6 @@ import code.mogaktae.global.exception.error.CustomErrorCode;
 import code.mogaktae.global.security.oauth.domain.common.OAuth2UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,18 +32,18 @@ public class UserService {
     private final UserDocumentRepository userDocumentRepository;
 
     @Transactional(readOnly = true)
-    public UserInfoResponse getMyPageInfo(OAuth2UserDetailsImpl authUser){
+    public MyPageResponse getMyPage(OAuth2UserDetailsImpl authUser){
         User user = userRepository.findByNickname(authUser.getUsername())
                 .orElseThrow(() -> new RestApiException(CustomErrorCode.USER_NOT_FOUND));
 
-        List<ChallengeInfoSummaryResponse> completedChallenges = challengeService.getMyCompletedChallenges(user.getId());
-        List<ChallengeInfoSummaryResponse> inProgressChallenges = challengeService.getMyInProgressChallenges(user.getId());
+        List<ChallengeSummary> completedChallenges = challengeService.getMyCompletedChallenges(user.getId());
+        List<ChallengeSummary> inProgressChallenges = challengeService.getMyInProgressChallenges(user.getId());
 
-        Tier tier = solvedAcClient.getBaekJoonTier(user.getSolvedAcId());
+        Tier tier = solvedAcClient.getTier(user.getSolvedAcId());
 
         log.info("사용자 정보 조회 완료, userId = {}", user.getId());
 
-        return UserInfoResponse.of(user.getProfileImageUrl(), user.getNickname(),tier,inProgressChallenges,completedChallenges);
+        return MyPageResponse.of(user.getProfileImageUrl(), user.getNickname(),tier,inProgressChallenges,completedChallenges);
     }
 
     public List<UserDocument> searchUsers(String nickname){

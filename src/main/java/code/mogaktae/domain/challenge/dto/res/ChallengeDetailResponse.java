@@ -1,6 +1,6 @@
 package code.mogaktae.domain.challenge.dto.res;
 
-import code.mogaktae.domain.challenge.dto.common.UserChallengeSummary;
+import code.mogaktae.domain.userChallenge.dto.common.UserChallengeSummary;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
@@ -8,7 +8,7 @@ import java.util.List;
 
 @Builder
 @Schema(description = "챌린지 상세 정보 Response")
-public record ChallengeInfoResponse(
+public record ChallengeDetailResponse(
 
     @Schema(description = "챌린지명", example = "알고리즘 스터디")
     String challengeName,
@@ -31,9 +31,9 @@ public record ChallengeInfoResponse(
     @Schema(description = "각 유저에 대한 챌린지 참여 정보")
     List<UserChallengeSummary> userChallengeSummaries
 ){
-    public static ChallengeInfoResponse create(String challengeName, String startDate, String endDate, Long totalPenalty,
-                                               int totalUsers, Long todaySolvedUsers, List<UserChallengeSummary> userChallengeSummaries){
-        return ChallengeInfoResponse.builder()
+    public static ChallengeDetailResponse create(String challengeName, String startDate, String endDate, Long totalPenalty,
+                                                 int totalUsers, Long todaySolvedUsers, List<UserChallengeSummary> userChallengeSummaries){
+        return ChallengeDetailResponse.builder()
                 .challengeName(challengeName)
                 .startDate(startDate)
                 .endDate(endDate)

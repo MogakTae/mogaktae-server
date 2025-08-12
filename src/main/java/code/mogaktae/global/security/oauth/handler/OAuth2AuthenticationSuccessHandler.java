@@ -1,6 +1,7 @@
 package code.mogaktae.global.security.oauth.handler;
 
-import code.mogaktae.domain.user.dto.res.TokenResponse;
+import code.mogaktae.domain.user.dto.res.JwtResponse;
+import code.mogaktae.global.security.jwt.JwtProvider;
 import code.mogaktae.global.security.oauth.domain.common.OAuth2UserDetailsImpl;
 import code.mogaktae.global.security.oauth.util.CookieUtils;
 import code.mogaktae.global.security.oauth.util.CustomOAuth2UserService;
@@ -10,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -26,6 +28,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final CustomOAuth2UserService oAuth2UserService;
 
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+    private final JwtProvider jwtProvider;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -44,10 +47,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         String targetUrl = redirectUrl.orElse(getDefaultTargetUrl());
 
-        String mode = CookieUtils.getCookie(request, HttpCookieOAuth2AuthorizationRequestRepository.MODE_PARAM)
-                .map(Cookie::getValue)
-                .orElse("");
-
         OAuth2UserDetailsImpl userDetails = getOAuth2UserDetails(authentication);
 
         if (userDetails == null)
@@ -56,32 +55,27 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                     .build()
                     .toUriString();
 
-        if ("login".equalsIgnoreCase(mode)){
-            log.info("Github oAuth2.0 인증 성공 user = {}", userDetails.getUsername());
-            if (Boolean.FALSE.equals(oAuth2UserService.checkUserPresent(userDetails.getUsername()))){
-                log.info("서비스 회원 아님. 회원가입 페이지로 리다이랙트");
-                return UriComponentsBuilder.fromUriString(targetUrl)
-                        .path("/signup")
-                        .queryParam("nickname", userDetails.getName())
-                        .queryParam("profileImageUrl", userDetails.getUserInfo().getProfileImageUrl())
-                        .build()
-                        .toUriString();
-            }else{
-                log.info("서비스 회원 인증 완료. 페인 페이지로 리다이랙트");
-                TokenResponse tokenResponse = oAuth2UserService.oAuth2Login(authentication);
-                return UriComponentsBuilder.fromUriString(targetUrl)
-                        .path("/main")
-                        .queryParam("accessToken", tokenResponse.accessToken())
-                        .queryParam("refreshToken", tokenResponse.refreshToken())
-                        .build()
-                        .toUriString();
-            }
-        }
+        if(Boolean.TRUE.equals(oAuth2UserService.checkUserPresent(userDetails.getName()))){
+            // 회원인 경우
+            JwtResponse jwtResponse = jwtProvider.generateToken(authentication);
 
-        return UriComponentsBuilder.fromUriString(targetUrl)
-                .queryParam("error", "UNEXPECTED_LOGIN_ERROR")
-                .build()
-                .toUriString();
+            response.addHeader(HttpHeaders.SET_COOKIE, CookieUtils.createCookie("access-token", jwtResponse.accessToken(), jwtResponse.maxAge()).toString());
+            response.addHeader(HttpHeaders.SET_COOKIE, CookieUtils.createCookie("refresh-token", jwtResponse.refreshToken(), jwtResponse.maxAge()).toString());
+
+            return UriComponentsBuilder.fromUriString(targetUrl)
+                    .path("/")
+                    .build()
+                    .toUriString();
+
+        }else{
+            // 회원이 아닌 경우
+            return UriComponentsBuilder.fromUriString(targetUrl)
+                    .path("/sign-up")
+                    .queryParam("nickname", userDetails.getName())
+                    .queryParam("profile-image-url", userDetails.getUserInfo().getProfileImageUrl())
+                    .build()
+                    .toUriString();
+        }
     }
 
     private OAuth2UserDetailsImpl getOAuth2UserDetails(Authentication authentication){

@@ -22,7 +22,7 @@ public class SolvedAcClient {
         this.restTemplate = restTemplate;
     }
 
-    public Tier getBaekJoonTier(String solvedAcId){
+    public Tier getTier(String solvedAcId){
 
         String endPoint = UriComponentsBuilder.fromUriString("/user/show")
                 .queryParam("handle", solvedAcId)
@@ -42,7 +42,7 @@ public class SolvedAcClient {
         return SolvedAcUtils.getTierFromResponse(response);
     }
 
-    public List<Map<String, Object>> getUserSolvedProblem(String solvedAcId){
+    public List<Map<String, Object>> getSolvedProblem(String solvedAcId){
 
         String endPoint = UriComponentsBuilder.fromUriString("/user/top_100")
                 .queryParam("handle", solvedAcId)

@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
         BindingResult result = e.getBindingResult();
         List<String> errorMessages = new ArrayList<>();
 
-//        log.error("@Valid Exception occur with below parameter");
+        log.error("@Valid Exception occur with below parameter");
         for (FieldError error : result.getFieldErrors()) {
             String errorMessage = "[ " + error.getField() + " ]" +
                     "[ " + error.getDefaultMessage() + " ]" +
@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
             errorMessages.add(errorMessage);
         }
 
-//        Sentry.captureException(e);
+        Sentry.captureException(e);
         return handleExceptionInternal(errorMessages);
     }
 
