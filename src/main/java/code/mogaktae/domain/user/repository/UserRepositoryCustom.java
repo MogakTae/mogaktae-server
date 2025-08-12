@@ -5,5 +5,6 @@ import java.util.Optional;
 
 public interface UserRepositoryCustom {
     List<Long> findUserIdByNicknameIn(List<String> nicknames);
+    Long findUserIdByNickname(String nickname);
     Optional<String> findSolvedAcIdByNickname(String nickname);
 }
