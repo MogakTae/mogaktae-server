@@ -8,7 +8,6 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,7 +21,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Component
 public class JwtProvider {
 
@@ -62,8 +60,6 @@ public class JwtProvider {
                 .setExpiration(new Date((now.getTime() + refreshTokenExpiredTime)))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
-
-        log.info("generateToken() : 토큰 생성 완료");
 
         return JwtResponse.builder()
                 .accessToken(accessToken)

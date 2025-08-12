@@ -7,14 +7,12 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-@Log4j2
 @Component
 public class JwtExceptionFilter extends OncePerRequestFilter {
 
@@ -24,7 +22,6 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
         try{
             filterChain.doFilter(request, response);
         }catch (JwtException e){
-            log.error("유효하지 않은 Jwt {}", e.getMessage());
             setErrorResponse(response, e);
         }
     }

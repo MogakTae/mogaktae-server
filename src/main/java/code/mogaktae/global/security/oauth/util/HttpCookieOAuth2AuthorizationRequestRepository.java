@@ -26,9 +26,9 @@ public class HttpCookieOAuth2AuthorizationRequestRepository implements Authoriza
     }
 
     @Override
-    public void saveAuthorizationRequest(OAuth2AuthorizationRequest authReq, HttpServletRequest request, HttpServletResponse response){
+    public void saveAuthorizationRequest(OAuth2AuthorizationRequest authorizationRequest, HttpServletRequest request, HttpServletResponse response){
 
-        if(authReq == null){
+        if(authorizationRequest == null){
             CookieUtils.deleteCookie(request, response, OAUTH2_AUTHORIZATION_REQUEST);
             CookieUtils.deleteCookie(request, response, REDIRECT_URI_PARAM);
             CookieUtils.deleteCookie(request, response, MODE_PARAM);
@@ -36,7 +36,7 @@ public class HttpCookieOAuth2AuthorizationRequestRepository implements Authoriza
             return;
         }
 
-        CookieUtils.setCookie(response, OAUTH2_AUTHORIZATION_REQUEST, CookieUtils.serialize(authReq), COOKIE_EXPIRED_TIME);
+        CookieUtils.setCookie(response, OAUTH2_AUTHORIZATION_REQUEST, CookieUtils.serialize(authorizationRequest), COOKIE_EXPIRED_TIME);
 
         String redirectUriAfterLogin = request.getParameter(REDIRECT_URI_PARAM);
         if(StringUtils.hasText(redirectUriAfterLogin))
@@ -49,7 +49,7 @@ public class HttpCookieOAuth2AuthorizationRequestRepository implements Authoriza
     }
 
     @Override
-    public OAuth2AuthorizationRequest removeAuthorizationRequest(HttpServletRequest request, HttpServletResponse res){
+    public OAuth2AuthorizationRequest removeAuthorizationRequest(HttpServletRequest request, HttpServletResponse response){
         return this.loadAuthorizationRequest(request);
     }
 
