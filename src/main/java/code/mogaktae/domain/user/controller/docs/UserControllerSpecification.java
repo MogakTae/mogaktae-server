@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@Tag(name = "UserControllerSpecification", description = "유저 관련 API")
+@Tag(name = "UserController", description = "유저 API")
 public interface UserControllerSpecification {
     @Operation(summary = "마이페이지 정보 조회", description = "사용자의 마이페이지 정보를 조회합니다<br>" +
             "🔐 <strong>Jwt 필요</strong><br>")
@@ -31,7 +31,7 @@ public interface UserControllerSpecification {
                             examples = {
                                     @ExampleObject(
                                             name = "유저 조회 실패",
-                                            value = "{\\\"error\\\" : \\\"USER_4041\\\", \\\"message\\\" : \\\"유저 조회 실패\\\"}"
+                                            value = "{\"error\" : \"USER_4041\", \"message\" : \"유저 조회 실패\"}"
                                     )
                             },
                             schema = @Schema(implementation = ErrorResponse.class))),
@@ -40,7 +40,7 @@ public interface UserControllerSpecification {
                             examples = {
                                     @ExampleObject(
                                             name = "외부 API 요청 실패",
-                                            value = "{\\\"error\\\" : \\\"API_5031\\\", \\\"message\\\" : \\\"외부 API 요청 실패\\\"}"
+                                            value = "{\"error\" : \"API_5031\", \"message\" : \"외부 API 요청 실패\"}"
                                     )
                             },
                             schema = @Schema(implementation = ErrorResponse.class)))

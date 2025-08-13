@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@Tag(name = "AuthControllerSpecification", description = "인증 관련 API")
+@Tag(name = "AuthController", description = "인증 API")
 public interface AuthControllerSpecification {
     @Operation(summary = "회원가입", description = "새로운 사용자를 등록합니다<br>" +
             "🔐 <strong>Jwt 불필요</strong><br>")
@@ -27,7 +27,7 @@ public interface AuthControllerSpecification {
                             examples = {
                                     @ExampleObject(
                                             name = "유효성 검사 실패",
-                                            value = "{\\\"error\\\" : \\\"VALID_4001\\\", \\\"message\\\" : \\\"유효성 검사 실패\\\"}"
+                                            value = "{\"error\" : \"VALID_4001\", \"message\" : \"유효성 검사 실패\"}"
                                     )
                             },
                             schema = @Schema(implementation = ErrorResponse.class))),
@@ -36,7 +36,7 @@ public interface AuthControllerSpecification {
                             examples = {
                                     @ExampleObject(
                                             name = "중복되는 닉네임",
-                                            value = "{\\\"error\\\" : \\\"USER_4001\\\", \\\"message\\\" : \\\"중복되는 닉네임\\\"}"
+                                            value = "{\"error\" : \"USER_4001\", \"message\" : \"중복되는 닉네임\"}"
                                     )
                             },
                             schema = @Schema(implementation = ErrorResponse.class)))
