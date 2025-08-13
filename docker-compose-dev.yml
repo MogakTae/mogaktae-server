@@ -1,0 +1,62 @@
+services:
+  spring:
+    container_name: mogaktae-server
+    image: ahh0520/mogaktae-server:latest
+    ports:
+      - "8070:8080"
+    depends_on:
+      js-elastic-search:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    environment:
+      - TZ=Asia/Seoul
+    networks:
+      - js-bridge
+    restart: unless-stopped
+
+  js-elastic-search:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.5.3
+    container_name: js-elastic-search
+    environment:
+      - node.name=js-node
+      - cluster.name=js-cluster
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    ports:
+      - 9200:9200
+      - 9300:9300
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    networks:
+      - js-bridge
+
+  js-kibana:
+    container_name: js-kibana
+    image: docker.elastic.co/kibana/kibana:8.5.3
+    environment:
+      SERVER_NAME: kibana
+      ELASTICSEARCH_HOSTS: http://js-elastic-search:9200
+    ports:
+      - 5601:5601
+    depends_on:
+      - js-elastic-search
+    networks:
+      - js-bridge
+
+  redis:
+    image: redis:latest
+    container_name: mogaktae-redis
+    command: redis-server --requirepass 0520
+    ports:
+      - 6384:6379
+    networks:
+      - js-bridge
+
+networks:
+  js-bridge:
+    driver: bridge
