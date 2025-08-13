@@ -7,6 +7,4 @@ public interface UserChallengeRepository extends JpaRepository<UserChallenge, Lo
 
     Boolean existsByUserIdAndChallengeId(Long userId, Long challengeId);
 
-    boolean existsByRepositoryUrl(String repositoryUrl);
-
 }

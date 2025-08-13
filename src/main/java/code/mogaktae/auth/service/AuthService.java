@@ -1,7 +1,7 @@
-package code.mogaktae.domain.user.service;
+package code.mogaktae.auth.service;
 
+import code.mogaktae.auth.dto.req.SignUpRequest;
 import code.mogaktae.domain.common.client.GithubClient;
-import code.mogaktae.domain.user.dto.req.SignUpRequest;
 import code.mogaktae.domain.user.entity.User;
 import code.mogaktae.domain.user.repository.UserRepository;
 import code.mogaktae.domain.userChallenge.repository.UserChallengeRepository;
@@ -10,8 +10,6 @@ import code.mogaktae.global.exception.error.CustomErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -34,15 +32,5 @@ public class AuthService {
         userRepository.save(user);
 
         return user.getNickname();
-    }
-
-    public Boolean checkRepositoryUrlAvailable(String nickname, String repositoryUrl){
-
-        List<String> userRepositoryUrls = githubClient.getRepositoryUrls(nickname);
-
-        if(userChallengeRepository.existsByRepositoryUrl(repositoryUrl))
-            throw new RestApiException(CustomErrorCode.REPOSITORY_URL_DUPLICATE);
-
-        return userRepositoryUrls.contains(repositoryUrl);
     }
 }

@@ -1,6 +1,6 @@
 package code.mogaktae.domain.user.entity;
 
-import code.mogaktae.domain.user.dto.req.SignUpRequest;
+import code.mogaktae.auth.dto.req.SignUpRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

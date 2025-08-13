@@ -1,7 +1,7 @@
-package code.mogaktae.domain.user.controller.docs;
+package code.mogaktae.auth.controller.docs;
 
 import code.mogaktae.domain.common.dto.ResponseDto;
-import code.mogaktae.domain.user.dto.req.SignUpRequest;
+import code.mogaktae.auth.dto.req.SignUpRequest;
 import code.mogaktae.global.exception.error.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

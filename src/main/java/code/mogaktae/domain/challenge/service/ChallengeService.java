@@ -198,5 +198,7 @@ public class ChallengeService {
 
             personalResultsWithTier.forEach(personalResult -> alarmService.sendChallengeEndAlarm(personalResult.userId(), endChallenge.challengeId(), endChallenge.challengeName()));
         });
+
+        // 해당 챌린지 아이디를 가진 UserChallenge의 isEnd state를 true로 변경
     }
 }

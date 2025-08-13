@@ -1,4 +1,4 @@
-package code.mogaktae.domain.user.dto.res;
+package code.mogaktae.auth.dto.res;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;

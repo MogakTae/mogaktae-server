@@ -21,4 +21,6 @@ public interface UserChallengeRepositoryCustom {
     Optional<UserChallenge> findByUserNicknameAndRepositoryUrl(String nickname, String repositoryUrl);
 
     List<UserChallenge> findAllByIsCompleted();
+
+    Boolean existsByRepositoryUrl(String repositoryUrl);
 }

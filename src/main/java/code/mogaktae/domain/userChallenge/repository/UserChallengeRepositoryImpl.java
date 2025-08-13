@@ -115,4 +115,15 @@ public class UserChallengeRepositoryImpl implements UserChallengeRepositoryCusto
                 .where(userChallenge.isCompleted.eq(false))
                 .fetch();
     }
+
+    @Override
+    public Boolean existsByRepositoryUrl(String repositoryUrl){
+        Integer fetchOne = jpaQueryFactory
+                .selectOne()
+                .from(userChallenge)
+                .where(userChallenge.repositoryUrl.eq(repositoryUrl))
+                .fetchOne();
+
+        return fetchOne != null;
+    }
 }
