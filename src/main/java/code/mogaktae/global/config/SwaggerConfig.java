@@ -31,7 +31,7 @@ public class SwaggerConfig {
                 .info(new Info()
                         .title("MogakTae API Docs")
                         .description("GitHub 커밋 로그 추적 기반 챌린지 자동 관리 서비스 MogakTae's API Docs")
-                        .version("v1")
+                        .version("1.1.1")
                 )
                 .servers(List.of(server))
                 .addSecurityItem(securityRequirement)
