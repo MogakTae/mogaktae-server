@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@Tag(name = "ChallengeController", description = "알림 API")
+@Tag(name = "AlarmController", description = "알림 API")
 public interface AlarmControllerSpecification {
 
     @Operation(summary = "알림 목록 조회", description = "사용자의 모든 알림 목록을 조회합니다<br>" +
