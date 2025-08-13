@@ -1,7 +1,7 @@
 package code.mogaktae.domain.git.service;
 
 import code.mogaktae.domain.common.client.GithubClient;
-import code.mogaktae.domain.userChallenge.repository.UserChallengeRepository;
+import code.mogaktae.domain.userChallenge.entity.UserChallengeRepository;
 import code.mogaktae.global.exception.entity.RestApiException;
 import code.mogaktae.global.exception.error.CustomErrorCode;
 import lombok.RequiredArgsConstructor;

@@ -7,6 +7,7 @@ import code.mogaktae.domain.challenge.dto.common.QChallengeSummary;
 import code.mogaktae.domain.userChallenge.dto.common.QUserChallengeSummary;
 import code.mogaktae.domain.userChallenge.dto.common.UserChallengeSummary;
 import code.mogaktae.domain.userChallenge.entity.UserChallenge;
+import code.mogaktae.domain.userChallenge.entity.UserChallengeRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -20,10 +21,18 @@ import static code.mogaktae.domain.userChallenge.entity.QUserChallenge.userChall
 
 @Repository
 @RequiredArgsConstructor
-public class UserChallengeRepositoryImpl implements UserChallengeRepositoryCustom {
+public class UserChallengeRepositoryImpl implements UserChallengeRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
+    private final UserChallengeJpaRepository userChallengeJpaRepository;
 
+    //JPA
+    @Override
+    public Boolean existsByUserIdAndChallengeId(Long userId, Long challengeId) {
+        return userChallengeJpaRepository.existsByUserIdAndChallengeId(userId, challengeId);
+    }
+
+    //QueryDsl
     @Override
     public List<ChallengePersonalResult> findPersonalResultByChallengeId(Long challengeId){
         return jpaQueryFactory
@@ -48,7 +57,7 @@ public class UserChallengeRepositoryImpl implements UserChallengeRepositoryCusto
                 .from(userChallenge)
                 .where(
                         userChallenge.userId.eq(userId),
-                        userChallenge.isCompleted.isFalse()
+                        userChallenge.isEnd.isFalse()
                 )
                 .fetchOne();
 
@@ -56,7 +65,7 @@ public class UserChallengeRepositoryImpl implements UserChallengeRepositoryCusto
     }
 
     @Override
-    public List<ChallengeSummary> findChallengesByUserIdAndIsCompleted(Long userId, Boolean isCompleted){
+    public List<ChallengeSummary> findChallengesByUserIdAndIsCompleted(Long userId, Boolean isEnd){
         return jpaQueryFactory
                 .select(new QChallengeSummary(
                         challenge.id,
@@ -70,7 +79,7 @@ public class UserChallengeRepositoryImpl implements UserChallengeRepositoryCusto
                 .join(challenge).on(userChallenge.challengeId.eq(challenge.id))
                 .where(
                         userChallenge.userId.eq(userId),
-                        userChallenge.isCompleted.eq(isCompleted)
+                        userChallenge.isEnd.eq(isEnd)
                 )
                 .fetch();
     }
@@ -84,13 +93,13 @@ public class UserChallengeRepositoryImpl implements UserChallengeRepositoryCusto
                         user.nickname,
                         userChallenge.totalPenalty,
                         userChallenge.todaySolvedProblem,
-                        userChallenge.isCompleted
+                        userChallenge.isEnd
                 ))
                 .from(userChallenge)
                 .join(user).on(userChallenge.userId.eq(user.id))
                 .where(
                         userChallenge.challengeId.eq(challengeId),
-                        userChallenge.isCompleted.isFalse()
+                        userChallenge.isEnd.isFalse()
                 )
                 .fetch();
     }
@@ -103,7 +112,7 @@ public class UserChallengeRepositoryImpl implements UserChallengeRepositoryCusto
                 .where(
                         user.nickname.eq(nickname)
                                 .and(userChallenge.repositoryUrl.eq(repositoryUrl))
-                                .and(userChallenge.isCompleted.eq(false))
+                                .and(userChallenge.isEnd.isFalse())
                 )
                 .fetchOne());
     }
@@ -112,7 +121,7 @@ public class UserChallengeRepositoryImpl implements UserChallengeRepositoryCusto
     public List<UserChallenge> findAllByIsCompleted(){
         return jpaQueryFactory
                 .select(userChallenge)
-                .where(userChallenge.isCompleted.eq(false))
+                .where(userChallenge.isEnd.isTrue())
                 .fetch();
     }
 

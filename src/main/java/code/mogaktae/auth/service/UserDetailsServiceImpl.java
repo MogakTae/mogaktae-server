@@ -2,7 +2,7 @@ package code.mogaktae.auth.service;
 
 import code.mogaktae.domain.user.entity.User;
 import code.mogaktae.auth.domain.UserDetailsImpl;
-import code.mogaktae.domain.user.repository.UserRepository;
+import code.mogaktae.domain.user.entity.UserRepository;
 import code.mogaktae.global.exception.entity.RestApiException;
 import code.mogaktae.global.exception.error.CustomErrorCode;
 import lombok.RequiredArgsConstructor;

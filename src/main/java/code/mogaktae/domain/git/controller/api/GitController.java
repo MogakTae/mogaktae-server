@@ -20,8 +20,8 @@ public class GitController implements GitControllerSpecification {
 
     private final GitService gitService;
 
-    @PostMapping("/repository/validations")
-    public ResponseEntity<ResponseDto<Boolean>> checkRepositoryUrlAvailable(@Valid @RequestBody RepositoryUrlVerifyRequest request){
+    @PostMapping("/repository-url/validations")
+    public ResponseEntity<ResponseDto<Boolean>> checkRepositoryUrlAvailable(@Valid@RequestBody RepositoryUrlVerifyRequest request){
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(gitService.checkRepositoryUrlAvailable(request.nickname(), request.repositoryUrl()), "레포지토리 URL 검사 완료"));
     }
 }
