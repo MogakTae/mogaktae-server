@@ -12,7 +12,6 @@ import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Log4j2
 @Component
@@ -38,7 +37,7 @@ public class UserChallengeEventHandler {
 
         List<Long> endChallengeIds = endChallengeIdNames.stream()
                 .map(EndChallengeIdName::challengeId)
-                .collect(Collectors.toList());
+                .toList();
 
         userChallengeRepository.updateUserChallengeEndStatus(endChallengeIds);
     }
