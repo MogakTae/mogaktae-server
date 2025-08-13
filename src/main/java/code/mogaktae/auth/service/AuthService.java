@@ -6,9 +6,11 @@ import code.mogaktae.domain.user.entity.UserRepository;
 import code.mogaktae.global.exception.entity.RestApiException;
 import code.mogaktae.global.exception.error.CustomErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -23,6 +25,10 @@ public class AuthService {
             throw new RestApiException(CustomErrorCode.USER_NICKNAME_DUPLICATED);
 
         // 유저를 생성하고 저장
-        return userRepository.save(User.signUp(request)).getNickname();
+        User user = userRepository.save(User.signUp(request));
+
+        log.info("Sign up successful for user {}", user.getNickname());
+
+        return user.getNickname();
     }
 }
