@@ -9,17 +9,14 @@ spring:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
         show_sql: true
+        generate_statistics: true
+        use_sql_comments: true
     open-in-view: false
-
-  jackson:
-    time-zone: Asia/Seoul
-    serialization:
-      fail-on-empty-beans: false
 
   data:
     elasticsearch:
@@ -50,6 +47,14 @@ logging:
   level:
     root: INFO
     org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.hibernate.type.descriptor.sql.BasicExtractor: TRACE
+    org.hibernate.engine.transaction: DEBUG
+    org.springframework.transaction: DEBUG
+    org.springframework.orm.jpa: DEBUG
+    org.springframework.jdbc.core: DEBUG
+    com.zaxxer.hikari: DEBUG
 
 sentry:
   dsn: "${SENTRY_DSN}"
