@@ -1,10 +1,10 @@
 package code.mogaktae.domain.challenge.infrastructure;
 
-import code.mogaktae.domain.challenge.dto.common.ChallengeIdName;
+import code.mogaktae.domain.challengeResult.dto.common.EndChallengeIdName;
 import code.mogaktae.domain.challenge.dto.common.ChallengeSummary;
-import code.mogaktae.domain.challenge.dto.common.QChallengeIdName;
 import code.mogaktae.domain.challenge.entity.Challenge;
 import code.mogaktae.domain.challenge.entity.ChallengeRepository;
+import code.mogaktae.domain.challengeResult.dto.common.QEndChallengeIdName;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -52,9 +52,9 @@ public class ChallengeRepositoryImpl implements ChallengeRepository {
 
     //QueryDsl
     @Override
-    public List<ChallengeIdName> findEndChallengeIdName(LocalDate date){
+    public List<EndChallengeIdName> findEndChallengeIdName(LocalDate date){
         return jpaQueryFactory
-                .select(new QChallengeIdName(
+                .select(new QEndChallengeIdName(
                         challenge.id,
                         challenge.name
                 ))

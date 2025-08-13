@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/git")
+@RequestMapping("/api/v2/git")
 public class GitController implements GitControllerSpecification {
 
     private final GitService gitService;

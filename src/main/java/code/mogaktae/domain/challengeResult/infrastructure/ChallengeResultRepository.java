@@ -1,5 +1,6 @@
-package code.mogaktae.domain.challenge.entity;
+package code.mogaktae.domain.challengeResult.infrastructure;
 
+import code.mogaktae.domain.challengeResult.entity.ChallengeResult;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;

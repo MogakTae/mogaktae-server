@@ -1,6 +1,6 @@
-package code.mogaktae.domain.challenge.entity;
+package code.mogaktae.domain.challengeResult.entity;
 
-import code.mogaktae.domain.challenge.dto.common.ChallengePersonalResult;
+import code.mogaktae.domain.challengeResult.dto.common.ChallengePersonalResult;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;

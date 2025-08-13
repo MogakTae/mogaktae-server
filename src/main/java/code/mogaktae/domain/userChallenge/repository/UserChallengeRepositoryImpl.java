@@ -1,15 +1,16 @@
 package code.mogaktae.domain.userChallenge.repository;
 
-import code.mogaktae.domain.challenge.dto.common.ChallengePersonalResult;
 import code.mogaktae.domain.challenge.dto.common.ChallengeSummary;
-import code.mogaktae.domain.challenge.dto.common.QChallengePersonalResult;
 import code.mogaktae.domain.challenge.dto.common.QChallengeSummary;
+import code.mogaktae.domain.challengeResult.dto.common.ChallengePersonalResult;
+import code.mogaktae.domain.challengeResult.dto.common.QChallengePersonalResult;
 import code.mogaktae.domain.userChallenge.dto.common.QUserChallengeSummary;
 import code.mogaktae.domain.userChallenge.dto.common.UserChallengeSummary;
 import code.mogaktae.domain.userChallenge.entity.UserChallenge;
 import code.mogaktae.domain.userChallenge.entity.UserChallengeRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -28,13 +29,23 @@ public class UserChallengeRepositoryImpl implements UserChallengeRepository {
 
     //JPA
     @Override
-    public Boolean existsByUserIdAndChallengeId(Long userId, Long challengeId) {
-        return userChallengeJpaRepository.existsByUserIdAndChallengeId(userId, challengeId);
+    public UserChallenge save(UserChallenge userChallenge) {
+        return userChallengeJpaRepository.save(userChallenge);
     }
 
     //QueryDsl
     @Override
-    public List<ChallengePersonalResult> findPersonalResultByChallengeId(Long challengeId){
+    @Modifying
+    public void updateUserChallengeEndStatus(List<Long> challengeIds){
+        jpaQueryFactory
+            .update(userChallenge)
+            .set(userChallenge.isEnd, true)
+            .where(userChallenge.id.in(challengeIds))
+            .execute();
+    }
+
+    @Override
+    public List<ChallengePersonalResult> findAllChallengePersonalResultByChallengeId(Long challengeId){
         return jpaQueryFactory
                 .select(new QChallengePersonalResult(
                         user.solvedAcId,
@@ -51,17 +62,16 @@ public class UserChallengeRepositoryImpl implements UserChallengeRepository {
     }
 
     @Override
-    public Long countUserChallenge(Long userId){
-        Long count = jpaQueryFactory
+    public Long countUserChallenge(String nickname){
+        return jpaQueryFactory
                 .select(userChallenge.count())
                 .from(userChallenge)
+                .join(user).on(userChallenge.userId.eq(user.id))
                 .where(
-                        userChallenge.userId.eq(userId),
+                        user.nickname.eq(nickname),
                         userChallenge.isEnd.isFalse()
                 )
                 .fetchOne();
-
-        return count != null ? count : Long.MAX_VALUE;
     }
 
     @Override
@@ -131,6 +141,20 @@ public class UserChallengeRepositoryImpl implements UserChallengeRepository {
                 .selectOne()
                 .from(userChallenge)
                 .where(userChallenge.repositoryUrl.eq(repositoryUrl))
+                .fetchOne();
+
+        return fetchOne != null;
+    }
+
+    @Override
+    public Boolean existsByUserNicknameAndChallengeId(String nickname, Long challengeId){
+        Integer fetchOne = jpaQueryFactory
+                .selectOne()
+                .from(userChallenge)
+                .join(user).on(userChallenge.userId.eq(user.id))
+                .where(
+                        user.nickname.eq(nickname)
+                )
                 .fetchOne();
 
         return fetchOne != null;

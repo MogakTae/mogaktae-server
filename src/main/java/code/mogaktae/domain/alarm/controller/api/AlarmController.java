@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/alarms")
+@RequestMapping("/api/v2/alarms")
 public class AlarmController implements AlarmControllerSpecification {
 
     private final AlarmService alarmService;

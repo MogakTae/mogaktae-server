@@ -1,16 +1,11 @@
 package code.mogaktae.domain.alarm.service;
 
 import code.mogaktae.domain.alarm.dto.res.AlarmResponseDto;
-import code.mogaktae.domain.alarm.entity.Alarm;
-import code.mogaktae.domain.alarm.entity.AlarmType;
 import code.mogaktae.domain.alarm.entity.AlarmRepository;
 import code.mogaktae.domain.user.entity.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,29 +20,5 @@ public class AlarmService {
         Long userId = userRepository.findUserIdByNickname(nickname);
 
         return AlarmResponseDto.create(alarmRepository.findAllAlarmByUserId(userId));
-    }
-
-    @Async
-    @Transactional
-    public void sendChallengeJoinAlarm(Long challengeId, String challengeName, String senderNickname, List<String> nicknames){
-
-        List<Long> participantsIds = userRepository.findUserIdByNicknameIn(nicknames);
-
-        if(participantsIds.isEmpty())
-            return;
-
-        for(Long participantsId : participantsIds){
-            Alarm alarm = Alarm.create(participantsId, challengeId, AlarmType.JOIN, challengeName, senderNickname);
-            alarmRepository.save(alarm);
-        }
-    }
-
-    @Async
-    @Transactional
-    public void sendChallengeEndAlarm(Long userId, Long challengeId, String challengeName){
-
-        Alarm alarm = Alarm.create(userId, challengeId, AlarmType.END, challengeName, "");
-
-        alarmRepository.save(alarm);
     }
 }

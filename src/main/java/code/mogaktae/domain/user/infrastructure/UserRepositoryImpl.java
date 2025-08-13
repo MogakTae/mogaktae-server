@@ -1,5 +1,6 @@
 package code.mogaktae.domain.user.infrastructure;
 
+import code.mogaktae.domain.user.dto.common.UserIdSolvedAcId;
 import code.mogaktae.domain.user.entity.User;
 import code.mogaktae.domain.user.entity.UserDocument;
 import code.mogaktae.domain.user.entity.UserRepository;
@@ -24,6 +25,11 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public Optional<User> findByNickname(String nickname) {
         return userJpaRepository.findByNickname(nickname);
+    }
+
+    @Override
+    public UserIdSolvedAcId findUserIdAndSolvedAcIdByNickname(String nickname) {
+        return userJpaRepository.findUserIdAndSolvedAcIdByNickname(nickname);
     }
 
     @Override

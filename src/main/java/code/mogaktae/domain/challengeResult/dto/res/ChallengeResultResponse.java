@@ -1,6 +1,6 @@
-package code.mogaktae.domain.challenge.dto.res;
+package code.mogaktae.domain.challengeResult.dto.res;
 
-import code.mogaktae.domain.challenge.dto.common.ChallengePersonalResult;
+import code.mogaktae.domain.challengeResult.dto.common.ChallengePersonalResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 

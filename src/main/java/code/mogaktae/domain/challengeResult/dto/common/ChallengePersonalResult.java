@@ -1,4 +1,4 @@
-package code.mogaktae.domain.challenge.dto.common;
+package code.mogaktae.domain.challengeResult.dto.common;
 
 import code.mogaktae.domain.user.entity.Tier;
 import com.querydsl.core.annotations.QueryProjection;
@@ -38,7 +38,7 @@ public record ChallengePersonalResult(
         this(solvedAcId, userId, profileImageUrl, nickname, startTier, null, totalPenalty, totalProblemSolved);
     }
 
-    public ChallengePersonalResult withEndTier(Tier endTier) {
+    public ChallengePersonalResult addEndTier(Tier endTier) {
         return new ChallengePersonalResult(this.solvedAcId, this.userId, this.profileImageUrl, this.nickname,
                 this.startTier, endTier, this.totalPenalty, this.totalProblemSolved);
     }

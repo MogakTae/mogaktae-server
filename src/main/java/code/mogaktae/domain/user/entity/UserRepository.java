@@ -1,5 +1,7 @@
 package code.mogaktae.domain.user.entity;
 
+import code.mogaktae.domain.user.dto.common.UserIdSolvedAcId;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -11,4 +13,5 @@ public interface UserRepository{
     Long findUserIdByNickname(String nickname);
     Optional<String> findSolvedAcIdByNickname(String nickname);
     List<UserDocument> findByKeyword(String keyword);
+    UserIdSolvedAcId findUserIdAndSolvedAcIdByNickname(String nickname);
 }

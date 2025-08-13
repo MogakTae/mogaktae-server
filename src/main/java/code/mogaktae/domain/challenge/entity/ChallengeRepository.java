@@ -1,6 +1,6 @@
 package code.mogaktae.domain.challenge.entity;
 
-import code.mogaktae.domain.challenge.dto.common.ChallengeIdName;
+import code.mogaktae.domain.challengeResult.dto.common.EndChallengeIdName;
 import code.mogaktae.domain.challenge.dto.common.ChallengeSummary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +13,7 @@ public interface ChallengeRepository{
     long count();
     Optional<Challenge> findById(Long id);
     Challenge save(Challenge challenge);
-    List<ChallengeIdName> findEndChallengeIdName(LocalDate date);
+    List<EndChallengeIdName> findEndChallengeIdName(LocalDate date);
     Page<ChallengeSummary> findByIdLessThanOrderByIdDesc(Long lastCursorId, Pageable pageable);
     Long findDailyProblemByChallengeId(Long challengeId);
 }
