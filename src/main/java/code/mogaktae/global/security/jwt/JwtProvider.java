@@ -1,8 +1,8 @@
 package code.mogaktae.global.security.jwt;
 
-import code.mogaktae.domain.user.dto.res.JwtResponse;
-import code.mogaktae.domain.user.entity.UserDetailsImpl;
-import code.mogaktae.domain.user.service.UserDetailsServiceImpl;
+import code.mogaktae.auth.dto.res.JwtResponse;
+import code.mogaktae.auth.domain.UserDetailsImpl;
+import code.mogaktae.auth.service.UserDetailsServiceImpl;
 import code.mogaktae.global.security.oauth.util.CookieUtils;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;

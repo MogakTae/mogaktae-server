@@ -19,18 +19,18 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/v2/users")
 public class UserController implements UserControllerSpecification {
 
     private final UserService userService;
 
     @GetMapping("/me")
     public ResponseEntity<ResponseDto<MyPageResponse>> getMyPage(@AuthenticationPrincipal OAuth2UserDetailsImpl user){
-        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(userService.getMyPage(user), "유저 정보 조회 성공"));
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(userService.getMyPage(user.getUsername()), "유저 정보 조회 성공"));
     }
 
     @GetMapping("/search")
-    public ResponseEntity<ResponseDto<List<UserDocument>>> searchUsers(@RequestParam("keyword") String nickname){
-        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(userService.searchUsers(nickname),"키워드와 일치하는 유저 조회 성공"));
+    public ResponseEntity<ResponseDto<List<UserDocument>>> searchUsers(@RequestParam("keyword") String keyword){
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(userService.searchUsers(keyword),"키워드와 일치하는 유저 조회 성공"));
     }
 }

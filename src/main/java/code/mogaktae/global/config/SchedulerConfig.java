@@ -1,6 +1,7 @@
 package code.mogaktae.global.config;
 
-import code.mogaktae.domain.challenge.service.ChallengeService;
+import code.mogaktae.domain.challengeResult.service.ChallengeResultService;
+import code.mogaktae.domain.userChallenge.service.UserChallengeService;
 import code.mogaktae.global.exception.handler.CustomSchedulerErrorHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -13,7 +14,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 @RequiredArgsConstructor
 public class SchedulerConfig {
 
-    private final ChallengeService challengeService;
+    private final ChallengeResultService challengeResultService;
+    private final UserChallengeService userChallengeService;
 
     @Bean
     public TaskScheduler taskScheduler() {
@@ -29,11 +31,11 @@ public class SchedulerConfig {
 
     @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
     public void resetUserChallengeCompletedStatus(){
-        challengeService.resetUserChallengeSolvedStatus();
+        userChallengeService.resetUserChallengeSolvedStatus();
     }
 
     @Scheduled(cron = "0 1 0 * * *")
     public void completeChallenge(){
-        challengeService.createChallengeResult();
+        challengeResultService.createChallengeResult();
     }
 }

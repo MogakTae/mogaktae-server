@@ -45,8 +45,11 @@ public class UserChallenge {
     @Column(name = "total_penalty", nullable = false)
     private Long totalPenalty;
 
-    @Column(name = "is_completed", nullable = false)
-    private Boolean isCompleted = false;
+    @Column(name = "today_solved", nullable = false)
+    private Boolean todaySolved = false;
+
+    @Column(name = "is_end", nullable = false)
+    private Boolean isEnd;
 
     @Builder
     private UserChallenge(Long userId, Long challengeId, String repositoryUrl, Tier tier) {
@@ -59,7 +62,8 @@ public class UserChallenge {
         this.totalPenalty = 0L;
         this.todaySolvedProblem = 0L;
         this.totalSolvedProblem = 0L;
-        this.isCompleted = false;
+        this.todaySolved = false;
+        this.isEnd = false;
     }
 
     public static UserChallenge create(Long userId, Long challengeId, String repositoryUrl, Tier tier) {
@@ -76,11 +80,11 @@ public class UserChallenge {
         this.todaySolvedProblem += 1;
 
         if(Objects.equals(dailyProblem, todaySolvedProblem))
-            this.isCompleted = true;
+            this.todaySolved = true;
     }
 
     public void resetSolveStatus(){
         this.todaySolvedProblem = 0L;
-        this.isCompleted = false;
+        this.todaySolved = false;
     }
 }

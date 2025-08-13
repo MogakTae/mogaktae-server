@@ -5,7 +5,7 @@ import code.mogaktae.domain.challenge.dto.req.ChallengeSummariesRequest;
 import code.mogaktae.domain.challenge.dto.req.ChallengeJoinRequest;
 import code.mogaktae.domain.challenge.dto.res.ChallengeDetailResponse;
 import code.mogaktae.domain.challenge.dto.res.ChallengeSummariesResponse;
-import code.mogaktae.domain.challenge.entity.ChallengeResult;
+import code.mogaktae.domain.challengeResult.entity.ChallengeResult;
 import code.mogaktae.domain.common.dto.ResponseDto;
 import code.mogaktae.global.exception.error.ErrorResponse;
 import code.mogaktae.global.security.oauth.domain.common.OAuth2UserDetailsImpl;

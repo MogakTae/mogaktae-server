@@ -1,6 +1,6 @@
 package code.mogaktae.domain.user.entity;
 
-import code.mogaktae.domain.user.dto.req.SignUpRequest;
+import code.mogaktae.auth.dto.req.SignUpRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -45,7 +45,7 @@ public class User {
         this.createdAt = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
     }
 
-    public static User create(SignUpRequest signUpRequest){
+    public static User signUp(SignUpRequest signUpRequest){
         return User.builder()
                 .nickname(signUpRequest.nickname())
                 .solvedAcId(signUpRequest.solvedAcId())

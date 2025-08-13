@@ -1,6 +1,6 @@
 package code.mogaktae.global.security.oauth.handler;
 
-import code.mogaktae.domain.user.dto.res.JwtResponse;
+import code.mogaktae.auth.dto.res.JwtResponse;
 import code.mogaktae.global.security.jwt.JwtProvider;
 import code.mogaktae.global.security.oauth.domain.common.OAuth2UserDetailsImpl;
 import code.mogaktae.global.security.oauth.util.CookieUtils;

@@ -6,7 +6,7 @@ import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfigurat
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 @Configuration
-@EnableElasticsearchRepositories(basePackages = "code.mogaktae.domain.user.repository")
+@EnableElasticsearchRepositories(basePackages = "code.mogaktae.domain.user.infrastructure")
 public class ElasticSearchConfig extends ElasticsearchConfiguration {
 
     @Override
