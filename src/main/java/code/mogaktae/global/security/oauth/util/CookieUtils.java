@@ -16,7 +16,7 @@ public class CookieUtils {
         return ResponseCookie.from(key, value)
                 .path("/")
                 .httpOnly(true)
-                .secure(true)
+                .secure(false)
                 .sameSite("None")
                 .maxAge(maxAge)
                 .domain("mogaktae.inuappcenter.kr")
