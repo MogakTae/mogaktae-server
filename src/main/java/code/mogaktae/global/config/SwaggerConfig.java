@@ -24,8 +24,13 @@ public class SwaggerConfig {
 
         SecurityRequirement securityRequirement = new SecurityRequirement().addList("BearerAuth");
 
-        Server server = new Server();
-        server.setUrl("https://mogaktae.inuappcenter.kr");
+        Server localServer = new Server();
+        localServer.setUrl("http://localhost:8080");
+        localServer.setDescription("Local Development Server");
+
+        Server prodServer = new Server();
+        prodServer.setUrl("https://mogaktae.inuappcenter.kr");
+        prodServer.setDescription("Production Server");
 
         return new OpenAPI()
                 .info(new Info()
@@ -33,7 +38,7 @@ public class SwaggerConfig {
                         .description("GitHub 커밋 로그 추적 기반 챌린지 자동 관리 서비스 MogakTae's API Docs")
                         .version("1.1.1")
                 )
-                .servers(List.of(server))
+                .servers(List.of(localServer, prodServer))
                 .addSecurityItem(securityRequirement)
                 .schemaRequirement("BearerAuth", securityScheme);
     }

@@ -10,6 +10,8 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -19,9 +21,16 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.IOException;
 import java.util.Optional;
 
+@Log4j2
 @Component
 @RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+
+    @Value("${spring.security.jwt.access-token.expired-time}")
+    private Long accessTokenExpiredTime;
+
+    @Value("${spring.security.jwt.refresh-token.expired-time}")
+    private Long refreshTokenExpiredTime;
 
     private final CustomOAuth2UserService oAuth2UserService;
 
@@ -57,11 +66,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             // 회원인 경우
             JwtResponse jwtResponse = jwtProvider.generateToken(authentication);
 
-            response.addHeader(HttpHeaders.SET_COOKIE, CookieUtils.createCookie("access-token", jwtResponse.accessToken(), jwtResponse.maxAge()).toString());
-            response.addHeader(HttpHeaders.SET_COOKIE, CookieUtils.createCookie("refresh-token", jwtResponse.refreshToken(), jwtResponse.maxAge()).toString());
+            response.addHeader(HttpHeaders.SET_COOKIE, CookieUtils.createCookie("access-token", jwtResponse.accessToken(), accessTokenExpiredTime / 1000).toString());
+            response.addHeader(HttpHeaders.SET_COOKIE, CookieUtils.createCookie("refresh-token", jwtResponse.refreshToken(), refreshTokenExpiredTime / 1000).toString());
 
             return UriComponentsBuilder.fromUriString(targetUrl)
-                    .path("/")
                     .build()
                     .toUriString();
 
