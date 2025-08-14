@@ -19,6 +19,7 @@ public class CookieUtils {
                 .secure(true)
                 .sameSite("None")
                 .maxAge(maxAge)
+                .domain("mogaktae.inuappcenter.kr")
                 .build();
     }
 
