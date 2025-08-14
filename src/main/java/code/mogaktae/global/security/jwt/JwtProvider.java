@@ -35,7 +35,6 @@ public class JwtProvider {
     public JwtProvider(@Value("${spring.security.jwt.secret}") String secret, UserDetailsServiceImpl userDetailsService){
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
         this.userDetailsService = userDetailsService;
-
     }
 
     public JwtResponse generateToken(Authentication authentication){

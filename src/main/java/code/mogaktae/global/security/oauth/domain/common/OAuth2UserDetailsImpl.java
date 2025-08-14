@@ -1,11 +1,11 @@
 package code.mogaktae.global.security.oauth.domain.common;
 
+import code.mogaktae.domain.user.entity.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 
 public class OAuth2UserDetailsImpl implements OAuth2User, UserDetails {
@@ -33,7 +33,7 @@ public class OAuth2UserDetailsImpl implements OAuth2User, UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList();
+        return Role.USER.getAuthorities();
     }
 
     @Override
