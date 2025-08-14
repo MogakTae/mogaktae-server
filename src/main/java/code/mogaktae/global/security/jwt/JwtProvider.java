@@ -24,11 +24,9 @@ import java.util.stream.Collectors;
 @Component
 public class JwtProvider {
 
-    @Value("${spring.security.jwt.access-token.expired-time}")
-    private Long accessTokenExpiredTime;
+    private static final Long ACCESS_TOKEN_EXPIRED_TIME = 21600000L;
 
-    @Value("${spring.security.jwt.refresh-token.expired-time}")
-    private Long refreshTokenExpiredTime;
+    private static final Long REFRESH_TOKEN_EXPIRED_TIME = 259200000L;
 
     private final Key key;
 
@@ -37,6 +35,7 @@ public class JwtProvider {
     public JwtProvider(@Value("${spring.security.jwt.secret}") String secret, UserDetailsServiceImpl userDetailsService){
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
         this.userDetailsService = userDetailsService;
+
     }
 
     public JwtResponse generateToken(Authentication authentication){
@@ -51,13 +50,13 @@ public class JwtProvider {
                 .setSubject(authentication.getName())
                 .claim("auth", authorities)
                 .setIssuedAt(now)
-                .setExpiration(new Date((now.getTime() + accessTokenExpiredTime)))
+                .setExpiration(new Date((now.getTime() + ACCESS_TOKEN_EXPIRED_TIME)))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
         String refreshToken = Jwts.builder()
                 .setIssuedAt(now)
-                .setExpiration(new Date((now.getTime() + refreshTokenExpiredTime)))
+                .setExpiration(new Date((now.getTime() + REFRESH_TOKEN_EXPIRED_TIME)))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 

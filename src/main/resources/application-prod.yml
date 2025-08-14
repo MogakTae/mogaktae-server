@@ -37,10 +37,6 @@ spring:
             client-secret: ${GIT_CLIENT_SECRET}
 
     jwt:
-      access-token:
-        expired-time: 21600000
-      refresh-token:
-        expired-time: 259200000
       secret: ${JWT_SECRET}
 
 logging:
