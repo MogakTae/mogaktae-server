@@ -38,23 +38,15 @@ spring:
 
     jwt:
       access-token:
-        expired-time: 10800000
+        expired-time: 21600000
       refresh-token:
-        expired-time: 432000000
+        expired-time: 259200000
       secret: ${JWT_SECRET}
 
 logging:
   level:
     root: INFO
     org.springframework.security: DEBUG
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-    org.hibernate.type.descriptor.sql.BasicExtractor: TRACE
-    org.hibernate.engine.transaction: DEBUG
-    org.springframework.transaction: DEBUG
-    org.springframework.orm.jpa: DEBUG
-    org.springframework.jdbc.core: DEBUG
-    com.zaxxer.hikari: DEBUG
 
 sentry:
   dsn: "${SENTRY_DSN}"
