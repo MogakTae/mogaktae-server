@@ -1,5 +1,6 @@
 package code.mogaktae.domain.challenge.controller.api;
 
+import code.mogaktae.auth.domain.UserDetailsImpl;
 import code.mogaktae.domain.challenge.controller.docs.ChallengeControllerSpecification;
 import code.mogaktae.domain.challenge.dto.req.ChallengeCreateRequest;
 import code.mogaktae.domain.challenge.dto.req.ChallengeJoinRequest;
@@ -9,7 +10,6 @@ import code.mogaktae.domain.challenge.dto.res.ChallengeSummariesResponse;
 import code.mogaktae.domain.challenge.facade.ChallengeFacade;
 import code.mogaktae.domain.challengeResult.entity.ChallengeResult;
 import code.mogaktae.domain.common.dto.ResponseDto;
-import code.mogaktae.global.security.oauth.domain.common.OAuth2UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,9 +29,9 @@ public class ChallengeController implements ChallengeControllerSpecification {
     private final ChallengeFacade challengeFacade;
 
     @PostMapping
-    public ResponseEntity<ResponseDto<Long>> createChallenge(@AuthenticationPrincipal OAuth2UserDetailsImpl user,
+    public ResponseEntity<ResponseDto<Long>> createChallenge(@AuthenticationPrincipal UserDetailsImpl user,
                                                              @Valid @RequestBody ChallengeCreateRequest request){
-        return ResponseEntity.status(HttpStatus.CREATED).body(ResponseDto.of(challengeFacade.createChallenge(user.getName(), request), "챌린지 생성 성공"));
+        return ResponseEntity.status(HttpStatus.CREATED).body(ResponseDto.of(challengeFacade.createChallenge(user.getUsername(), request), "챌린지 생성 성공"));
     }
 
     @GetMapping("/summaries")
@@ -40,21 +40,21 @@ public class ChallengeController implements ChallengeControllerSpecification {
     }
 
     @GetMapping("/details/{challengeId}")
-    public ResponseEntity<ResponseDto<ChallengeDetailResponse>> getChallengeDetail(@AuthenticationPrincipal OAuth2UserDetailsImpl user,
+    public ResponseEntity<ResponseDto<ChallengeDetailResponse>> getChallengeDetail(@AuthenticationPrincipal UserDetailsImpl user,
                                                                                    @PathVariable Long challengeId){
-        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(challengeFacade.getChallengesDetail(user.getName(), challengeId), "챌린지 상세 조회 완료"));
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(challengeFacade.getChallengesDetail(user.getUsername(), challengeId), "챌린지 상세 조회 완료"));
     }
 
     @PostMapping("/participants")
-    public ResponseEntity<ResponseDto<Long>> joinChallenge(@AuthenticationPrincipal OAuth2UserDetailsImpl user,
+    public ResponseEntity<ResponseDto<Long>> joinChallenge(@AuthenticationPrincipal UserDetailsImpl user,
                                                            @Valid @RequestBody ChallengeJoinRequest request){
-        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(challengeFacade.joinChallenge(user.getName(), request), "챌린지 참여 성공"));
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(challengeFacade.joinChallenge(user.getUsername(), request), "챌린지 참여 성공"));
     }
 
     @GetMapping("/results/{challengeId}")
-    public ResponseEntity<ResponseDto<ChallengeResult>> getChallengeResult(@AuthenticationPrincipal OAuth2UserDetailsImpl user,
+    public ResponseEntity<ResponseDto<ChallengeResult>> getChallengeResult(@AuthenticationPrincipal UserDetailsImpl user,
                                                                            @PathVariable Long challengeId){
-        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(challengeFacade.getChallengeResult(user.getName(), challengeId), "챌린지 결과 조회 성공"));
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(challengeFacade.getChallengeResult(user.getUsername(), challengeId), "챌린지 결과 조회 성공"));
     }
 
     @PostMapping("/webhooks/push")

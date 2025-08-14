@@ -7,6 +7,7 @@ import code.mogaktae.global.exception.error.ErrorResponse;
 import io.sentry.Sentry;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -24,7 +25,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RestApiException.class)
     public ResponseEntity<ErrorResponse<String>> handleRestApiException(HttpServletRequest request, RestApiException e){
 
-        log.error("[ {} ] 예외 발생 : {}", request.getRequestURI(), e.getErrorCode().toString());
+        log.error("[ {} ] 런타임 예외 발생 : {}", request.getRequestURI(), e.getErrorCode().toString());
 
         ErrorCode errorCode = e.getErrorCode();
 
@@ -33,12 +34,23 @@ public class GlobalExceptionHandler {
         return handleExceptionInternal(errorCode);
     }
 
+    @ExceptionHandler(DataAccessException.class)
+    public ResponseEntity<ErrorResponse<String>> handleDataAccessException(HttpServletRequest request, DataAccessException e){
+
+        log.error("[ {} ] 데이터베이스 예외 발생 : {}", request.getRequestURI(), CustomErrorCode.DATABASE_ERROR.toString());
+
+
+        Sentry.captureException(e);
+
+        return handleExceptionInternal(CustomErrorCode.DATABASE_ERROR);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse<List<String>>> handleValidException(HttpServletRequest request, MethodArgumentNotValidException e) {
         BindingResult result = e.getBindingResult();
         List<String> errorMessages = new ArrayList<>();
 
-        log.error("[ {} ] 예외 발생 : {}", request.getRequestURI(), CustomErrorCode.INVALID_PARAMS.toString());
+        log.error("[ {} ] 유효성 검사 예외 발생 : {}", request.getRequestURI(), CustomErrorCode.INVALID_PARAMS.toString());
 
         for (FieldError error : result.getFieldErrors()) {
             String errorMessage = "[ " + error.getField() + " ]" +

@@ -1,8 +1,8 @@
 package code.mogaktae.domain.alarm.controller.docs;
 
+import code.mogaktae.auth.domain.UserDetailsImpl;
 import code.mogaktae.domain.alarm.dto.res.AlarmResponseDto;
 import code.mogaktae.domain.common.dto.ResponseDto;
-import code.mogaktae.global.security.oauth.domain.common.OAuth2UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -20,5 +20,5 @@ public interface AlarmControllerSpecification {
             @ApiResponse(responseCode = "200", description = "✅ 알림 조회 성공")
     })
     @GetMapping
-    ResponseEntity<ResponseDto<AlarmResponseDto>> getAllAlarm(@AuthenticationPrincipal OAuth2UserDetailsImpl user);
+    ResponseEntity<ResponseDto<AlarmResponseDto>> getAllAlarm(@AuthenticationPrincipal UserDetailsImpl user);
 }

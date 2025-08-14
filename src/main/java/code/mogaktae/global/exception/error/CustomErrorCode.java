@@ -32,9 +32,9 @@ public enum CustomErrorCode implements ErrorCode {
     // Validation
     INVALID_PARAMS(HttpStatus.BAD_REQUEST, "VALID_4001", "유효성 검사 실패"),
 
-    // Unexpected
-    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "GLOBAL_500", "서버 내부 오류");
-
+    // Global
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "GLOBAL_500", "서버 내부 오류"),
+    DATABASE_ERROR(HttpStatus.NOT_ACCEPTABLE, "GLOBAL_406", "데이터베이스 작업 오류");
 
     private final HttpStatus httpStatus;
     private final String code;

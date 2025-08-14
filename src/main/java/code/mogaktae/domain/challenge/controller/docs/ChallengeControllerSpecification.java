@@ -1,14 +1,14 @@
 package code.mogaktae.domain.challenge.controller.docs;
 
+import code.mogaktae.auth.domain.UserDetailsImpl;
 import code.mogaktae.domain.challenge.dto.req.ChallengeCreateRequest;
-import code.mogaktae.domain.challenge.dto.req.ChallengeSummariesRequest;
 import code.mogaktae.domain.challenge.dto.req.ChallengeJoinRequest;
+import code.mogaktae.domain.challenge.dto.req.ChallengeSummariesRequest;
 import code.mogaktae.domain.challenge.dto.res.ChallengeDetailResponse;
 import code.mogaktae.domain.challenge.dto.res.ChallengeSummariesResponse;
 import code.mogaktae.domain.challengeResult.entity.ChallengeResult;
 import code.mogaktae.domain.common.dto.ResponseDto;
 import code.mogaktae.global.exception.error.ErrorResponse;
-import code.mogaktae.global.security.oauth.domain.common.OAuth2UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -20,7 +20,10 @@ import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Map;
 
@@ -73,7 +76,7 @@ public interface ChallengeControllerSpecification {
             )
     })
     @PostMapping
-    ResponseEntity<ResponseDto<Long>> createChallenge(@AuthenticationPrincipal OAuth2UserDetailsImpl user,
+    ResponseEntity<ResponseDto<Long>> createChallenge(@AuthenticationPrincipal UserDetailsImpl user,
                                                       @Valid @RequestBody ChallengeCreateRequest request);
 
     @Operation(summary = "챌린지 요약 조회", description = "메인 페이지용 챌린지 요약 정보를 조회합니다<br>" +
@@ -119,7 +122,7 @@ public interface ChallengeControllerSpecification {
             )
     })
     @GetMapping("/{challengeId}")
-    ResponseEntity<ResponseDto<ChallengeDetailResponse>> getChallengeDetail(@AuthenticationPrincipal OAuth2UserDetailsImpl user,
+    ResponseEntity<ResponseDto<ChallengeDetailResponse>> getChallengeDetail(@AuthenticationPrincipal UserDetailsImpl user,
                                                                             @PathVariable Long challengeId);
 
     @Operation(summary = "챌린지 참여", description = "기존 챌린지에 참여합니다<br>" +
@@ -165,7 +168,7 @@ public interface ChallengeControllerSpecification {
                             schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping("/participants")
-    ResponseEntity<ResponseDto<Long>> joinChallenge(@AuthenticationPrincipal OAuth2UserDetailsImpl user,
+    ResponseEntity<ResponseDto<Long>> joinChallenge(@AuthenticationPrincipal UserDetailsImpl user,
                                                     @Valid @RequestBody ChallengeJoinRequest request);
 
     @Operation(summary = "챌린지 결과 조회", description = "완료된 챌린지의 결과를 조회합니다<br>" +
@@ -201,7 +204,7 @@ public interface ChallengeControllerSpecification {
                             schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping("/results/{challengeId}")
-    ResponseEntity<ResponseDto<ChallengeResult>> getChallengeResult(@AuthenticationPrincipal OAuth2UserDetailsImpl user,
+    ResponseEntity<ResponseDto<ChallengeResult>> getChallengeResult(@AuthenticationPrincipal UserDetailsImpl user,
                                                                     @PathVariable Long challengeId);
 
     @Operation(summary = "깃허브 푸시 웹훅 처리", description = "깃허브에서 전송되는 푸시 이벤트를 처리합니다<br>" +
