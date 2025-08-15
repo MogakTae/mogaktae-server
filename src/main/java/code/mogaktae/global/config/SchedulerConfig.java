@@ -29,6 +29,7 @@ public class SchedulerConfig {
         return scheduler;
     }
 
+    // TODO 해당 스케줄러 실행 시, 락 설정 추가
     @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
     public void resetUserChallengeCompletedStatus(){
         userChallengeService.resetUserChallengeSolvedStatus();

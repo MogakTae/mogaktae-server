@@ -1,0 +1,24 @@
+{
+  "analysis": {
+    "tokenizer": {
+      "nickname_edge_ngram_tokenizer": {
+        "type": "edge_ngram",
+        "min_gram": 1,
+        "max_gram": 30,
+        "token_chars": ["letter", "digit", "punctuation"]
+      }
+    },
+    "analyzer": {
+      "nickname_index_analyzer": {
+        "type": "custom",
+        "tokenizer": "nickname_edge_ngram_tokenizer",
+        "filter": ["lowercase"]
+      },
+      "nickname_search_analyzer": {
+        "type": "custom",
+        "tokenizer": "keyword",
+        "filter": ["lowercase"]
+      }
+    }
+  }
+}

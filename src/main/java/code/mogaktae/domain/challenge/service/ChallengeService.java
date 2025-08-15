@@ -62,6 +62,7 @@ public class ChallengeService {
         // 유저 챌린지 생성
         publisher.publishEvent(new UserChallengeCreateRequest(userIdSolvedAcId.userId(), challenge.getId(), request.repositoryUrl(), tier));
 
+        // TODO 유저 아이디를 받는 방식으로 변경 ChallengeCreateRequest 수정
         // 알림 전송
         publisher.publishEvent(new ChallengeJoinAlarmCreateRequest(challenge.getId(), challenge.getName(), nickname, request.participants()));
 

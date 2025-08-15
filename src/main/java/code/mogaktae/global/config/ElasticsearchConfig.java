@@ -7,11 +7,12 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 
 @Configuration
 @EnableElasticsearchRepositories(basePackages = "code.mogaktae.domain.user.infrastructure")
-public class ElasticSearchConfig extends ElasticsearchConfiguration {
+public class ElasticsearchConfig extends ElasticsearchConfiguration {
 
     @Override
     public ClientConfiguration clientConfiguration(){
         return ClientConfiguration.builder()
+                //.connectedTo("localhost:9200")
                 .connectedTo("js-elastic-search:9200")
                 .build();
     }
