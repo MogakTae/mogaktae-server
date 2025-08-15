@@ -25,7 +25,7 @@ spring:
 
     redis:
       host: mogaktae-redis
-      port: 6384
+      port: 6379
       password: ${REDIS_PASSWORD}
 
   security:
