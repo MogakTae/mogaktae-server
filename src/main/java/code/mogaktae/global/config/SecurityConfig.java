@@ -5,6 +5,7 @@ import code.mogaktae.global.exception.handler.CustomAuthenticationEntryPoint;
 import code.mogaktae.global.security.jwt.JwtAuthenticationFilter;
 import code.mogaktae.global.security.jwt.JwtExceptionFilter;
 import code.mogaktae.global.security.jwt.JwtProvider;
+import code.mogaktae.global.security.jwt.JwtReissueFilter;
 import code.mogaktae.global.security.oauth.handler.OAuth2AuthenticationFailureHandler;
 import code.mogaktae.global.security.oauth.handler.OAuth2AuthenticationSuccessHandler;
 import code.mogaktae.global.security.oauth.util.CustomOAuth2UserService;
@@ -72,7 +73,8 @@ public class SecurityConfig {
                         .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new JwtExceptionFilter(), JwtAuthenticationFilter.class)
+                .addFilterBefore(new JwtReissueFilter(jwtProvider), JwtAuthenticationFilter.class)
+                .addFilterBefore(new JwtExceptionFilter(), JwtReissueFilter.class)
                 .build();
     }
 
