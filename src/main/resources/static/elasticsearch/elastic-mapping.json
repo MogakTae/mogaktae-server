@@ -1,0 +1,13 @@
+{
+  "properties": {
+    "nickname": {
+      "type": "text",
+      "analyzer": "nickname_index_analyzer",
+      "search_analyzer": "nickname_search_analyzer"
+    },
+    "profileImageUrl": {
+      "type": "keyword",
+      "index": false
+    }
+  }
+}

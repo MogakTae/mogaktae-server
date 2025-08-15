@@ -1,7 +1,6 @@
 package code.mogaktae.domain.user.service;
 
 import code.mogaktae.domain.challenge.dto.common.ChallengeSummary;
-import code.mogaktae.domain.challenge.service.ChallengeService;
 import code.mogaktae.domain.common.client.SolvedAcClient;
 import code.mogaktae.domain.user.dto.res.MyPageResponse;
 import code.mogaktae.domain.user.entity.Tier;
@@ -23,7 +22,6 @@ public class UserService {
 
     private final SolvedAcClient solvedAcClient;
 
-    private final ChallengeService challengeService;
     private final UserChallengeService userChallengeService;
 
     private final UserRepository userRepository;
