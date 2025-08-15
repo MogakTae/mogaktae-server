@@ -1,9 +1,9 @@
 package code.mogaktae.auth.controller.api;
 
-import code.mogaktae.domain.common.dto.ResponseDto;
 import code.mogaktae.auth.controller.docs.AuthControllerSpecification;
 import code.mogaktae.auth.dto.req.SignUpRequest;
 import code.mogaktae.auth.service.AuthService;
+import code.mogaktae.domain.common.dto.ResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

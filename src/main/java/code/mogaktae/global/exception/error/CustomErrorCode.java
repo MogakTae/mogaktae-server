@@ -29,6 +29,16 @@ public enum CustomErrorCode implements ErrorCode {
     REPOSITORY_URL_NOT_FOUND(HttpStatus.NOT_FOUND, "GIT_4041", "레포지토리 주소 조회 실패"),
     NOT_AVAILABLE_COMMIT_MESSAGE(HttpStatus.BAD_REQUEST, "GIT_4002", "커밋 메시지 형식 불일치"),
 
+    // JWT
+    JWT_REFRESH_TOKEN_NOT_FOUND(HttpStatus.UNAUTHORIZED, "JWT_4011", "사용자의 리프레시 토큰 조회 실패"),
+    JWT_REFRESH_TOKEN_MISMATCH(HttpStatus.UNAUTHORIZED, "JWT_4012", "일치하지 않는 리프레시 토큰"),
+    JWT_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "JWT_4013", "토큰이 만료되었습니다"),
+    JWT_TOKEN_MALFORMED(HttpStatus.BAD_REQUEST, "JWT_4001", "토큰의 형식이 옳바르지 않습니다"),
+    JWT_TOKEN_SIGNATURE_INVALID(HttpStatus.UNAUTHORIZED, "JWT_4014", "토큰의 서명이 옳바르지 않습니다"),
+    JWT_TOKEN_UNSUPPORTED(HttpStatus.BAD_REQUEST, "JWT_4002", "지원하지 않는 토큰 형식입니다"),
+    JWT_ACCESS_TOKEN_NULL(HttpStatus.UNAUTHORIZED, "JWT_4015", "액세스 토큰이 존재하지 않습니다"),
+    JWT_REFRESH_TOKEN_NULL(HttpStatus.UNAUTHORIZED, "JWT_4016", "리프레시 토큰이 존재하지 않습니다"),
+
     // Validation
     INVALID_PARAMS(HttpStatus.BAD_REQUEST, "VALID_4001", "유효성 검사 실패"),
 
