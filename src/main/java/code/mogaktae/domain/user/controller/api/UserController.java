@@ -33,4 +33,5 @@ public class UserController implements UserControllerSpecification {
     public ResponseEntity<ResponseDto<List<UserDocument>>> searchUsers(@RequestParam("keyword") String keyword){
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(userService.searchUsers(keyword),"키워드와 일치하는 유저 조회 성공"));
     }
+
 }
