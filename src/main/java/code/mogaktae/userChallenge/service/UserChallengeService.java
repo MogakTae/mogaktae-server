@@ -9,14 +9,13 @@ import code.mogaktae.common.util.GitHubUtils;
 import code.mogaktae.git.dto.common.GitCommitDetail;
 import code.mogaktae.global.exception.entity.RestApiException;
 import code.mogaktae.global.exception.error.CustomErrorCode;
-import code.mogaktae.user.dto.common.UserSolvedProblemIdsUpdateRequest;
+import code.mogaktae.user.entity.User;
 import code.mogaktae.user.entity.UserRepository;
 import code.mogaktae.userChallenge.dto.common.UserChallengeSummary;
 import code.mogaktae.userChallenge.entity.UserChallenge;
 import code.mogaktae.userChallenge.entity.UserChallengeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,8 +26,6 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class UserChallengeService {
-
-    private final ApplicationEventPublisher publisher;
 
     private final BaekjoonClient baekjoonClient;
 
@@ -74,16 +71,23 @@ public class UserChallengeService {
 
         String problemId = gitCommitDetail.problemId();
 
+        User user = userRepository.findByNickname(gitCommitDetail.pusher())
+                .orElseThrow(() -> new RestApiException(CustomErrorCode.USER_NOT_FOUND));
+
+        // 이미 푼 문제에 대해 다시 제출했다면,
+        if(user.getSolvedProblemIds().contains(problemId))
+            throw new RestApiException(CustomErrorCode.ALREADY_SOLVED_PROBLEM);
+
         if(baekjoonClient.verifySolvedProblem(solvedAcId, problemId)){
             Long dailyProblem = challengeRepository.findDailyProblemByChallengeId(userChallenge.getChallengeId());
 
             userChallenge.updateSolveStatus(dailyProblem);
 
-            publisher.publishEvent(new UserSolvedProblemIdsUpdateRequest(gitCommitDetail.pusher(), problemId));
+            user.addSolvedProblemId(problemId);
 
             return true;
         }else{
-            throw new RestApiException(CustomErrorCode.USER_NOT_SOLVE_TARGET_PROBLEM);
+            throw new RestApiException(CustomErrorCode.USER_NOT_SOLVE_PROBLEM);
         }
     }
 

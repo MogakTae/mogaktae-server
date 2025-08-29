@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-@Table(name = "users")
-//@Table(name = "user")
+@Table(name = "user")
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
