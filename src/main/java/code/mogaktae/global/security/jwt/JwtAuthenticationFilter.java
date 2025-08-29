@@ -26,6 +26,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             "/api/v2/users/search",
             "/api/v2/git/**",
             "/api/v2/challenges/info/summaries",
+            "/api/v2/challenges/commit",
             "/oauth2/authorization/**",
             "/login/oauth2/code/**"
     );

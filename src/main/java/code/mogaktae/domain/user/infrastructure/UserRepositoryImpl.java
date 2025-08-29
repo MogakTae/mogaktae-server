@@ -38,6 +38,11 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public Boolean existsBySolvedAcId(String solvedAcId) {
+        return userJpaRepository.existsBySolvedAcId(solvedAcId);
+    }
+
+    @Override
     public User save(User user){
         return userJpaRepository.save(user);
     }

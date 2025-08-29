@@ -8,6 +8,7 @@ import java.util.Optional;
 public interface UserRepository{
     Optional<User> findByNickname(String nickname);
     Boolean existsByNickname(String nickname);
+    Boolean existsBySolvedAcId(String solvedAcId);
     User save(User user);
     List<Long> findUserIdByNicknameIn(List<String> nicknames);
     Long findUserIdByNickname(String nickname);

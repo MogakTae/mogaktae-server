@@ -1,6 +1,7 @@
 package code.mogaktae.auth.service;
 
 import code.mogaktae.auth.dto.req.SignUpRequest;
+import code.mogaktae.domain.common.client.SolvedAcClient;
 import code.mogaktae.domain.user.dto.req.SaveUserDocumentRequest;
 import code.mogaktae.domain.user.entity.User;
 import code.mogaktae.domain.user.entity.UserRepository;
@@ -19,14 +20,19 @@ public class AuthService {
 
     private final ApplicationEventPublisher publisher;
 
+    private final SolvedAcClient solvedAcClient;
     private final UserRepository userRepository;
 
     @Transactional
     public String signUp(SignUpRequest request){
 
-        // 유저가 이미 존재하는지 확인
-        if (Boolean.TRUE.equals(userRepository.existsByNickname(request.nickname())))
+        if(userRepository.existsByNickname(request.nickname())) {
             throw new RestApiException(CustomErrorCode.USER_NICKNAME_DUPLICATED);
+        } else if (!solvedAcClient.verifySolvedAcId(request.solvedAcId())) {
+            throw new RestApiException(CustomErrorCode.USER_SOLVED_AC_ID_NOT_AVAILABLE);
+        } else if (userRepository.existsBySolvedAcId(request.solvedAcId())) {
+            throw new RestApiException(CustomErrorCode.USER_SOLVED_AC_ID_DUPLICATED);
+        }
 
         // 유저를 생성하고 저장
         User user = userRepository.save(User.signUp(request));

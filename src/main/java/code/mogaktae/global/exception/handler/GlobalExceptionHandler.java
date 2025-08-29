@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RestApiException.class)
     public ResponseEntity<ErrorResponse<String>> handleRestApiException(HttpServletRequest request, RestApiException e){
 
-        log.error("[ {} ] 런타임 예외 발생 : {}", request.getRequestURI(), e.getErrorCode().toString());
+        log.error("[ {} ] 런타임 예외 발생 : {}", request.getRequestURI(), e.getErrorCode().getMessage());
 
         ErrorCode errorCode = e.getErrorCode();
 
@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DataAccessException.class)
     public ResponseEntity<ErrorResponse<String>> handleDataAccessException(HttpServletRequest request, DataAccessException e){
 
-        log.error("[ {} ] 데이터베이스 예외 발생 : {}", request.getRequestURI(), CustomErrorCode.DATABASE_ERROR.toString());
+        log.error("[ {} ] 데이터베이스 예외 발생 : {}", request.getRequestURI(), CustomErrorCode.DATABASE_ERROR.getMessage());
 
 
         Sentry.captureException(e);
@@ -50,7 +50,7 @@ public class GlobalExceptionHandler {
         BindingResult result = e.getBindingResult();
         List<String> errorMessages = new ArrayList<>();
 
-        log.error("[ {} ] 유효성 검사 예외 발생 : {}", request.getRequestURI(), CustomErrorCode.INVALID_PARAMS.toString());
+        log.error("[ {} ] 유효성 검사 예외 발생 : {}", request.getRequestURI(), CustomErrorCode.INVALID_PARAMS.getMessage());
 
         for (FieldError error : result.getFieldErrors()) {
             String errorMessage = "[ " + error.getField() + " ]" +
@@ -66,7 +66,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse<String>> handleException(HttpServletRequest request, Exception e){
 
-        log.error("[ {} ] 예외 발생 : {}", request.getRequestURI(), CustomErrorCode.INTERNAL_SERVER_ERROR.toString());
+        log.error("[ {} ] 예외 발생 : {}", request.getRequestURI(), CustomErrorCode.INTERNAL_SERVER_ERROR.getMessage());
 
         Sentry.captureException(e);
 
@@ -84,16 +84,10 @@ public class GlobalExceptionHandler {
     }
 
     private ErrorResponse<String> makeErrorResponse(ErrorCode errorCode){
-        return ErrorResponse.<String>builder()
-                .error(errorCode.getCode())
-                .message(errorCode.getMessage())
-                .build();
+        return new ErrorResponse<>(errorCode.getCode(), errorCode.getMessage());
     }
 
     private ErrorResponse<List<String>> makeErrorResponse(List<String> message){
-        return ErrorResponse.<List<String>>builder()
-                .error(CustomErrorCode.INVALID_PARAMS.getCode())
-                .message(message)
-                .build();
+        return new ErrorResponse<>(CustomErrorCode.INVALID_PARAMS.getCode(), message);
     }
 }

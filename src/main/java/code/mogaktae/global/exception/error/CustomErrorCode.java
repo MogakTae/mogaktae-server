@@ -10,7 +10,9 @@ public enum CustomErrorCode implements ErrorCode {
 
     // User
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_4041", "유저 조회 실패"),
-    USER_NICKNAME_DUPLICATED(HttpStatus.BAD_REQUEST, "USER_4001", "중복되는 닉네임"),
+    USER_NICKNAME_DUPLICATED(HttpStatus.BAD_REQUEST, "USER_4001", "이미 존재하는 깃허브 아이디"),
+    USER_SOLVED_AC_ID_DUPLICATED(HttpStatus.BAD_REQUEST, "USER_4002", "이미 존재하는 백준 아이디"),
+    USER_SOLVED_AC_ID_NOT_AVAILABLE(HttpStatus.BAD_REQUEST, "USER_4003", "유효하지 않은 백준 아이디"),
     USER_NO_PERMISSION_TO_CHALLENGE(HttpStatus.UNAUTHORIZED, "USER_4011", "챌린지 접근 권한 없음"),
 
     // Challenge
@@ -44,6 +46,7 @@ public enum CustomErrorCode implements ErrorCode {
 
     // Global
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "GLOBAL_500", "서버 내부 오류"),
+    PARSE_CRAWLING_DATA_FAILED(HttpStatus.SERVICE_UNAVAILABLE, "GLOBAL_503", "외부 크롤링 데이터 파싱 실패"),
     DATABASE_ERROR(HttpStatus.NOT_ACCEPTABLE, "GLOBAL_406", "데이터베이스 작업 오류");
 
     private final HttpStatus httpStatus;

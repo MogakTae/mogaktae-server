@@ -39,18 +39,19 @@ public class GitHubUtils {
 
         if(url != null && pusher != null && message != null){
             log.info("getCommitDetail() - {}의 {} 이벤트 수신 완료", pusher, message);
-            return GitCommitDetail.from(url,pusher,message);
+            return GitCommitDetail.from(url,pusher,message, getProblemId(message));
         }else{
             log.warn("getCommitDetail() - Github Webhook 이벤트 처리 실패");
             throw new RestApiException(CustomErrorCode.HTTP_REQUEST_FAILED);
         }
     }
 
-    public static Long getProblemId(String commitMessage){
+    public static String getProblemId(String commitMessage){
         String[] words = commitMessage.split(" ");
 
+        // 커밋 메시지가 2개 이상의 단어로 이루어져 있는지, 문제 아이디가 4~5자리 사이인지
         if(words.length >= 2 && words[1].matches("\\d{4,5}")) {
-            return Long.parseLong(words[1]);
+            return words[1];
         }else{
             throw new RestApiException(CustomErrorCode.NOT_AVAILABLE_COMMIT_MESSAGE);
         }

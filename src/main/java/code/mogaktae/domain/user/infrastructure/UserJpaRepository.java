@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface UserJpaRepository extends JpaRepository<User, Long> {
     Optional<User> findByNickname(String nickname);
     Boolean existsByNickname(String nickname);
+    Boolean existsBySolvedAcId(String solvedAcId);
 
     @Query("""
         SELECT new code.mogaktae.domain.user.dto.common.UserIdSolvedAcId(u.id, u.solvedAcId)
