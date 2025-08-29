@@ -57,8 +57,8 @@ public class ChallengeController implements ChallengeControllerSpecification {
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(challengeFacade.getChallengeResult(user.getUsername(), challengeId), "챌린지 결과 조회 성공"));
     }
 
-    @PostMapping("/webhooks/push")
+    @PostMapping("/commit")
     public ResponseEntity<ResponseDto<?>> pushCodingTestCommit(@RequestBody Map<String, Object> request){
-        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(challengeFacade.handleChallengeCommit(request), "레포지토리 푸쉬 웹훅 처리 완료"));
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.of(challengeFacade.handleChallengeCommit(request), "사용자 문제 풀이 처리 완료"));
     }
 }

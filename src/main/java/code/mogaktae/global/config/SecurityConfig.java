@@ -53,7 +53,7 @@ public class SecurityConfig {
                                 "/api/v2/auth/**",
                                 "/api/v2/users/search",
                                 "/api/v2/git/**",
-                                "/api/v2/challenges/info/summaries",
+                                "/api/v2/challenges/info/summaries", "/api/v2/challenges/commit",
                                 "/oauth2/authorization/**",
                                 "/login/oauth2/code/**"
                         ).permitAll()

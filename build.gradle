@@ -56,6 +56,9 @@ dependencies {
 	// Web
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
+	// JSoup
+	implementation 'org.jsoup:jsoup:1.21.2'
+
 	// Lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -71,6 +74,7 @@ dependencies {
 	// Testing
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testImplementation 'org.jsoup:jsoup:1.21.2'
 
 	// logging
 	implementation 'io.sentry:sentry-spring-boot-starter-jakarta:7.9.0'
