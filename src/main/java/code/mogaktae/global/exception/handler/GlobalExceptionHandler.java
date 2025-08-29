@@ -84,16 +84,10 @@ public class GlobalExceptionHandler {
     }
 
     private ErrorResponse<String> makeErrorResponse(ErrorCode errorCode){
-        return ErrorResponse.<String>builder()
-                .error(errorCode.getCode())
-                .message(errorCode.getMessage())
-                .build();
+        return new ErrorResponse<>(errorCode.getCode(), errorCode.getMessage());
     }
 
     private ErrorResponse<List<String>> makeErrorResponse(List<String> message){
-        return ErrorResponse.<List<String>>builder()
-                .error(CustomErrorCode.INVALID_PARAMS.getCode())
-                .message(message)
-                .build();
+        return new ErrorResponse<>(CustomErrorCode.INVALID_PARAMS.getCode(), message);
     }
 }
