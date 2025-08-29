@@ -28,6 +28,16 @@ spring:
       port: 6379
       password: ${REDIS_PASSWORD}
 
+  sql:
+    init:
+      mode: always
+      data-locations:
+        - classpath:sql/USER.sql
+        - classpath:sql/CHALLENGE.sql
+        - classpath:sql/USER_CHALLENGE.sql
+      continue-on-error: false
+      encoding: UTF-8
+
   security:
     oauth2:
       client:
