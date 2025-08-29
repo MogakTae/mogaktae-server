@@ -1,21 +1,16 @@
 package code.mogaktae.global.security.jwt;
 
+import code.mogaktae.global.exception.entity.CustomJwtException;
 import code.mogaktae.global.exception.error.ErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.extern.log4j.Log4j2;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-@Log4j2
-@Component
 public class JwtExceptionFilter extends OncePerRequestFilter {
 
     @Override
@@ -23,20 +18,19 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         try{
             filterChain.doFilter(request, response);
-        }catch (JwtException e){
-            log.error("유효하지 않은 Jwt {}", e.getMessage());
+        }catch (CustomJwtException e){
             setErrorResponse(response, e);
         }
     }
 
-    protected void setErrorResponse(HttpServletResponse response, JwtException e) throws IOException{
+    protected void setErrorResponse(HttpServletResponse response, CustomJwtException e) throws IOException{
         ObjectMapper objectMapper = new ObjectMapper();
 
         response.setContentType("application/json;charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
         ErrorResponse<String> errorResponse = new ErrorResponse<>(
-                HttpStatus.UNAUTHORIZED.toString(),
+                e.getErrorCode().toString(),
                 e.getMessage()
         );
 

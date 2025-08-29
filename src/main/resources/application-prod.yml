@@ -14,12 +14,9 @@ spring:
       hibernate:
         format_sql: true
         show_sql: true
+        generate_statistics: true
+        use_sql_comments: true
     open-in-view: false
-
-  jackson:
-    time-zone: Asia/Seoul
-    serialization:
-      fail-on-empty-beans: false
 
   data:
     elasticsearch:
@@ -28,7 +25,7 @@ spring:
 
     redis:
       host: mogaktae-redis
-      port: 6384
+      port: 6379
       password: ${REDIS_PASSWORD}
 
   security:
@@ -40,16 +37,11 @@ spring:
             client-secret: ${GIT_CLIENT_SECRET}
 
     jwt:
-      access-token:
-        expired-time: 10800000
-      refresh-token:
-        expired-time: 432000000
       secret: ${JWT_SECRET}
 
 logging:
   level:
     root: INFO
-    org.springframework.security: DEBUG
 
 sentry:
   dsn: "${SENTRY_DSN}"

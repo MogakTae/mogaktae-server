@@ -8,6 +8,6 @@ public class CustomSchedulerErrorHandler implements ErrorHandler {
 
     @Override
     public void handleError(Throwable throwable) {
-        log.error("스케줄러 작업 중 예외 발생: {}", throwable.getMessage());
+        log.error("스케줄러 작업 중 예외 발생");
     }
 }

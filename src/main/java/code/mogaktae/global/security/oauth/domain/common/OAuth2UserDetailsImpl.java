@@ -1,11 +1,11 @@
 package code.mogaktae.global.security.oauth.domain.common;
 
+import code.mogaktae.domain.user.entity.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 
 public class OAuth2UserDetailsImpl implements OAuth2User, UserDetails {
@@ -27,33 +27,13 @@ public class OAuth2UserDetailsImpl implements OAuth2User, UserDetails {
     }
 
     @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
-    @Override
     public Map<String, Object> getAttributes() {
         return oAuth2UserInfo.getAttributes();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList();
+        return Role.USER.getAuthorities();
     }
 
     @Override

@@ -1,10 +1,10 @@
 package code.mogaktae.domain.user.controller.docs;
 
+import code.mogaktae.auth.domain.UserDetailsImpl;
 import code.mogaktae.domain.common.dto.ResponseDto;
 import code.mogaktae.domain.user.dto.res.MyPageResponse;
 import code.mogaktae.domain.user.entity.UserDocument;
 import code.mogaktae.global.exception.error.ErrorResponse;
-import code.mogaktae.global.security.oauth.domain.common.OAuth2UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@Tag(name = "UserControllerSpecification", description = "유저 관련 API")
+@Tag(name = "UserController", description = "유저 API")
 public interface UserControllerSpecification {
     @Operation(summary = "마이페이지 정보 조회", description = "사용자의 마이페이지 정보를 조회합니다<br>" +
             "🔐 <strong>Jwt 필요</strong><br>")
@@ -31,7 +31,7 @@ public interface UserControllerSpecification {
                             examples = {
                                     @ExampleObject(
                                             name = "유저 조회 실패",
-                                            value = "{\\\"error\\\" : \\\"USER_4041\\\", \\\"message\\\" : \\\"유저 조회 실패\\\"}"
+                                            value = "{\"error\" : \"USER_4041\", \"message\" : \"유저 조회 실패\"}"
                                     )
                             },
                             schema = @Schema(implementation = ErrorResponse.class))),
@@ -40,13 +40,13 @@ public interface UserControllerSpecification {
                             examples = {
                                     @ExampleObject(
                                             name = "외부 API 요청 실패",
-                                            value = "{\\\"error\\\" : \\\"API_5031\\\", \\\"message\\\" : \\\"외부 API 요청 실패\\\"}"
+                                            value = "{\"error\" : \"API_5031\", \"message\" : \"외부 API 요청 실패\"}"
                                     )
                             },
                             schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping("/me")
-    ResponseEntity<ResponseDto<MyPageResponse>> getMyPage(@AuthenticationPrincipal OAuth2UserDetailsImpl user);
+    ResponseEntity<ResponseDto<MyPageResponse>> getMyPage(@AuthenticationPrincipal UserDetailsImpl user);
 
     @Operation(summary = "사용자 검색", description = "키워드로 사용자를 검색합니다<br>" +
             "🔐 <strong>Jwt 불필요</strong><br>")

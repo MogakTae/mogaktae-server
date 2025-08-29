@@ -1,14 +1,11 @@
 package code.mogaktae.global.security.oauth.util;
 
-import code.mogaktae.domain.user.dto.res.JwtResponse;
-import code.mogaktae.domain.user.repository.UserRepository;
-import code.mogaktae.global.security.jwt.JwtProvider;
+import code.mogaktae.domain.user.entity.UserRepository;
 import code.mogaktae.global.security.oauth.domain.common.OAuth2UserDetailsImpl;
 import code.mogaktae.global.security.oauth.domain.common.OAuth2UserInfo;
 import code.mogaktae.global.security.oauth.exception.OAuth2AuthenticationProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -23,7 +20,6 @@ import org.springframework.util.StringUtils;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
-    private final JwtProvider jwtProvider;
 
     @Transactional
     @Override
@@ -55,11 +51,5 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     public Boolean checkUserPresent(String nickname){
         return userRepository.existsByNickname(nickname);
-    }
-
-    @Transactional
-    public JwtResponse oAuth2Login(Authentication authentication){
-
-        return jwtProvider.generateToken(authentication);
     }
 }

@@ -5,6 +5,7 @@ import code.mogaktae.global.exception.handler.CustomAuthenticationEntryPoint;
 import code.mogaktae.global.security.jwt.JwtAuthenticationFilter;
 import code.mogaktae.global.security.jwt.JwtExceptionFilter;
 import code.mogaktae.global.security.jwt.JwtProvider;
+import code.mogaktae.global.security.jwt.JwtReissueFilter;
 import code.mogaktae.global.security.oauth.handler.OAuth2AuthenticationFailureHandler;
 import code.mogaktae.global.security.oauth.handler.OAuth2AuthenticationSuccessHandler;
 import code.mogaktae.global.security.oauth.util.CustomOAuth2UserService;
@@ -49,10 +50,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/swagger-ui/**", "/v3/api-docs/**",
-                                "/api/v1/auth/**",
-                                "/api/v1/users/suggest",
-                                "/api/v1/git/**",
-                                "/api/v1/challenges/info/summaries",
+                                "/api/v2/auth/**",
+                                "/api/v2/users/search",
+                                "/api/v2/git/**",
+                                "/api/v2/challenges/info/summaries",
                                 "/oauth2/authorization/**",
                                 "/login/oauth2/code/**"
                         ).permitAll()
@@ -72,7 +73,8 @@ public class SecurityConfig {
                         .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new JwtExceptionFilter(), JwtAuthenticationFilter.class)
+                .addFilterBefore(new JwtReissueFilter(jwtProvider), JwtAuthenticationFilter.class)
+                .addFilterBefore(new JwtExceptionFilter(), JwtReissueFilter.class)
                 .build();
     }
 
@@ -87,7 +89,7 @@ public class SecurityConfig {
     public CorsConfigurationSource configurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
 
-        corsConfiguration.setAllowedOriginPatterns(List.of("*"));
+        corsConfiguration.setAllowedOriginPatterns(List.of("http://localhost:5173", "https://mogaktae.inuappcenter.kr"));
         corsConfiguration.setExposedHeaders(List.of("*"));
         corsConfiguration.setAllowedHeaders(List.of("*"));
         corsConfiguration.setAllowedMethods(List.of("*"));
