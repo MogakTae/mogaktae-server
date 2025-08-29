@@ -1,0 +1,75 @@
+package code.mogaktae.common.util;
+
+import code.mogaktae.git.dto.common.GitCommitDetail;
+import code.mogaktae.global.exception.entity.RestApiException;
+import code.mogaktae.global.exception.error.CustomErrorCode;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Map;
+
+@Log4j2
+@Component
+public class GitHubUtils {
+
+    public static GitCommitDetail getCommitDetail(Map<String, Object> requestBody){
+        String url = null;
+        String pusher = null;
+        String message = null;
+
+        Map<String, Object> repository = (Map<String, Object>) requestBody.get("repository");
+        if (repository != null)
+            url = (String) repository.get("url");
+
+        Map<String, Object> pusherName = (Map<String, Object>) requestBody.get("pusher");
+        if (pusherName != null)
+            pusher = (String) pusherName.get("name");
+
+        List<Map<String, Object>> commits = (List<Map<String, Object>>) requestBody.get("commits");
+        if (commits != null && !commits.isEmpty()) {
+            Map<String, Object> firstCommit = commits.get(0);
+            if (firstCommit != null) {
+                message = (String) firstCommit.get("message");
+            }
+        }
+
+        if(url != null && pusher != null && message != null){
+            log.info("getCommitDetail() - {}의 {} 이벤트 수신 완료", pusher, message);
+            return GitCommitDetail.from(url,pusher,message, getProblemId(message));
+        }else{
+            log.warn("getCommitDetail() - Github Webhook 이벤트 처리 실패");
+            throw new RestApiException(CustomErrorCode.HTTP_REQUEST_FAILED);
+        }
+    }
+
+    public static String getProblemId(String commitMessage){
+        String[] words = commitMessage.split(" ");
+
+        // 커밋 메시지가 2개 이상의 단어로 이루어져 있는지, 문제 아이디가 4~5자리 사이인지
+        if(words.length >= 2 && words[1].matches("\\d{4,5}")) {
+            return words[1];
+        }else{
+            throw new RestApiException(CustomErrorCode.NOT_AVAILABLE_COMMIT_MESSAGE);
+        }
+    }
+
+    public static List<String> getRepositoryUrls(String response){
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try{
+            List<Map<String, Object>> repositoryUrls = objectMapper.readValue(response, new TypeReference<>() {});
+
+            return repositoryUrls.stream()
+                    .map(repo -> (String) repo.get("html_url"))
+                    .toList();
+
+        }catch (JsonProcessingException e){
+            throw new RestApiException(CustomErrorCode.JSON_PARSING_ERROR);
+        }
+    }
+}

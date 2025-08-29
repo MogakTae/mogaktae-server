@@ -1,6 +1,6 @@
 package code.mogaktae.auth.controller.docs;
 
-import code.mogaktae.domain.common.dto.ResponseDto;
+import code.mogaktae.common.dto.ResponseDto;
 import code.mogaktae.auth.dto.req.SignUpRequest;
 import code.mogaktae.global.exception.error.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;

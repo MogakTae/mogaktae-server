@@ -1,6 +1,6 @@
 package code.mogaktae.global.security.oauth.util;
 
-import code.mogaktae.domain.user.entity.UserRepository;
+import code.mogaktae.user.entity.UserRepository;
 import code.mogaktae.global.security.oauth.domain.common.OAuth2UserDetailsImpl;
 import code.mogaktae.global.security.oauth.domain.common.OAuth2UserInfo;
 import code.mogaktae.global.security.oauth.exception.OAuth2AuthenticationProcessingException;

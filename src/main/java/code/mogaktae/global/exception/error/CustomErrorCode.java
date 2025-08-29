@@ -9,11 +9,8 @@ import org.springframework.http.HttpStatus;
 public enum CustomErrorCode implements ErrorCode {
 
     // User
-    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_4041", "유저 조회 실패"),
-    USER_NICKNAME_DUPLICATED(HttpStatus.BAD_REQUEST, "USER_4001", "이미 존재하는 깃허브 아이디"),
-    USER_SOLVED_AC_ID_DUPLICATED(HttpStatus.BAD_REQUEST, "USER_4002", "이미 존재하는 백준 아이디"),
-    USER_SOLVED_AC_ID_NOT_AVAILABLE(HttpStatus.BAD_REQUEST, "USER_4003", "유효하지 않은 백준 아이디"),
-    USER_NO_PERMISSION_TO_CHALLENGE(HttpStatus.UNAUTHORIZED, "USER_4011", "챌린지 접근 권한 없음"),
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_4041", "유저 조회에 실패하였습니다."),
+    USER_DUPLICATED(HttpStatus.BAD_REQUEST, "USER_4001", "이미 존재하는 유저입니다."),
 
     // Challenge
     CHALLENGE_NOT_FOUND(HttpStatus.NOT_FOUND, "CHALLENGE_4041", "챌린지 조회 실패"),
@@ -21,6 +18,9 @@ public enum CustomErrorCode implements ErrorCode {
     USER_CHALLENGE_NOT_FOUND(HttpStatus.NOT_FOUND, "CHALLENGE_4042", "챌린지에 참여하지 않은 유저"),
     USER_NOT_SOLVE_TARGET_PROBLEM(HttpStatus.BAD_REQUEST, "CHALLENGE_4002", "문제 미해결"),
     CHALLENGE_RESULT_NOT_FOUND(HttpStatus.NOT_FOUND, "CHALLENGE_4043", "챌린지 결과 조회 실패"),
+    NO_PERMISSION_FOR_CHALLENGE(HttpStatus.UNAUTHORIZED, "USER_4011", "챌린지 조회 권한 없음"),
+    NO_PERMISSION_FOR_CHALLENGE_RESULT(HttpStatus.UNAUTHORIZED, "USER_4011", "챌린지 결과 조회 권한 없음"),
+
 
     // RestTemplate Request/Response
     HTTP_REQUEST_FAILED(HttpStatus.SERVICE_UNAVAILABLE, "API_5031", "외부 API 요청 실패"),
@@ -30,6 +30,10 @@ public enum CustomErrorCode implements ErrorCode {
     REPOSITORY_URL_DUPLICATE(HttpStatus.BAD_REQUEST, "GIT_4001", "레포지토리 주소 중복"),
     REPOSITORY_URL_NOT_FOUND(HttpStatus.NOT_FOUND, "GIT_4041", "레포지토리 주소 조회 실패"),
     NOT_AVAILABLE_COMMIT_MESSAGE(HttpStatus.BAD_REQUEST, "GIT_4002", "커밋 메시지 형식 불일치"),
+
+    // Beakjoon
+    SOLVED_AC_ID_DUPLICATED(HttpStatus.BAD_REQUEST, "USER_4002", "이미 존재하는 백준 아이디"),
+    SOLVED_AC_ID_NOT_AVAILABLE(HttpStatus.BAD_REQUEST, "USER_4003", "유효하지 않은 백준 아이디"),
 
     // JWT
     JWT_REFRESH_TOKEN_NOT_FOUND(HttpStatus.UNAUTHORIZED, "JWT_4011", "사용자의 리프레시 토큰 조회 실패"),

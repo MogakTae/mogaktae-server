@@ -1,6 +1,6 @@
 package code.mogaktae.global.security.oauth.domain.common;
 
-import code.mogaktae.domain.user.entity.Role;
+import code.mogaktae.user.entity.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;

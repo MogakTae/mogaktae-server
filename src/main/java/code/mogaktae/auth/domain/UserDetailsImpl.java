@@ -1,7 +1,7 @@
 package code.mogaktae.auth.domain;
 
-import code.mogaktae.domain.user.entity.Role;
-import code.mogaktae.domain.user.entity.User;
+import code.mogaktae.user.entity.Role;
+import code.mogaktae.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;

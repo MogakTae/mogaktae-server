@@ -1,0 +1,65 @@
+package code.mogaktae.user.entity;
+
+import code.mogaktae.auth.dto.req.SignUpRequest;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+
+@Table(name = "users")
+//@Table(name = "user")
+@Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, columnDefinition = "varchar(255)", unique = true)
+    private String nickname;
+
+    @Column(name = "solved_ac_id", columnDefinition = "varchar(150)", nullable = false, unique = true)
+    private String solvedAcId;
+
+    @Column(name = "profile_image_url", columnDefinition = "varchar(255)", nullable = false)
+    private String profileImageUrl;
+
+    @Column(name = "solved_problem_ids", columnDefinition = "TEXT", nullable = false)
+    private String solvedProblemIds;
+
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "varchar(100)", nullable = false)
+    private Role role;
+
+    @Column(name = "created_at", columnDefinition = "datetime", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Builder
+    private User(String nickname, String solvedAcId, String profileImageUrl, String solvedProblemIds) {
+        this.nickname = nickname;
+        this.solvedAcId = solvedAcId;
+        this.profileImageUrl = profileImageUrl;
+        this.solvedProblemIds = solvedProblemIds;
+        this.role = Role.USER;
+        this.createdAt = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+    }
+
+    public static User signUp(SignUpRequest signUpRequest, String solvedProblemIds){
+        return User.builder()
+                .nickname(signUpRequest.nickname())
+                .solvedAcId(signUpRequest.solvedAcId())
+                .profileImageUrl(signUpRequest.profileImageUrl())
+                .solvedProblemIds(solvedProblemIds)
+                .build();
+    }
+
+    public void addSolvedProblemId(String solvedProblemId){
+        this.solvedProblemIds += solvedProblemId + " ";
+    }
+}

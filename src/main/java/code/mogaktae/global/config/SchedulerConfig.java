@@ -1,7 +1,7 @@
 package code.mogaktae.global.config;
 
-import code.mogaktae.domain.challengeResult.service.ChallengeResultService;
-import code.mogaktae.domain.userChallenge.service.UserChallengeService;
+import code.mogaktae.challengeResult.service.ChallengeResultService;
+import code.mogaktae.userChallenge.service.UserChallengeService;
 import code.mogaktae.global.exception.handler.CustomSchedulerErrorHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
