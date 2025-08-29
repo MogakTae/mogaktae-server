@@ -4,9 +4,8 @@ import code.mogaktae.domain.challenge.dto.common.ChallengeSummary;
 import code.mogaktae.domain.challenge.dto.res.ChallengeDetailResponse;
 import code.mogaktae.domain.challenge.entity.Challenge;
 import code.mogaktae.domain.challenge.entity.ChallengeRepository;
-import code.mogaktae.domain.common.client.SolvedAcClient;
+import code.mogaktae.domain.common.client.BaekjoonClient;
 import code.mogaktae.domain.common.util.GitHubUtils;
-import code.mogaktae.domain.common.util.SolvedAcUtils;
 import code.mogaktae.domain.git.dto.common.GitCommitDetail;
 import code.mogaktae.domain.user.entity.UserRepository;
 import code.mogaktae.domain.userChallenge.dto.common.UserChallengeSummary;
@@ -27,7 +26,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UserChallengeService {
 
-    private final SolvedAcClient solvedAcClient;
+    private final BaekjoonClient baekjoonClient;
 
     private final UserRepository userRepository;
     private final ChallengeRepository challengeRepository;
@@ -60,21 +59,24 @@ public class UserChallengeService {
     }
 
     public Boolean handleChallengeCommit(Map<String, Object> request){
+
         GitCommitDetail gitCommitDetail = GitHubUtils.getCommitDetail(request);
 
         UserChallenge userChallenge = userChallengeRepository.findByUserNicknameAndRepositoryUrl(gitCommitDetail.pusher(), gitCommitDetail.url())
                 .orElseThrow(() -> new RestApiException(CustomErrorCode.USER_CHALLENGE_NOT_FOUND));
 
-        Long dailyProblem = challengeRepository.findDailyProblemByChallengeId(userChallenge.getChallengeId());
-
         String solvedAcId = userRepository.findSolvedAcIdByNickname(gitCommitDetail.pusher())
                 .orElseThrow(() -> new RestApiException(CustomErrorCode.USER_NOT_FOUND));
 
-        Long targetProblemId = GitHubUtils.getProblemId(gitCommitDetail.commitMessage());
+        // TODO 푼 문제를 체크하기 위한 검증 로직 필요
 
-        if(SolvedAcUtils.checkUserSolvedTargetProblem(solvedAcClient.getSolvedProblem(solvedAcId), targetProblemId)){
+        String problemId = gitCommitDetail.problemId();
+
+        if(baekjoonClient.verifySolvedProblem(solvedAcId, problemId)){
+            Long dailyProblem = challengeRepository.findDailyProblemByChallengeId(userChallenge.getChallengeId());
+
             userChallenge.updateSolveStatus(dailyProblem);
-            log.info("커밋 처리 완료, userId = {}, challengeId = {}", userChallenge.getUserId(), userChallenge.getChallengeId());
+
             return true;
         }else{
             throw new RestApiException(CustomErrorCode.USER_NOT_SOLVE_TARGET_PROBLEM);

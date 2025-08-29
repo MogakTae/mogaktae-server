@@ -46,6 +46,7 @@ public enum CustomErrorCode implements ErrorCode {
 
     // Global
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "GLOBAL_500", "서버 내부 오류"),
+    PARSE_CRAWLING_DATA_FAILED(HttpStatus.SERVICE_UNAVAILABLE, "GLOBAL_503", "외부 크롤링 데이터 파싱 실패"),
     DATABASE_ERROR(HttpStatus.NOT_ACCEPTABLE, "GLOBAL_406", "데이터베이스 작업 오류");
 
     private final HttpStatus httpStatus;
